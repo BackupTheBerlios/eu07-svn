@@ -1,0 +1,16 @@
+/AnimationPathManipulator////
+/DriveManipulator////
+/Export////
+/FlightManipulator////
+/GUIActionAdapter////
+/GUIEventAdapter////
+/GUIEventHandler////
+/GUIEventHandlerVisitor////
+/KeySwitchMatrixManipulator////
+/MatrixManipulator////
+/NodeTrackerManipulator////
+/SetSceneViewVisitor////
+/StateSetManipulator////
+/TerrainManipulator////
+/TrackballManipulator////
+/Version////
