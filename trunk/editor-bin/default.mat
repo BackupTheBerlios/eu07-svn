@@ -1,0 +1,13 @@
+/* UID >> type >> tex >> texDim.x() >> texDim.y() >> stateSet */
+100
+01 0 GrassGreen1.tga			50 50 DefaultOpaque.osg
+02 0 water10.tga			50 50 DefaultOpaque.osg
+03 0 GrassDead2.tga			50 50 DefaultOpaque.osg
+04 0 Ground-yellowbrown.tga		50 50 DefaultOpaque.osg
+05 0 farm00.bmp				50 50 DefaultOpaque.osg
+06 0 farm01.bmp				50 50 DefaultOpaque.osg
+07 0 farm02.bmp				50 50 DefaultOpaque.osg
+08 0 farm03.bmp				50 50 DefaultOpaque.osg
+09 0 farm04.bmp				50 50 DefaultOpaque.osg
+15 0 farm05.bmp				50 50 DefaultOpaque.osg
+16 0 farm06.bmp				50 50 DefaultOpaque.osg

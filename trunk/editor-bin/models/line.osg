@@ -1,0 +1,89 @@
+MatrixTransform {
+  DataVariance STATIC
+  name "Scene Root"
+  nodeMask 0xff
+  cullingActive TRUE
+  StateSet {
+    UniqueID StateSet_0
+    DataVariance STATIC
+    rendering_hint DEFAULT_BIN
+    renderBinMode INHERIT
+  }
+  referenceFrame RELATIVE_TO_PARENTS
+  Matrix {
+    1 0 0 0
+    0 1 0 0
+    0 0 1 0
+    0 0 0 1
+  }
+  num_children 2
+  Geode {
+    DataVariance STATIC
+    nodeMask 0xff
+    cullingActive TRUE
+    num_drawables 1
+    Geometry {
+      DataVariance DYNAMIC
+      StateSet {
+        DataVariance STATIC
+        rendering_hint DEFAULT_BIN
+        renderBinMode INHERIT
+      }
+      useDisplayList TRUE
+      useVertexBufferObjects FALSE
+      PrimitiveSets 1
+      {
+        DrawArrays LINE_STRIP 0 2
+      }
+      VertexArray Vec3Array 2
+      {
+        -0.5 0 0
+        0.5 0 0
+      }
+      NormalBinding OVERALL
+      NormalArray Vec3Array 1
+      {
+        0 0 1
+      }
+    }
+  }
+  Geode {
+    UniqueID Geode_1
+    DataVariance STATIC
+    nodeMask 0xff
+    cullingActive TRUE
+    num_drawables 1
+    Geometry {
+      DataVariance DYNAMIC
+      StateSet {
+        DataVariance STATIC
+        rendering_hint DEFAULT_BIN
+        renderBinMode INHERIT
+      }
+      useDisplayList TRUE
+      useVertexBufferObjects FALSE
+      PrimitiveSets 1
+      {
+        DrawElementsUShort TRIANGLE_STRIP 4
+        {
+          1 2 0 3 
+        }
+      }
+      VertexArray Vec3Array 4
+      {
+        -0.5 -3 0
+        -0.5 3 0
+        0.5 3 0
+        0.5 -3 0
+      }
+      NormalBinding PER_VERTEX
+      NormalArray Vec3Array 4
+      {
+        0 0 -1
+        0 0 -1
+        0 0 -1
+        0 0 -1
+      }
+    }
+  }
+}
