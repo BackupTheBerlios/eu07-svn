@@ -1,0 +1,7 @@
+#--------------------------------------------------------------------
+# /bin/win32/ndinput8.toc
+# MACHINE GENERATED, DON'T EDIT!
+# Wed Dec 22 16:23:59 Środkowoeuropejski czas stand. 2004
+#--------------------------------------------------------------------
+$ndinput8
+%ndi8server
