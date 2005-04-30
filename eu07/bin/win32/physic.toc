@@ -1,0 +1,18 @@
+#--------------------------------------------------------------------
+# /bin/win32/physic.toc
+# MACHINE GENERATED, DON'T EDIT!
+# Wed Apr 13 20:19:03 Środkowoeuropejski czas letni 2005
+#--------------------------------------------------------------------
+$physic
+%nvehicle
+%nelement
+%nlogic
+%nanalogelement
+%ndevice
+%ncircuit
+%nfloatarray
+%nengine
+%ngear
+%npressregulator
+%nvalve2way
+%nvalve

@@ -1,0 +1,21 @@
+#--------------------------------------------------------------------
+# /bin/win32/simcore.toc
+# MACHINE GENERATED, DON'T EDIT!
+# Fri Apr 15 09:33:52 Środkowoeuropejski czas letni 2005
+#--------------------------------------------------------------------
+$simcore
+%nsimnode
+%ndynamic
+%nmcdynamic
+%ntrack
+%ncamerahandle
+%ncamera
+%nworld
+%nsimevent
+%nsesetmatrix
+%nsecommands
+%nseswitch
+%nstateholder
+%ntemplatenode
+%nsignal
+%nsimpletimetable
