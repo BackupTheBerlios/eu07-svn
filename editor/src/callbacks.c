@@ -29,7 +29,7 @@
 #endif
 
 
-GtkWidget *main_window, *window2;
+GtkWidget *main_window, *window2, *quit_dialog;
 
 
 gboolean
@@ -72,14 +72,16 @@ init_interface (int *argcp, char ***argvp)
 		    G_CALLBACK (gtk_main_quit), NULL);
 
   window2 = create_window2 ();
-  // gtk_widget_show (window2);
   g_signal_connect ((gpointer) window2, "destroy", G_CALLBACK (gtk_main_quit),
 		    NULL);
-
-if (E_DEBUG) printf("Wins created, not shown\n"); 
-
   gtk_window_set_transient_for (GTK_WINDOW (window2),
 				GTK_WINDOW (main_window));
+		    
+  quit_dialog = create_quit_dialog();
+  gtk_window_set_transient_for (GTK_WINDOW (quit_dialog),
+				GTK_WINDOW (main_window));
+
+if (E_DEBUG) printf("Wins created, not shown\n"); 
 
 
 #ifdef EDITOR_FULL
@@ -180,13 +182,6 @@ void
 on_save_as_mi_activate (GtkMenuItem * menuitem, gpointer user_data)
 {
   Editor::instance ()->saveToFile ("test.bscn");
-}
-
-
-void
-on_quit_mi_activate (GtkMenuItem * menuitem, gpointer user_data)
-{
-
 }
 
 
@@ -327,7 +322,7 @@ on_export_mi_activate (GtkMenuItem * menuitem, gpointer user_data)
 {
   Editor::instance ()->saveToFile ("tmp.bscn");
   Editor::instance ()->exportToDirectory ("..\\eu07\\scenery\\test\\");
-  exit(0);
+  gtk_main_quit();
 //  Editor::instance ()->freeNodes ();
 }
 
@@ -418,5 +413,87 @@ on_import_mode_radiotoolbutton_toggled (GtkToggleToolButton *toggletoolbutton,
   if (gtk_toggle_tool_button_get_active (toggletoolbutton))
 	  Editor::instance ()->changeMode (Editor::em_Import);
 
+}
+
+gboolean quit_request()
+{
+         gtk_widget_show(quit_dialog);
+         return TRUE;
+}
+
+void
+on_quit_toolbutton_clicked             (GtkToolButton   *toolbutton,
+                                        gpointer         user_data)
+{
+   quit_request();
+}
+
+
+void
+on_quit_mi_activate (GtkMenuItem * menuitem, gpointer user_data)
+{
+   quit_request();
+}
+
+void
+on_quit_dialog_response                (GtkDialog       *dialog,
+                                        gint             response_id,
+                                        gpointer         user_data)
+{
+   switch(response_id)
+   {
+       case GTK_RESPONSE_YES:
+            // trza zapisac:
+                    
+       case GTK_RESPONSE_NO:
+            gtk_main_quit();
+            
+       case GTK_RESPONSE_CANCEL:
+            gtk_widget_hide(GTK_WIDGET(dialog));
+            
+       case GTK_RESPONSE_DELETE_EVENT:
+            return;
+       
+       default:
+            Publisher::warn("Code bug:\nUnknown response from the 'quit dialog'");
+   }
+}
+
+gboolean
+on_main_window_delete_event            (GtkWidget       *widget,
+                                        GdkEvent        *event,
+                                        gpointer         user_data)
+{
+  return quit_request();
+}
+
+
+gboolean
+on_main_window_destroy_event           (GtkWidget       *widget,
+                                        GdkEvent        *event,
+                                        gpointer         user_data)
+{
+
+  return quit_request();
+}
+
+
+gboolean
+on_window2_delete_event                (GtkWidget       *widget,
+                                        GdkEvent        *event,
+                                        gpointer         user_data)
+{
+
+  return quit_request();
+}
+
+
+gboolean
+on_window2_destroy_event               (GtkWidget       *widget,
+                                        GdkEvent        *event,
+                                        gpointer         user_data)
+{
+
+  return quit_request();
 }
 
