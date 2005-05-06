@@ -444,6 +444,7 @@ on_quit_dialog_response                (GtkDialog       *dialog,
    {
        case GTK_RESPONSE_YES:
             // trza zapisac:
+			Editor::instance ()->saveToFile ("test.bscn");
                     
        case GTK_RESPONSE_NO:
             gtk_main_quit();
