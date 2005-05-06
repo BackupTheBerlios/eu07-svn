@@ -11,6 +11,7 @@
 #include <GL/gl.h>
 #include <GL/glu.h>
 
+#define DEBUG 1
 
 int GL_realizer::gl_inited = 0;
 GdkGLConfig *GL_realizer::gl_config= NULL;
@@ -18,13 +19,17 @@ GdkGLContext *GL_realizer::shareContext= NULL;
 
 void GL_realizer::gl_init(int *argc, char ***argv)
 {
+    if (DEBUG) printf("entered GL_realizer::gl_init\n");
     gdk_gl_init(argc,argv);
     create_GL_config();
     create_GL_context();
+    if (DEBUG) printf("leaving GL_realizer::gl_init\n");
 }
 
 GL_realizer::GL_realizer ( GtkWidget *_dr_area ) : dr_area(_dr_area)
 {
+    if (DEBUG) printf("entered GL_realizer::GL_realizer\n");
+
     static const char* gl_key = "gl-adapted";
 
     if (!gl_inited)
@@ -109,10 +114,13 @@ GL_realizer::GL_realizer ( GtkWidget *_dr_area ) : dr_area(_dr_area)
                        G_CALLBACK (scroll_callback), this );
 
     gtk_widget_set_double_buffered ( dr_area, FALSE );
+
+    if (DEBUG) printf("leaving GL_realizer::gl_init\n");
 }
 
 void GL_realizer::create_GL_config()
 {
+    if (DEBUG) printf("entered GL_realizer::create_GL_config\n");
 
    static const int gl_cfg[] = {
       GDK_GL_DOUBLEBUFFER,
@@ -135,10 +143,13 @@ void GL_realizer::create_GL_config()
             Publisher::err("Can not create GL-visual");
     }    
     gl_inited = 1;
+
+    if (DEBUG) printf("leaving GL_realizer::create_GL_config\n");
 }
 
 void GL_realizer::create_GL_context()
 {
+    if (DEBUG) printf("entered GL_realizer::create_GL_context\n");
     GtkWidget
         *window = create_ghost_window(),
         *area = lookup_widget(window,"drawingarea");
@@ -154,10 +165,14 @@ void GL_realizer::create_GL_context()
     gtk_widget_realize(area);
 
 	shareContext = gtk_widget_get_gl_context (area);
+
+    if (DEBUG) printf("leaving GL_realizer::create_GL_context\n");
 }
 
 bool GL_realizer::begin_gl()
 {
+    if (DEBUG) printf("entered GL_realizer::begin_gl\n");
+
    // printf("Begin gl\n");
    GdkGLContext *glc = gtk_widget_get_gl_context ( dr_area );
    GdkGLDrawable *gld = gtk_widget_get_gl_drawable ( dr_area );
@@ -167,24 +182,26 @@ bool GL_realizer::begin_gl()
       Publisher::err("Can not begin gl"); 
 	  return false;
    }
-   return true;
 
+   if (DEBUG) printf("leaving GL_realizer::begin_gl\n");
+   return true;
 }
 
 void GL_realizer::end_gl()
 {
-   // printf("End gl 1\n");
+   if (DEBUG) printf("entered GL_realizer::end_gl\n");
    GdkGLDrawable *gld = gtk_widget_get_gl_drawable ( dr_area );
    gdk_gl_drawable_gl_end(gld);
-   // printf("End gl 2\n");
+   if (DEBUG) printf("leaving GL_realizer::end_gl\n");
 }
 
 void GL_realizer::commit_gl()
 {
+    if (DEBUG) printf("entered GL_realizer::commit_gl\n");
     GdkGLDrawable *gld = gtk_widget_get_gl_drawable ( dr_area );
     if ( gdk_gl_drawable_is_double_buffered(gld) )
         gdk_gl_drawable_swap_buffers(gld);
     else
         glFlush();
+    if (DEBUG) printf("leaving GL_realizer::commit_gl\n");
 }
-

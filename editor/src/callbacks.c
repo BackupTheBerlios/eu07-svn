@@ -88,12 +88,17 @@ printf("Wins created, not shown\n");
 #ifdef EDITOR_FULL
   osg::ref_ptr < TopView > top =
     new TopView (lookup_widget (main_window, "main_drawingarea"));
+printf("(1)\n");
   osg::ref_ptr < PerspectiveView > perspective =
     new PerspectiveView (lookup_widget (window2, "drawingarea2"));
+printf("(2)\n");
   static Editor editor (top.get ());
+printf("(3)\n");
   editor.addPerspectiveView (perspective.get ());
+printf("(4)\n");
   perspective->
     unsetNodeMask (Editor::Masks::nm_Nodes | Editor::Masks::nm_Maps);
+printf("(5)\n");
 #else
   Publisher::set_status_msg (3, "Publisher::set_status_msg(...)");
   static foo realizer2 (lookup_widget (window2, "drawingarea2"));
@@ -101,6 +106,7 @@ printf("Wins created, not shown\n");
   static Editor editor;
   // printf("foos created\n"); _sleep(4444);
 #endif
+printf("Win show attempt\n"); 
   gtk_widget_show (main_window);
   gtk_widget_show (window2);
 printf("Wins shown\n"); 
