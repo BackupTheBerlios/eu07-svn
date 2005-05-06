@@ -3,6 +3,8 @@
 #include "publisher.h"
 #include "core/PropertySet.h"
 
+#define DEBUG 1
+
 GtkBox *Kit::external_widget;
 GtkWidget *Kit::active=NULL;
 
@@ -22,15 +24,18 @@ void my_gstring_free(gpointer gstring)
 
 Kit::Kit() : elems(0)
 {
+    if (DEBUG) printf("entering Kit::Kit\n");
     if (!external_widget)
         Publisher::err("Code bug:\nInaccessible container for property kits");
     kit_widget = GTK_BOX ( gtk_vbox_new (FALSE, 0) );
     gtk_box_pack_start (GTK_BOX(external_widget), GTK_WIDGET(kit_widget), FALSE, FALSE, 0);
     setOwner(NULL);
+    if (DEBUG) printf("leaving Kit::Kit\n");
 }
 
 void Kit::activate()
 {
+    if (DEBUG) printf("entering Kit::activate\n");
     if (active)
         gtk_widget_hide(active);
     // while ()
@@ -40,13 +45,16 @@ void Kit::activate()
     GtkWidget *hpaned = lookup_widget(GTK_WIDGET(external_widget),"main_hpaned");
     gtk_paned_set_position(GTK_PANED(hpaned),10000);
     */
+    if (DEBUG) printf("leaving Kit::activate\n");
 }
 
 void Kit::disable()
 {
+    if (DEBUG) printf("entering Kit::disable\n");
     if (active)
         gtk_widget_hide(active);
     active = NULL;
+    if (DEBUG) printf("leaving Kit::disable\n");
 }
 
 //changed_callback wywoluje sie przy setOwnerWithRead,
@@ -55,20 +63,25 @@ static int disableOnChange= false; //MW - HACK :)
 
 void Kit::setOwnerWithRead(PropertySet *set)
 {
+    if (DEBUG) printf("entering Kit::sOWR\n");
 	disableOnChange= true; //MW - HACK :)
     setOwner(set);
     gtk_container_foreach(GTK_CONTAINER(kit_widget), readProperty, set);
 	disableOnChange= false; //MW - HACK :)
+    if (DEBUG) printf("leaving Kit::sOWR\n");
 }
 
 void Kit::setOwnerWithWrite(PropertySet *set)
 {
+    if (DEBUG) printf("entering Kit::sOWW\n");
     setOwner(set);
     gtk_container_foreach(GTK_CONTAINER(kit_widget), writeProperty, set);
+    if (DEBUG) printf("leaving Kit::sOWW\n");
 }
 
 void Kit::readProperty(GtkWidget *item, gpointer owner)
 { // static
+    if (DEBUG) printf("entering Kit::readProperty\n");
     void (*f)(GObject*) = 
         (void(*)(GObject*)) g_object_get_data(G_OBJECT(item),READ_FUNC_KEY);
 
@@ -76,10 +89,12 @@ void Kit::readProperty(GtkWidget *item, gpointer owner)
         Publisher::warn("Code bug:\nInaccessible 'read function' in Kit::readProperty\nProperty editor will not function correctly");
     else
         f(G_OBJECT(item));
+    if (DEBUG) printf("leaving Kit::readProperty\n");
 }
 
 void Kit::writeProperty(GtkWidget *item, gpointer owner)
 { // static
+    if (DEBUG) printf("entering Kit::writeProperty\n");
     void (*f)(GObject*) = 
         (void(*)(GObject*)) g_object_get_data(G_OBJECT(item),WRITE_FUNC_KEY);
 
@@ -87,19 +102,27 @@ void Kit::writeProperty(GtkWidget *item, gpointer owner)
         Publisher::warn("Code bug:\nInaccessible 'write function' in Kit::writeProperty\nProperty editor will not function correctly");
     else
         f(G_OBJECT(item));
+    if (DEBUG) printf("leaving Kit::readProperty\n");
 }
 
 PropertySet* Kit::getOwner(GtkBox *prop_item)
 { // static
+    if (DEBUG) printf("entering Kit::getOwner\n");
+
     GtkWidget *kit_widget = gtk_widget_get_parent(GTK_WIDGET(prop_item));
     PropertySet *owner = (PropertySet*) g_object_get_data(G_OBJECT(kit_widget),OWNER_KEY);
     if (!owner)
         Publisher::warn("Code bug:\nInaccesible owner of properties\nProperty editor will not function correctly");
+
+    if (DEBUG) printf("leaving Kit::getOwner soon\n");
+
     return (gpointer)owner==(gpointer)kit_widget ? NULL : owner;
 }
 
 const char* Kit::getPropName(GtkBox *prop_item)
 {
+    if (DEBUG) printf("entering Kit::getPropName\n");
+
     gpointer label = g_object_get_data(G_OBJECT(prop_item),PROP_LABEL_KEY);
     
     if (!label)
@@ -107,11 +130,16 @@ const char* Kit::getPropName(GtkBox *prop_item)
         Publisher::warn("Code bug:\nInaccessible property name\nProperty editor will not function correctly");
         return "?";
     }    
+
+    if (DEBUG) printf("leaving Kit::getPropName soon\n");
+
     return gtk_label_get_text(GTK_LABEL(label));
 }    
 
 void Kit::update_visibility ( GtkWidget *prop_item, gpointer data )
 {
+     if (DEBUG) printf("entering Kit::update_visibility\n");
+
      PropertySet *owner = getOwner(GTK_BOX(prop_item));
      switch ( (int)g_object_get_data ( G_OBJECT(prop_item), VISIBILITY_KEY ) )
      {
@@ -121,34 +149,44 @@ void Kit::update_visibility ( GtkWidget *prop_item, gpointer data )
             case MANUAL_VISIBILITY:
                  break;
             default:
-            Publisher::warn("Code bug:\nInaccessible visibility mode\nProperty editor may show/hide undesirable items");
+                 Publisher::warn("Code bug:\nInaccessible visibility mode\nProperty editor may show/hide undesirable items");
      }
+     
+     if (DEBUG) printf("leaving Kit::update_visibility\n");
 };
 
 
 void Kit::setOwner(PropertySet* owner)
 {
+    if (DEBUG) printf("entering Kit::setOwner\n");
     gpointer ptr = owner ? (gpointer)owner : kit_widget;
     g_object_set_data ( G_OBJECT(kit_widget), OWNER_KEY, ptr );
     gtk_container_foreach(GTK_CONTAINER(kit_widget), update_visibility, NULL);
+    if (DEBUG) printf("leaving Kit::setOwner\n");
 }
 
 void Kit::Item::shown()
 {
+     if (DEBUG) printf("entering Kit::Item::shown\n");
      gtk_widget_show(item);
      g_object_set_data ( G_OBJECT(item), VISIBILITY_KEY, (gpointer)MANUAL_VISIBILITY );
+     if (DEBUG) printf("leaving Kit::Item::shown\n");
 }
 
 void Kit::Item::hidden()
 {
+     if (DEBUG) printf("entering Kit::Item::hidden\n");
      gtk_widget_hide(item);
      g_object_set_data ( G_OBJECT(item), VISIBILITY_KEY, (gpointer)MANUAL_VISIBILITY );
+     if (DEBUG) printf("leaving Kit::Item::hidden\n");
 }
 
 void Kit::Item::switching()
 {
+     if (DEBUG) printf("entering Kit::Item::switching\n");
      g_object_set_data ( G_OBJECT(item), VISIBILITY_KEY, (gpointer)SWITCHING_VISIBILITY );
      update_visibility(item,NULL);
+     if (DEBUG) printf("leaving Kit::Item::switching\n");
 }
 
 void Kit::registerPropertyItem ( GtkBox *prop_item,
@@ -157,8 +195,7 @@ void Kit::registerPropertyItem ( GtkBox *prop_item,
                                  const char *prop_name
                                  )
 {
-    if (E_DEBUG)
-       printf("registering\n");
+    if (DEBUG) printf("entering Kit::rPI\n");
 	/*
     if (elems++)
     {
@@ -174,14 +211,13 @@ void Kit::registerPropertyItem ( GtkBox *prop_item,
     g_object_set_data ( G_OBJECT(prop_item), VISIBILITY_KEY, (gpointer)MANUAL_VISIBILITY );
     gtk_box_pack_start ( kit_widget, GTK_WIDGET(prop_item), FALSE, TRUE, 0 );
     //                   container   new child              expand fill  padding
-    if (E_DEBUG)
-       printf("registered\n");
+    if (DEBUG) printf("leaving Kit::rPI\n");
 }
 
 Kit::Item Kit::addTextEntry ( const char *prop_name, const char *default_val )
 {
-    if (E_DEBUG)
-       printf("addTextEntry\n");
+    if (DEBUG)
+       printf("addTextEntry...\n");
 
     struct support
     {
@@ -229,13 +265,15 @@ Kit::Item Kit::addTextEntry ( const char *prop_name, const char *default_val )
 
   registerPropertyItem ( GTK_BOX(item), support::write_func, support::read_func, prop_name );
   
+  if (DEBUG)
+       printf("addTextEntry done\n");
   return Kit::Item(item);
 }
 
 Kit::Item Kit::addIntEntry ( const char* prop_name, int min, int max, int step, int default_val )
 {
-    if (E_DEBUG)
-       printf("addIntEntry\n");
+    if (DEBUG)
+       printf("addIntEntry ...\n");
 
     struct support
     {
@@ -284,14 +322,17 @@ Kit::Item Kit::addIntEntry ( const char* prop_name, int min, int max, int step, 
   g_signal_connect ( (gpointer)spinbutton, "changed", G_CALLBACK(support::changed_callback), item );
 
   registerPropertyItem ( GTK_BOX(item), support::write_func, support::read_func, prop_name );
+
+  if (DEBUG)
+       printf("addIntEntry done\n");
   
   return Kit::Item(item);
 }    
 
 Kit::Item Kit::addButton ( const char *prop_name, bool toggle, bool toggle_state )
 {
-     if (E_DEBUG)
-        printf("addButton\n");
+     if (DEBUG)
+        printf("addButton ...\n");
      struct support
      {
           static void button_pressed(GtkButton *button, gpointer item)
@@ -379,14 +420,17 @@ Kit::Item Kit::addButton ( const char *prop_name, bool toggle, bool toggle_state
          registerPropertyItem ( GTK_BOX(item), support::write_func_b,
                                 support::read_func_b, prop_name );
      }
+
+     if (DEBUG)
+        printf("addButton done\n");
      
      return Kit::Item(item);
 }
 
 Kit::Item Kit::addFileSel(const char *prop_name, const char *dir_path, const char *pattern, const char *default_val)
 {
-  if (E_DEBUG)
-     printf("addFileSel(dir:%s,val:%s)\n",dir_path,default_val);
+  if (DEBUG)
+     printf("addFileSel(dir:%s,val:%s) ...\n",dir_path,default_val);
 
   struct support
   {
@@ -395,32 +439,32 @@ Kit::Item Kit::addFileSel(const char *prop_name, const char *dir_path, const cha
                 static GtkWidget *filechooserdialog = NULL;
                 if (!filechooserdialog)
                 {
-  if (E_DEBUG) printf(".\n");
+  if (DEBUG) printf(".\n");
                    GtkWidget *fcd = gtk_file_chooser_dialog_new ("Choose a file", NULL, GTK_FILE_CHOOSER_ACTION_OPEN, NULL);
-  if (E_DEBUG) printf(",\n");
+  if (DEBUG) printf(",\n");
                    filechooserdialog = fcd;
-  if (E_DEBUG) printf("..\n");
+  if (DEBUG) printf("..\n");
                    gtk_window_set_position (GTK_WINDOW (filechooserdialog), GTK_WIN_POS_CENTER_ON_PARENT);
-  if (E_DEBUG) printf("...\n");
+  if (DEBUG) printf("...\n");
                    gtk_window_set_modal (GTK_WINDOW (filechooserdialog), TRUE);
-  if (E_DEBUG) printf("=\n");
+  if (DEBUG) printf("=\n");
                    gtk_window_set_destroy_with_parent (GTK_WINDOW (filechooserdialog), TRUE);
-  if (E_DEBUG) printf("==\n");
+  if (DEBUG) printf("==\n");
                    gtk_window_set_skip_taskbar_hint (GTK_WINDOW (filechooserdialog), FALSE);
-  if (E_DEBUG) printf("===\n");
+  if (DEBUG) printf("===\n");
                    gtk_window_set_type_hint (GTK_WINDOW (filechooserdialog), GDK_WINDOW_TYPE_HINT_DIALOG);
-  if (E_DEBUG) printf("#\n");
+  if (DEBUG) printf("#\n");
                    gtk_window_set_transient_for ( GTK_WINDOW(filechooserdialog), 
                                                   GTK_WINDOW(gtk_widget_get_toplevel(GTK_WIDGET(external_widget))) );
-  if (E_DEBUG) printf("##\n");
+  if (DEBUG) printf("##\n");
                    g_signal_connect ( (gpointer) filechooserdialog, "file_activated",
                                     G_CALLBACK (support::file_activated), NULL );
-  if (E_DEBUG) printf("###\n");
+  if (DEBUG) printf("###\n");
                    g_signal_connect ( (gpointer) filechooserdialog, "delete_event",
                                     G_CALLBACK(gtk_widget_hide_on_delete), NULL );
-  if (E_DEBUG) printf("!\n");
+  if (DEBUG) printf("!\n");
                 }
-  if (E_DEBUG) printf("!!\n");
+  if (DEBUG) printf("!!\n");
                 return filechooserdialog;
          }
 
@@ -564,22 +608,22 @@ Kit::Item Kit::addFileSel(const char *prop_name, const char *dir_path, const cha
   g_signal_connect ((gpointer) comboboxentry, "changed", G_CALLBACK (support::combo_changed),item);
   g_signal_connect ((gpointer) GTK_ENTRY(GTK_BIN(comboboxentry)->child), "changed", G_CALLBACK (support::entry_changed),item);
 
-  if (E_DEBUG) printf("addFileSel/accessing dialog\n");
+  if (DEBUG) printf("addFileSel/accessing dialog\n");
   GtkWidget *filechooserdialog = support::get_dialog();
 
-  if (E_DEBUG) printf("addFileSel/creating filter(%s)\n",pattern);
+  if (DEBUG) printf("addFileSel/creating filter(%s)\n",pattern);
   GtkFileFilter *filter = gtk_file_filter_new();
-  if (E_DEBUG) printf("*\n");
+  if (DEBUG) printf("*\n");
   g_object_ref(G_OBJECT(filter));
-  if (E_DEBUG) printf("**\n",pattern);
+  if (DEBUG) printf("**\n",pattern);
   gtk_file_filter_add_pattern(filter, pattern);
 
-  if (E_DEBUG) printf("addFileSel/creating button\n");
+  if (DEBUG) printf("addFileSel/creating button\n");
   GtkWidget *button = gtk_button_new_with_mnemonic (_("..."));
   gtk_widget_show (button);
   gtk_box_pack_start (GTK_BOX (hbox), button, FALSE, FALSE, 0);
 
-  if (E_DEBUG)
+  if (DEBUG)
      printf("addFileSel/connecting signals\n");
 
   g_signal_connect ((gpointer) button, "released", G_CALLBACK (support::button_released), item );
@@ -591,6 +635,9 @@ Kit::Item Kit::addFileSel(const char *prop_name, const char *dir_path, const cha
 
   registerPropertyItem ( GTK_BOX(item), support::write_func,
                          support::read_func, prop_name );
+
+  if (DEBUG)
+     printf("addFileSel done\n");
                          
   return Kit::Item(item);
 }
