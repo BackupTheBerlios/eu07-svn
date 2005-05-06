@@ -62,6 +62,7 @@ gboolean gajewski_h(gpointer data)
 void
 init_interface (int *argcp, char ***argvp)
 {
+printf("init_interface started\n");
   GL_realizer::gl_init (argcp, argvp);
 
   main_window = create_main_window ();
@@ -81,7 +82,7 @@ init_interface (int *argcp, char ***argvp)
   gtk_window_set_transient_for (GTK_WINDOW (quit_dialog),
 				GTK_WINDOW (main_window));
 
-if (E_DEBUG) printf("Wins created, not shown\n"); 
+printf("Wins created, not shown\n"); 
 
 
 #ifdef EDITOR_FULL
@@ -102,6 +103,7 @@ if (E_DEBUG) printf("Wins created, not shown\n");
 #endif
   gtk_widget_show (main_window);
   gtk_widget_show (window2);
+printf("Wins shown\n"); 
 
 #ifndef EDITOR_FULL
 
@@ -126,8 +128,7 @@ if (E_DEBUG) printf("Wins created, not shown\n");
   
 #endif
 
-if (E_DEBUG)
-   printf("ret/init_interface\n");
+printf("ret/init_interface\n");
 
 };
 
