@@ -109,3 +109,32 @@ on_import_mode_radiotoolbutton_toggled (GtkToggleToolButton *toggletoolbutton,
 void
 on_import_mode_radiotoolbutton_toggled (GtkToggleToolButton *toggletoolbutton,
                                         gpointer         user_data);
+
+void
+on_quit_toolbutton_clicked             (GtkToolButton   *toolbutton,
+                                        gpointer         user_data);
+
+void
+on_quit_dialog_response                (GtkDialog       *dialog,
+                                        gint             response_id,
+                                        gpointer         user_data);
+
+gboolean
+on_main_window_delete_event            (GtkWidget       *widget,
+                                        GdkEvent        *event,
+                                        gpointer         user_data);
+
+gboolean
+on_main_window_destroy_event           (GtkWidget       *widget,
+                                        GdkEvent        *event,
+                                        gpointer         user_data);
+
+gboolean
+on_window2_delete_event                (GtkWidget       *widget,
+                                        GdkEvent        *event,
+                                        gpointer         user_data);
+
+gboolean
+on_window2_destroy_event               (GtkWidget       *widget,
+                                        GdkEvent        *event,
+                                        gpointer         user_data);
