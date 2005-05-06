@@ -729,7 +729,6 @@ create_quit_dialog (void)
   yes_button = gtk_button_new ();
   gtk_widget_show (yes_button);
   gtk_dialog_add_action_widget (GTK_DIALOG (quit_dialog), yes_button, GTK_RESPONSE_YES);
-  gtk_widget_set_sensitive (yes_button, FALSE);
   GTK_WIDGET_SET_FLAGS (yes_button, GTK_CAN_DEFAULT);
 
   alignment4 = gtk_alignment_new (0.5, 0.5, 0, 0);
