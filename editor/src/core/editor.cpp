@@ -293,7 +293,7 @@ osg::Node* Editor::createStatusBar(unsigned int n)
     osg::Vec3 delta(150.0f,0.0f,0.0f);
 
 
-	statusBar.reserve(n);
+	statusBar.reserve(n+1);
 	for (unsigned int i=0; i<n; i++)
     {
         osgText::Text* text = new  osgText::Text;
@@ -617,13 +617,13 @@ void Editor::updateNodeDesc()
 	if (selectedNode.valid())
 	{
 		selectedNode->getNodeDesc(buf);
-		Publisher::set_status_msg(3,buf);
-		statusBar[3]->setText(buf);
+		Publisher::set_status_msg(4,buf);
+		statusBar[4]->setText(buf);
 	}
 	else
 	{
-		Publisher::set_status_msg(3,"");
-		statusBar[3]->setText("");
+		Publisher::set_status_msg(4,"");
+		statusBar[4]->setText("");
 	}
 }
 
@@ -632,13 +632,13 @@ void Editor::selectMaterial(int i)
 	if (i<0 || !materials[i].valid())
 	{
 		material= NULL;
-		Publisher::set_status_msg(4,"blend");
+		Publisher::set_status_msg(5,"blend");
 //		statusBar[7]->setText("blend");
 	}
 	else
 	{
 		material= materials[i].get();
-		Publisher::set_status_msg(4,material->tex.c_str());
+		Publisher::set_status_msg(5,material->tex.c_str());
 //		statusBar[7]->setText(material->tex);
 		
 	}
@@ -1769,6 +1769,13 @@ bool Editor::onMove(unsigned int state)
 	sprintf(buf,"Z:%0.2f",hitPt.z());
 	statusBar[2]->setText(buf);
 	Publisher::set_status_msg(2,buf);
+
+	if (selectedNode.valid())		
+		sprintf(buf,"dist:%0.2f",(selectedNode->getPosition()-hitPt).length());
+	else
+		buf[0]= 0;
+	statusBar[3]->setText(buf);
+	Publisher::set_status_msg(3,buf);
 	redrawAll();
 
 	return true;

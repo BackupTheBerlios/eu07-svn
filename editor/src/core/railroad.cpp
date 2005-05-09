@@ -18,7 +18,8 @@ extern "C" {
 		registerProp(pr,"ballast shape",setBallastShape,getBallastShape,"StdBallast.shp","\\shapes","*.shp");
 		registerProp(pr,"rails shape",setRailsShape,getRailsShape,"Std1435Rails.shp","\\shapes","*.shp");
 //		registerProp(pr,"distance",setDistance,getDistance);
-		registerProp(pr,"distance",setDistance,getDistance,-1,-1,9999999,1);
+		registerProp(pr,"tracks dist [dm]",setTrackDistance,getTrackDistance,45,-1,9999999,1);
+		registerProp(pr,"distance [hm]",setDistance,getDistance,-1,-1,9999999,1);
 		registerProp(pr,"create",applyButton,NULL);
 		registerProp(pr,"mileposts",setMilepostsI,getMilepostsI,1);
 		registerProp(pr,"tracks",setNumTracks,getNumTracks,1,0,4);
@@ -28,7 +29,7 @@ extern "C" {
 		registerProp(pr,"posts offset",setPostsOffset,getPostsOffset,3,1,20);
 	}
 
-edRailLine::edRailLine() : edSplineFeature(), numTracks(1), tracksDist(5), 
+edRailLine::edRailLine() : edSplineFeature(), numTracks(1), tracksDist(4.5), 
 	tracksStep(5), croneWidth(10), croneStep(20), postsOffset(3), 
 	distance(-1), side(0), mileposts(true), terrain(true) 
 { 

@@ -15,7 +15,7 @@ public:
 		registerProp(pr,"dh[cm]",setDH,getDH,100,0,1000,1);
 		registerProp(pr,"type",setWireType,getWireType,1,0,1,1);
 		registerProp(pr,"wires",setNumWires,getNumWires,3,0,3,1);
-		registerProp(pr,"models",setModels,getModels,"tr/P-STB1]-3K.ive;tr/P-STB1]-3D.ive");
+		registerProp(pr,"models",setModels,getModels,"tr/B-STB1-3K.ive;tr/B-STB1-3D.ive");
 
 	}
 

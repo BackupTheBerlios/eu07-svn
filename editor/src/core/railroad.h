@@ -47,6 +47,8 @@ public:
 	virtual void applyFeature();
 	virtual void clearFeature();
 
+	void setTrackDistance(double dm) { distance= dm*0.1; };
+	double getTrackDistance() { return distance/0.1; };
 	void setDistance(int hm) { distance= hm*100; };
 	int getDistance() { return distance/100; };
 	void setBallastTex(const char* tex) { ballastTex= tex; };
