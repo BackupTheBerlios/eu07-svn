@@ -3,6 +3,7 @@
  * Glade will not overwrite this file.
  */
 
+#include "txt.h"
 
 #ifdef HAVE_CONFIG_H
 #  include <config.h>
@@ -63,7 +64,7 @@ main (int argc, char *argv[])
   gtk_widget_show (filechooserdialog1);
   g_signal_connect ((gpointer) filechooserdialog1, "destroy", G_CALLBACK(gtk_main_quit),
                     NULL);
-
+wysypujacy_text();
   gtk_main ();
 
 #ifdef G_OS_WIN32

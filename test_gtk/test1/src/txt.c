@@ -12,5 +12,5 @@ void wysypujacy_text()
 		text->setColor(osg::Vec4(1,0,0,1));
         text->setText("test");
 		osg::ref_ptr<osg::State> state= new osg::State;
-		text->compileGLObjects(*state);
+		//text->compileGLObjects(*state);
 }

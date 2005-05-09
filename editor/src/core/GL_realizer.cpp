@@ -11,7 +11,7 @@
 #include <GL/gl.h>
 #include <GL/glu.h>
 
-#define DEBUG 1
+#define DEBUG 0
 
 int GL_realizer::gl_inited = 0;
 GdkGLConfig *GL_realizer::gl_config= NULL;
