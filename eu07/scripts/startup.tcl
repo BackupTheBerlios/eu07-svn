@@ -9,10 +9,10 @@ source scripts/utilities.tcl
 /world.open "scenery/test/main.scn"
 
 
-#addMover eu07-424 PKP/EU07/303e_mover_ctrl.tcl abc
+addMover eu07-424 PKP/EU07/303e_mover_ctrl.tcl abc
 #addMoverTo bd1 PKP/BD/111a_mover.tcl abc eu07-424
 #addMover eu07-424 PKP/BD/111a_mover.tcl abc 
-addVehicle eu07-424 PKP/EU07/303e_ctrl.tcl abc
+#addVehicle eu07-424 PKP/EU07/303e_ctrl.tcl abc
 
 #addVehicle ty2-test PKP/ty2/ty2_ctrl.tcl abc
 #addVehicleTo ty2-test2 PKP/ty2/ty2beczka.tcl abc ty2-test
