@@ -3,6 +3,7 @@
  * Glade will not overwrite this file.
  */
 
+
 #ifdef HAVE_CONFIG_H
 #  include <config.h>
 #endif
