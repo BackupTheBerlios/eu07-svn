@@ -18,7 +18,7 @@ extern "C" {
 		registerProp(pr,"ballast shape",setBallastShape,getBallastShape,"StdBallast.shp","\\shapes","*.shp");
 		registerProp(pr,"rails shape",setRailsShape,getRailsShape,"Std1435Rails.shp","\\shapes","*.shp");
 //		registerProp(pr,"distance",setDistance,getDistance);
-		registerProp(pr,"tracks dist [dm]",setTrackDistance,getTrackDistance,45,-1,9999999,1);
+		registerProp(pr,"tracks dist [dm]",setTrackDistance,getTrackDistance,45,10,9999999,1);
 		registerProp(pr,"distance [hm]",setDistance,getDistance,-1,-1,9999999,1);
 		registerProp(pr,"create",applyButton,NULL);
 		registerProp(pr,"mileposts",setMilepostsI,getMilepostsI,1);
