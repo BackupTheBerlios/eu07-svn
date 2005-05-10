@@ -4,7 +4,7 @@
 
 #define E_DEBUG 0
 
-class Publisher 
+class Publisher
 {
     public:
         static void init(GtkWidget* main_window);

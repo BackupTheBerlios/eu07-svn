@@ -5,6 +5,7 @@
 #include <gtk/gtkgl.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include "../publisher.h"
 
 class MouseCoords
 {

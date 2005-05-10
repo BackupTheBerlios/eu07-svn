@@ -5,8 +5,8 @@ CPP  = g++.exe
 CC   = gcc.exe
 WINDRES = windres.exe
 RES  = 
-OBJ  = ../src/main.o ../src/callbacks.o ../src/interface.o ../src/support.o $(RES)
-LINKOBJ  = ../src/main.o ../src/callbacks.o ../src/interface.o ../src/support.o $(RES)
+OBJ  = ../src/main.o ../src/callbacks.o ../src/interface.o ../src/support.o ../src/txt.o $(RES)
+LINKOBJ  = ../src/main.o ../src/callbacks.o ../src/interface.o ../src/support.o ../src/txt.o $(RES)
 LIBS =  -L"C:/DEV-CPP/lib" -L"C:/GTK/LIB" -lgtk-win32-2.0 -lgdk-win32-2.0 -latk-1.0 -lgdk_pixbuf-2.0 -lpangowin32-1.0 -lgdi32 -lpango-1.0 -lgobject-2.0 -lgmodule-2.0 -lglib-2.0 -lintl -liconv  
 INCS =  -I"C:/DEV-CPP/include"  -I"C:/GTK/INCLUDE"  -I"C:/GTK/INCLUDE/GTK-2.0"  -I"C:/GTK/INCLUDE/GLIB-2.0"  -I"C:/GTK/INCLUDE/PANGO-1.0"  -I"C:/GTK/INCLUDE/ATK-1.0"  -I"C:/GTK/INCLUDE/GTKGLEXT-1.0"  -I"C:/GTK/LIB/GTK-2.0/INCLUDE"  -I"C:/GTK/LIB/GLIB-2.0/INCLUDE"  -I"C:/GTK/LIB/GTKGLEXT-1.0/INCLUDE"  -I"C:/GTK/INCLUDE/LIBGLADE-2.0"  -I"C:/GTK/INCLUDE/LIBXML2"  -I"./" 
 CXXINCS =  -I"C:/DEV-CPP/include/c++/3.3.1"  -I"C:/DEV-CPP/include/c++/3.3.1/mingw32"  -I"C:/DEV-CPP/include/c++/3.3.1/backward"  -I"C:/DEV-CPP/lib/gcc-lib/mingw32/3.3.1/include"  -I"C:/DEV-CPP/include"  -I"C:/GTK/INCLUDE"  -I"C:/GTK/INCLUDE/GTK-2.0"  -I"C:/GTK/INCLUDE/GLIB-2.0"  -I"C:/GTK/INCLUDE/PANGO-1.0"  -I"C:/GTK/INCLUDE/ATK-1.0"  -I"C:/GTK/INCLUDE/GTKGLEXT-1.0"  -I"C:/GTK/LIB/GTK-2.0/INCLUDE"  -I"C:/GTK/LIB/GLIB-2.0/INCLUDE"  -I"C:/GTK/LIB/GTKGLEXT-1.0/INCLUDE"  -I"C:/GTK/INCLUDE/LIBGLADE-2.0"  -I"C:/GTK/INCLUDE/LIBXML2"  -I"./" 
@@ -36,3 +36,6 @@ $(BIN): $(OBJ)
 
 ../src/support.o: ../src/support.c
 	$(CC) -c ../src/support.c -o ../src/support.o $(CFLAGS)
+
+../src/txt.o: ../src/txt.cpp
+	$(CC) -c ../src/txt.cpp -o ../src/txt.o $(CFLAGS)
