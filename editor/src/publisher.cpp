@@ -63,7 +63,11 @@ int Publisher::set_status_msg(int sbar_num,const char *msg)
     };    
 
     gtk_statusbar_push(GTK_STATUSBAR(sb),0,msg);
+    /*
     gtk_widget_queue_draw(GTK_STATUSBAR(sb)->label);
+    gtk_widget_queue_draw(GTK_STATUSBAR(sb));
+    */
+    gtk_widget_draw(sb,NULL);
     
     return 0;
 }
