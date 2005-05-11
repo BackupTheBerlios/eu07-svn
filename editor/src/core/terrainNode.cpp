@@ -476,6 +476,7 @@ void edTerrainNode::applyCulture(const char *cultureFile)
 
 void edTerrainNode::setMaterialI(int val)
 {
+//	Editor::instance()->selectMaterial(val);
 	setMaterial(Editor::instance()->getMaterial(val)); 
 	redrawAll(); 
 }

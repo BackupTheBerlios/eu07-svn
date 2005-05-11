@@ -69,6 +69,7 @@ OSG_realizer::OSG_realizer(GtkWidget* dr_area) : GL_realizer(dr_area),
 	initOsg();
 
 	frameStamp= new osg::FrameStamp();
+
 }
 
 OSG_realizer::~OSG_realizer()
@@ -199,6 +200,7 @@ gboolean OSG_realizer::exposed()
         // compile any GL objects that are required.
         databasePager->compileGLObjects(*(sceneView->getState()), availableTime);
 	end_gl();
+//	printf("redraw\n");
 
 	return true;
 }

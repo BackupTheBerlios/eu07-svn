@@ -9,7 +9,7 @@
 
 TopView::TopView(GtkWidget* dr_area) : OSG_realizer(dr_area), eye(0.0,0.0,0.0), mouseAdapter(NULL)
 {
-	setHeight(1000);
+	setHeight(300);
 	char buf[256];
 	GetPrivateProfileString("Settings","ViewX","0",buf,255,"editor.ini");
 	eye.x()= atof(buf);

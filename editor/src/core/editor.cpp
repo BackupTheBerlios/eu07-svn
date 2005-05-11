@@ -135,7 +135,7 @@ Editor::Editor(TopView *_mainView) : MouseAdapter(), mainView(_mainView), mode(e
 
 	edTerrainNode::terrainRoot= terrainRoot.get();
 
-	root->addChild(createStatusBar(4));
+//	root->addChild(createStatusBar(4));
 
 	stateset= new osg::StateSet();
 //	osg::PolygonMode *pm= new osg::PolygonMode();
@@ -277,7 +277,7 @@ void Editor::freeNodes()
 
 osg::Node* Editor::createStatusBar(unsigned int n)
 {
-
+/*
     osg::Geode* geode = new osg::Geode();
     
 
@@ -331,6 +331,8 @@ osg::Node* Editor::createStatusBar(unsigned int n)
 	projection->setNodeMask(0x0000FF00);
 
     return projection;
+	*/
+	return NULL;
 
 }
 
@@ -617,13 +619,13 @@ void Editor::updateNodeDesc()
 	if (selectedNode.valid())
 	{
 		selectedNode->getNodeDesc(buf);
-		Publisher::set_status_msg(4,buf);
-		statusBar[4]->setText(buf);
+		Publisher::set_status_msg(5,buf);
+//		statusBar[4]->setText(buf);
 	}
 	else
 	{
-		Publisher::set_status_msg(4,"");
-		statusBar[4]->setText("");
+		Publisher::set_status_msg(5,"");
+//		statusBar[4]->setText("");
 	}
 }
 
@@ -632,13 +634,13 @@ void Editor::selectMaterial(int i)
 	if (i<0 || !materials[i].valid())
 	{
 		material= NULL;
-		Publisher::set_status_msg(5,"blend");
+//		Publisher::set_status_msg(4,"blend");
 //		statusBar[7]->setText("blend");
 	}
 	else
 	{
 		material= materials[i].get();
-		Publisher::set_status_msg(5,material->tex.c_str());
+//		Publisher::set_status_msg(4,material->tex.c_str());
 //		statusBar[7]->setText(material->tex);
 		
 	}
@@ -1760,21 +1762,21 @@ bool Editor::onMove(unsigned int state)
 	static char buf[256];
 	sprintf(buf,"X:%0.2f",hitPt.x());
 //	sprintf(buf,"X:%0.2f %d",hitPt.x(),getCellX(hitPt.x()));
-	statusBar[0]->setText(buf);
+//	statusBar[0]->setText(buf);
 	Publisher::set_status_msg(0,buf);
 	sprintf(buf,"Y:%0.2f",hitPt.y());
 //	sprintf(buf,"Y:%0.2f %d",hitPt.y(),getCellY(hitPt.y()));
-	statusBar[1]->setText(buf);
+//	statusBar[1]->setText(buf);
 	Publisher::set_status_msg(1,buf);
 	sprintf(buf,"Z:%0.2f",hitPt.z());
-	statusBar[2]->setText(buf);
+//	statusBar[2]->setText(buf);
 	Publisher::set_status_msg(2,buf);
 
 	if (selectedNode.valid())		
 		sprintf(buf,"dist:%0.2f",(selectedNode->getPosition()-hitPt).length());
 	else
 		buf[0]= 0;
-	statusBar[3]->setText(buf);
+//	statusBar[3]->setText(buf);
 	Publisher::set_status_msg(3,buf);
 	redrawAll();
 
