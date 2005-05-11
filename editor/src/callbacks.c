@@ -82,6 +82,9 @@ printf("init_interface started\n");
   gtk_window_set_transient_for (GTK_WINDOW (quit_dialog),
 				GTK_WINDOW (main_window));
 
+
+  GtkWidget *fcd = gtk_file_chooser_dialog_new ("Choose a file", NULL, GTK_FILE_CHOOSER_ACTION_OPEN, NULL);
+
 printf("Wins created, not shown\n"); 
 
 
