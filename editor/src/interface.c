@@ -355,12 +355,14 @@ create_main_window (void)
 
   n3_statusbar = gtk_statusbar_new ();
   gtk_widget_show (n3_statusbar);
-  gtk_box_pack_start (GTK_BOX (status_hbox), n3_statusbar, TRUE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (status_hbox), n3_statusbar, FALSE, FALSE, 0);
+  gtk_widget_set_size_request (n3_statusbar, 90, -1);
   gtk_statusbar_set_has_resize_grip (GTK_STATUSBAR (n3_statusbar), FALSE);
 
   n4_statusbar = gtk_statusbar_new ();
   gtk_widget_show (n4_statusbar);
-  gtk_box_pack_start (GTK_BOX (status_hbox), n4_statusbar, TRUE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (status_hbox), n4_statusbar, FALSE, FALSE, 0);
+  gtk_widget_set_size_request (n4_statusbar, 90, -1);
   gtk_statusbar_set_has_resize_grip (GTK_STATUSBAR (n4_statusbar), FALSE);
 
   n5_statusbar = gtk_statusbar_new ();
