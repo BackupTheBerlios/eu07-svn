@@ -392,7 +392,7 @@ Kit::Item Kit::addButton ( const char *prop_name, bool toggle, bool toggle_state
      
      if (toggle)
      {
-         button = gtk_toggle_button_new_with_mnemonic (_(prop_name));
+         button = gtk_check_button_new_with_mnemonic (_(prop_name));
          gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button),toggle_state);
          gtk_widget_show (button);
          gtk_box_pack_start (GTK_BOX (item), button, FALSE, FALSE, 0);

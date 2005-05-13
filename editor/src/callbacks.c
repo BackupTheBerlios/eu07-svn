@@ -127,7 +127,7 @@ printf("Wins shown\n");
   kit[0].addTextEntry ("Kozlowski", "");
   kit[0].addTextEntry ("Jaworski", "");
   kit[0].addTextEntry ("Janowski", "");
-  kit[0].addTextEntry ("ski", "");
+  kit[0].addTextEntry ("Zalewski", "");
   kit[0].addButton ("Borowski", 1, 0);
   kit[0].addFileSel ("Majewski", "C:\\WINDOWS\\Desktop\\Editor","*.*","Zielinski");
   static Kit::Item gajewski_item = kit[0].addButton ("Gajewski", 1, 1);
