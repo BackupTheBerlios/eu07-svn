@@ -79,8 +79,10 @@ create_main_window (void)
   GtkWidget *main_hpaned;
   GtkWidget *viewport1;
   GtkWidget *main_drawingarea;
+  GtkWidget *properties_scrolledwindow;
+  GtkWidget *properties_viewport;
   GtkWidget *properties_vbox;
-  GtkWidget *properties_label;
+  GtkWidget *label6;
   GtkWidget *status_hbox;
   GtkWidget *n0_statusbar;
   GtkWidget *n1_statusbar;
@@ -321,14 +323,25 @@ create_main_window (void)
   gtk_container_add (GTK_CONTAINER (viewport1), main_drawingarea);
   gtk_widget_set_size_request (main_drawingarea, 512, 384);
 
+  properties_scrolledwindow = gtk_scrolled_window_new (NULL, NULL);
+  gtk_widget_show (properties_scrolledwindow);
+  gtk_paned_pack2 (GTK_PANED (main_hpaned), properties_scrolledwindow, FALSE, TRUE);
+  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (properties_scrolledwindow), GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
+
+  properties_viewport = gtk_viewport_new (NULL, NULL);
+  gtk_widget_show (properties_viewport);
+  gtk_container_add (GTK_CONTAINER (properties_scrolledwindow), properties_viewport);
+  gtk_widget_set_size_request (properties_viewport, 119, 88);
+  gtk_viewport_set_shadow_type (GTK_VIEWPORT (properties_viewport), GTK_SHADOW_NONE);
+
   properties_vbox = gtk_vbox_new (FALSE, 0);
   gtk_widget_show (properties_vbox);
-  gtk_paned_pack2 (GTK_PANED (main_hpaned), properties_vbox, FALSE, TRUE);
-  gtk_widget_set_size_request (properties_vbox, 160, 70);
+  gtk_container_add (GTK_CONTAINER (properties_viewport), properties_vbox);
+  gtk_widget_set_size_request (properties_vbox, 1, -1);
 
-  properties_label = gtk_label_new (_("Ten widget jest\nniewidoczny.\nZawierajacy go vbox\nsluzy do umieszczania\nzestawow edycyjnych.\n"));
-  gtk_box_pack_start (GTK_BOX (properties_vbox), properties_label, FALSE, FALSE, 0);
-  gtk_label_set_justify (GTK_LABEL (properties_label), GTK_JUSTIFY_CENTER);
+  label6 = gtk_label_new (_("Ten widget jest\nniewidoczny.\nZawierajacy go vbox\nsluzy do umieszczania\nzestawow edycyjnych.\n"));
+  gtk_box_pack_start (GTK_BOX (properties_vbox), label6, FALSE, FALSE, 0);
+  gtk_label_set_justify (GTK_LABEL (label6), GTK_JUSTIFY_CENTER);
 
   status_hbox = gtk_hbox_new (FALSE, 2);
   gtk_widget_show (status_hbox);
@@ -513,8 +526,10 @@ create_main_window (void)
   GLADE_HOOKUP_OBJECT (main_window, main_hpaned, "main_hpaned");
   GLADE_HOOKUP_OBJECT (main_window, viewport1, "viewport1");
   GLADE_HOOKUP_OBJECT (main_window, main_drawingarea, "main_drawingarea");
+  GLADE_HOOKUP_OBJECT (main_window, properties_scrolledwindow, "properties_scrolledwindow");
+  GLADE_HOOKUP_OBJECT (main_window, properties_viewport, "properties_viewport");
   GLADE_HOOKUP_OBJECT (main_window, properties_vbox, "properties_vbox");
-  GLADE_HOOKUP_OBJECT (main_window, properties_label, "properties_label");
+  GLADE_HOOKUP_OBJECT (main_window, label6, "label6");
   GLADE_HOOKUP_OBJECT (main_window, status_hbox, "status_hbox");
   GLADE_HOOKUP_OBJECT (main_window, n0_statusbar, "n0_statusbar");
   GLADE_HOOKUP_OBJECT (main_window, n1_statusbar, "n1_statusbar");
