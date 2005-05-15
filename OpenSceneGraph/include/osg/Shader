@@ -1,0 +1,168 @@
+/* -*-c++-*- OpenSceneGraph - Copyright (C) 1998-2005 Robert Osfield 
+ * Copyright (C) 2003-2005 3Dlabs Inc. Ltd.
+ * Copyright (C) 2004-2005 Nathan Cournia
+ *
+ * This application is open source and may be redistributed and/or modified   
+ * freely and without restriction, both in commericial and non commericial
+ * applications, as long as this copyright notice is maintained.
+ * 
+ * This application is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+*/
+
+/* file:	include/osg/Shader
+ * author:	Mike Weiblen 2005-03-30
+*/
+
+#ifndef OSG_SHADER
+#define OSG_SHADER 1
+
+#include <set>
+#include <string>
+
+#include <osg/Program>
+
+namespace osg {
+
+///////////////////////////////////////////////////////////////////////////
+/** osg::Shader is an application-level abstraction of an OpenGL glShader.
+  * It is a container to load the shader source code text and manage its
+  * compilation.
+  * An osg::Shader may be attached to more than one osg::Program.
+  * Shader will automatically manage per-context instancing of the
+  * internal objects, if that is necessary for a particular display
+  * configuration.
+  */
+
+class SG_EXPORT Shader : public osg::Object
+{
+    public:
+
+	enum Type {
+	    VERTEX = GL_VERTEX_SHADER,
+	    FRAGMENT = GL_FRAGMENT_SHADER
+	};
+
+        Shader( Type type, const char* sourceText = 0 );
+
+        /** Copy constructor using CopyOp to manage deep vs shallow copy.*/
+        Shader(const Shader& rhs, const osg::CopyOp& copyop=osg::CopyOp::SHALLOW_COPY);
+
+	META_Object(osg, Shader);	// see note in Shader.cpp Shader()
+
+        int compare(const Shader& rhs) const;
+
+        // data access methods.
+
+	/** Load the Shader's source code text from a string. */
+	void setShaderSource( const char* sourceText );
+
+	/** Load the Shader's source code text from a file. */
+	bool loadShaderSourceFromFile( const char* fileName );
+
+	/** Query the shader's source code text */
+	inline const std::string& getShaderSource() const { return _shaderSource; }
+
+	/** Get the Shader type as an enum. */
+	inline Type getType() const { return _type; }
+
+	/** Get the Shader type as a descriptive string. */
+	const char* getTypename() const;
+
+        /** Mark our PCSs as needing recompilation.
+	  * Also mark Programs that depend on us as needing relink */
+        void dirtyShader();        
+
+	/** If needed, compile the PCS's glShader */
+	void compileShader(unsigned int contextID) const;
+
+	/** For a given GL context, attach a glShader to a glProgram */
+	void attachShader(unsigned int contextID, GLuint program) const;
+
+	/** Query InfoLog from a glShader */
+	void getGlShaderInfoLog(unsigned int contextID, std::string& log) const;
+
+	/** A name for use by the application */
+	void setName( const std::string& name ) { _name = name; }
+	void setName( const char* name ) { _name = name; }
+	const std::string& getName() const { return _name; };
+
+	/** Mark internal glShader for deletion.
+	  * Deletion requests are queued tuntil they can be executed
+	  * in the proper GL context. */
+	static void deleteGlShader(unsigned int contextID, GLuint shader);
+
+        /** flush all the cached glShaders which need to be deleted
+          * in the OpenGL context related to contextID.*/
+        static void flushDeletedGlShaders(unsigned int contextID,double currentTime, double& availableTime);
+
+    protected:
+	/** PerContextShader (PCS) is an OSG-internal encapsulation of glShader per-GL context. */
+	class PerContextShader : public osg::Referenced
+	{
+	    public:
+		PerContextShader(const Shader* shader, unsigned int contextID);
+
+		GLuint getHandle() const {return _glShaderHandle;}
+
+		void requestCompile();
+		void compileShader();
+		void getInfoLog( std::string& infoLog ) const;
+
+		/** Attach our glShader to a glProgram */
+		void attachShader(GLuint program) const;
+
+		/** Detach our glShader from a glProgram */
+		void detachShader(GLuint program) const;
+
+	    protected:	/*methods*/
+		~PerContextShader();
+
+	    protected:	/*data*/
+		/** Pointer to our parent osg::Shader */
+		const Shader* _shader;
+		/** Pointer to this context's extension functions. */
+		osg::ref_ptr<osg::GL2Extensions> _extensions;
+		/** Handle to the actual glShader. */
+		GLuint _glShaderHandle;
+		/** Does our glShader need to be recompiled? */
+		bool _needsCompile;
+		/** Is our glShader successfully compiled? */
+		bool _isCompiled;
+		const unsigned int _contextID;
+
+	    private:
+		PerContextShader();	// disallowed
+		PerContextShader(const PerContextShader&);	// disallowed
+		PerContextShader& operator=(const PerContextShader&);	// disallowed
+	};
+
+    protected:	/*methods*/
+        Shader();	// undesired, temporarily required by META_Object.
+        virtual ~Shader();
+
+        PerContextShader* getPCS(unsigned int contextID) const;
+
+	friend class Program;
+	bool addProgramRef( Program* program );
+	bool removeProgramRef( Program* program );
+
+    protected:	/*data*/
+	const Type _type;
+	std::string _name;
+	std::string _shaderSource;
+	/** osg::Programs that this osg::Shader is attached to */
+	typedef std::set< Program* > ProgramSet;
+	ProgramSet _programSet;
+        mutable osg::buffered_value< osg::ref_ptr<PerContextShader> > _pcsList;
+
+    private:
+        Shader& operator=(const Shader&);	// disallowed
+};
+
+}
+
+#endif
+
+/*EOF*/
