@@ -1,0 +1,202 @@
+#--------------------------------------------------------------------
+#   simcore.pak
+#   ============
+#   Description of your class/package
+#
+#   17-Dec-2004   user	created
+#--------------------------------------------------------------------
+
+#--------------------------------------------------------------------
+beginmodule nsimnode
+    setdir simcore
+    setfiles {
+        nsimnode_main nsimnode_cmds
+    }
+    setheaders {
+        nsimnode
+    }
+endmodule
+
+#--------------------------------------------------------------------
+beginmodule ndynamic
+    setdir simcore
+    setfiles {
+        ndynamic_main ndynamic_cmds
+    }
+    setheaders {
+        ndynamic dumb3d
+    }
+endmodule
+
+#--------------------------------------------------------------------
+beginmodule nmcdynamic
+    setdir simcore
+    setfiles {
+        nmcdynamic_main nmcdynamic_cmds
+    }
+    setheaders {
+        nmcdynamic
+    }
+endmodule
+
+#--------------------------------------------------------------------
+beginmodule ntrack
+    setdir simcore
+    setfiles {
+        ntrack_main ntrack_cmds segment trkfoll
+    }
+    setheaders {
+        ntrack segment trkfoll
+    }
+endmodule
+
+#--------------------------------------------------------------------
+beginmodule ncamerahandle
+    setdir simcore
+    setfiles {
+        ncamerahandle_main ncamerahandle_cmds
+    }
+    setheaders {
+        ncamerahandle
+    }
+endmodule
+
+#--------------------------------------------------------------------
+beginmodule ncamera
+    setdir simcore
+    setfiles {
+        ncamera_main ncamera_cmds
+    }
+    setheaders {
+        ncamera
+    }
+endmodule
+
+#--------------------------------------------------------------------
+beginmodule nworld
+    setdir simcore
+    setfiles {
+        nworld_main nworld_cmds
+    }
+    setheaders {
+        nworld usefull
+    }
+endmodule
+
+#--------------------------------------------------------------------
+beginmodule nsimevent
+    setdir simcore
+    setfiles {
+        nsimevent_main nsimevent_cmds
+    }
+    setheaders {
+        nsimevent
+    }
+endmodule
+
+#--------------------------------------------------------------------
+beginmodule nsesetmatrix
+    setdir simcore
+    setfiles {
+        nsesetmatrix_main nsesetmatrix_cmds
+    }
+    setheaders {
+        nsesetmatrix
+    }
+endmodule
+
+#--------------------------------------------------------------------
+beginmodule nsecommands
+    setdir simcore
+    setfiles {
+        nsecommands_main nsecommands_cmds
+    }
+    setheaders {
+        nsecommands
+    }
+endmodule
+
+#--------------------------------------------------------------------
+beginmodule nseswitch
+    setdir simcore
+    setfiles {
+        nseswitch_main nseswitch_cmds
+    }
+    setheaders {
+        nseswitch
+    }
+endmodule
+
+#--------------------------------------------------------------------
+beginmodule nstateholder
+    setdir simcore
+    setfiles {
+        nstateholder_main nstateholder_cmds
+    }
+    setheaders {
+        nstateholder
+    }
+endmodule
+
+#--------------------------------------------------------------------
+beginmodule ntemplatenode
+    setdir simcore
+    setfiles {
+        ntemplatenode_main ntemplatenode_cmds
+    }
+    setheaders {
+        ntemplatenode
+    }
+endmodule
+
+#--------------------------------------------------------------------
+beginmodule nsignal
+    setdir simcore
+    setfiles {
+        nsignal_main nsignal_cmds
+    }
+    setheaders {
+        nsignal
+    }
+endmodule
+
+#--------------------------------------------------------------------
+beginmodule nsimpletimetable
+    setdir simcore
+    setfiles {
+        nsimpletimetable_main nsimpletimetable_cmds
+    }
+    setheaders {
+        nsimpletimetable
+    }
+endmodule
+
+#--------------------------------------------------------------------
+begintarget simcore
+    settype package
+    setmods {
+		nsimnode
+		ndynamic
+		nmcdynamic
+		ntrack
+		ncamerahandle
+		ncamera
+        nworld
+		nsimevent
+		nsesetmatrix
+		nsecommands
+		nseswitch
+		nstateholder
+		ntemplatenode
+		nsignal
+		nsimpletimetable
+    }
+    setdepends { nkernel nnebula nopengl multimedia }
+    setlibs_win32 { nkernel.lib nnebula.lib nopengl.lib multimedia.lib osg.lib osgUtil.lib OpenThreadsWin32.lib newton.lib }
+    setlibs_unix  { nkernel nnebula}
+endtarget
+
+#--------------------------------------------------------------------
+#   EOF
+#--------------------------------------------------------------------
+
