@@ -1,0 +1,165 @@
+#ifndef N_DYNAMIC_H
+#define N_DYNAMIC_H
+//------------------------------------------------------------------------------
+/**
+    @class ndynamic
+
+    @brief a brief description of the class
+
+    a detailed description of the class
+
+    (C)	2003	user
+*/
+#ifndef N_ROOT_H
+#include "kernel/nroot.h"
+#endif
+
+#include "simcore/nsimnode.h"
+
+//#include "collide/ncollideserver.h"
+//#include "gfx/nchannelserver.h"
+
+//#include "node/n3dnode.h"
+
+#undef N_DEFINES
+#define N_DEFINES ndynamic
+#include "kernel/ndefdllclass.h"
+
+#include "misc/nmathserver.h"
+#include "simcore/trkfoll.h"
+//#include "customnodes/nanimctrl.h"
+
+//const int iMaxAxles= 2;	
+
+class TPantograph
+{
+	friend class nDynamic;
+public:
+	TPantograph() : Owner(NULL), Wire(NULL), Up(false), Height(0), Offset(0,0,0), HalfWidth(0), 
+					WireNodeOffsetX(0.0) ,WireNodeOffsetZ(0.0), Ctrl(NULL) {};
+	void Update(double dt);
+	void UpdateChannels();
+	void Init(int id, dvector3 offset, float halfwidth, nDynamic *owner);
+private:
+	dvector3 Offset;
+	bool Up;
+	double Height;
+	double HalfWidth;
+	line3 line;
+//	double Speed;
+//	int ChannelId;
+//	int CtrlID;
+	TController *Ctrl;
+	nDynamic *Owner;
+	class nCatenary *Wire;
+	double WireNodeOffsetX,WireNodeOffsetZ;
+};
+
+enum TDir { cFront, cBack };
+
+
+class nAnimCtrl;
+class nTrack;
+class nTrain;
+//------------------------------------------------------------------------------
+class nDynamic : public nGameNode
+{
+	friend nTrack;
+public:
+    /// constructor
+    nDynamic();
+    /// destructor
+    virtual ~nDynamic();
+    /// persistency
+    virtual bool SaveCmds(nPersistServer* fileServer);
+
+	virtual void Initialize();
+
+	virtual void SetVisual3DNode(n3DNode *node);
+	virtual void UpdateVisual(bool UpdateCollide= true);
+
+	virtual void SetNumAxles(int n);
+
+	virtual const char * getTypeName() { return TypeName; };
+	virtual void setParameters(char *szName);
+	virtual void Flip();
+	virtual void SetTrack(nTrack *node, double fDist= 0);
+
+	void inline SetDir(double dir) { Dir= dir; if (numAxles>0) {Axles[0].SetPrimary(false); Axles[numAxles-1].SetPrimary(false); if (dir>=0) Axles[0].SetPrimary(true); if (dir<0) Axles[numAxles-1].SetPrimary(true); }; };
+	float inline GetDir() { return Dir; };
+	void inline SetAI(bool val) { AI= val; };
+//	void setVisual(n3DNode *node) { Visual= node; };
+	void SetStdParams(float HalfMaxAxleDist, float Width, int NumPantographs) { fHalfMaxAxleDist= HalfMaxAxleDist; fWidth= Width; SetNumPantographs(NumPantographs); };
+
+	void inline InitPantograph(int id, dvector3 offset, float halfwidth) { Pantographs[id].Init(id,offset,halfwidth,this); };
+	void inline SetNumPantographs(int n) { SafeDeleteArray(Pantographs); numPantographs= n; Pantographs= new TPantograph[n]; };
+	void inline SetPantographState(int ID, bool Up) { n_assert(ID>=0 && ID<numPantographs); Pantographs[ID].Up= Up; };
+
+	virtual void ConnectTo(nDynamic *Dynamic, TDir Dir);
+
+	virtual void Move(double s, nDynamic *Caller=NULL);
+
+	virtual void UpdateForce(double dt) {};
+	virtual double Update(double dt);
+
+	virtual void UpdateElements(double dt);
+
+	inline void SetEnabled(bool en) { enabled= en; };
+
+	inline TTrackFollower* GetPrimaryAxle() { n_assert(numAxles>0); return (Axles[0].IsPrimary() ? &Axles[0] : &Axles[numAxles-1]); };
+
+	inline nTrack* GetMyTrack() { n_assert(numAxles>0); return (Axles[0].IsPrimary() ? Axles[0].GetTrack() : Axles[numAxles-1].GetTrack()); };
+
+	virtual void Status();
+
+	virtual void UpdateChannels();
+	virtual void UpdateAudioChannels();
+
+//	dvector3 GetDirection() { return vFront; };
+	dvector3 GetDirection() { n_assert(numAxles>1); return Normalize( Axles[numAxles-1].pPosition-Axles[0].pPosition); };
+	dvector3 GetPosition() { n_assert(numAxles>0); return (Axles[numAxles-1].pPosition*0.5+Axles[0].pPosition*0.5); };
+
+	double v;		
+	int numAxles;
+	TTrackFollower *Axles;		//McZapkie-170204: definicja ukladu osi
+//	TTrackFollower Axle[1];
+
+	matrix44 mat;
+    dvector3  vUp,vFront,vLeft;
+
+	double fWidth;
+
+	nAnimCtrl *AnimCtrl;
+
+	nTrain *Train;
+
+	nRoot *elementsRoot;
+
+    /// pointer to nKernelServer
+    static nKernelServer* kernelServer;
+    static nCollideServer *collideServer;
+    static nChannelServer *channelServer;
+protected:
+//	n3DNode *Visual;
+	char TypeName[16];
+	double fHalfMaxAxleDist;
+//	int Counter;
+	double f1sTimer;
+	double Dir;
+	bool AI;
+	bool enabled;
+	nDynamic *ConnectedFront;
+	nDynamic *ConnectedBack;
+
+	nNode trackNode;
+
+//	dvector3 Pantograph1Offset;
+//	dvector3 Pantograph2Offset;
+	int numPantographs;
+	TPantograph *Pantographs;
+
+
+};
+//------------------------------------------------------------------------------
+#endif
+
