@@ -1,2 +1,0 @@
-
-void wysypujacy_text();
