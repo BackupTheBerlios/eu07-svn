@@ -11,4 +11,4 @@
 # For VC6
 set gen_vc gen_workspace
 # For VC7
-#set gen_vc gen_solution
+set gen_vc gen_solution
