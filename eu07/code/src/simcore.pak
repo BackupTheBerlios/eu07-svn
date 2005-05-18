@@ -192,7 +192,7 @@ begintarget simcore
 		nsimpletimetable
     }
     setdepends { nkernel nnebula nopengl multimedia }
-    setlibs_win32 { nkernel.lib nnebula.lib nopengl.lib multimedia.lib osg.lib osgUtil.lib OpenThreadsWin32.lib newton.lib }
+    setlibs_win32 { nkernel.lib nnebula.lib nopengl.lib multimedia.lib osg.lib osgUtil.lib OpenThreadsWin32.lib }
     setlibs_unix  { nkernel nnebula}
 endtarget
 
