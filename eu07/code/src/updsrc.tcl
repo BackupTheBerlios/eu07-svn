@@ -95,7 +95,7 @@ foreach {ws wsl} [array get workspaces] {
     puts "==========================="
     
     # Build VS6 workspace files.
-#    gen_workspace $ws $wsl
+    gen_workspace $ws $wsl
     # Build VS7 solution files.
     gen_solution $ws $wsl
     foreach {m} $wsl {
