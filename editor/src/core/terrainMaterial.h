@@ -25,6 +25,7 @@ class TerrainMaterial : public osg::Referenced
 {
 public:
 	TerrainMaterial() :	UID(0), type(0), texDim(1,1) { texMat.identity(); };
+	virtual ~TerrainMaterial() {};
 
 	void load(std::istream &file);
 	inline bool	hasTex() { return !tex.empty(); };

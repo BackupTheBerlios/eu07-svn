@@ -3,7 +3,7 @@
 #include "publisher.h"
 #include "core/PropertySet.h"
 
-#define DEBUG 1
+#define DEBUG 0
 
 GtkBox *Kit::external_widget;
 GtkWidget *Kit::active=NULL;

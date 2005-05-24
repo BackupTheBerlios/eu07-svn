@@ -21,8 +21,12 @@
 			CharacterSet="2">
 			<Tool
 				Name="VCCLCompilerTool"
-				Optimization="2"
+				Optimization="4"
+				GlobalOptimizations="TRUE"
 				InlineFunctionExpansion="1"
+				FavorSizeOrSpeed="1"
+				OptimizeForProcessor="2"
+				OptimizeForWindowsApplication="TRUE"
 				AdditionalIncludeDirectories=".\"
 				PreprocessorDefinitions="NDEBUG;WIN32;_WINDOWS;HAVE_CONFIG_H;EDITOR_FULL;ANSI_DECLARATORS"
 				StringPooling="TRUE"
@@ -37,6 +41,7 @@
 				ProgramDataBaseFileName=".\Release/"
 				WarningLevel="3"
 				SuppressStartupBanner="TRUE"
+				DebugInformationFormat="0"
 				CompileAs="0"/>
 			<Tool
 				Name="VCCustomBuildTool"/>
@@ -46,6 +51,7 @@
 				OutputFile="..\..\editor-bin\bin/editor.exe"
 				LinkIncremental="2"
 				SuppressStartupBanner="TRUE"
+				GenerateDebugInformation="FALSE"
 				ProgramDatabaseFile=".\Release/editor.pdb"
 				SubSystem="1"
 				TargetMachine="1"/>

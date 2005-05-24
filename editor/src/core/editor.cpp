@@ -86,6 +86,7 @@ Editor *Editor::instance()
 
 Editor::Editor(TopView *_mainView) : MouseAdapter(), mainView(_mainView), mode(em_Select), allowRedraws(false)
 {
+	material= NULL;
 	self= this;
 
 //	defaultOptions= new osgDB::ReaderWriter::Options();
@@ -161,7 +162,8 @@ Editor::Editor(TopView *_mainView) : MouseAdapter(), mainView(_mainView), mode(e
 
 	textureMatrix.makeIdentity();
 	
-	TerrainMaterial *tm;
+
+	osg::ref_ptr<TerrainMaterial> tm;
 	std::ifstream file("default.mat", std::ios::in);
 	char buf[256];
 	file.getline(buf,255);
@@ -169,17 +171,27 @@ Editor::Editor(TopView *_mainView) : MouseAdapter(), mainView(_mainView), mode(e
 	unsigned int n=0;
 	file >> n;
 	materials.resize(n);
-	for (unsigned int i=0; i<n; i++)
-		materials[i]= NULL;
+//	for (unsigned int i=0; i<n; i++)
+//		materials[i]= NULL;
+	
 	while (!file.eof())
 	{
-		tm= new TerrainMaterial();
-		tm->load(file);
-		if (tm->UID<n && !materials[tm->UID].valid())
-			materials[tm->UID]= tm;
-		else
-			SafeDelete(tm);
+		unsigned int UID= 0;
+		file >> UID;
+
+//		if (tm->UID<n && !materials[tm->UID].valid())
+		if (UID>0 && UID<n && !materials[UID].valid())
+		{
+			tm= new TerrainMaterial();
+			tm->UID= UID;
+			tm->load(file);
+			//delete tm;
+//			SafeDelete(tm);
+			materials[UID]= tm.get();
+		}
+		else MessageBox(0,"!","!",MB_OK);
 	}
+	
 	file.close();
 	selectMaterial( materials.size()>1 ? 1 : -1 );
 	
@@ -229,6 +241,8 @@ Editor::Editor(TopView *_mainView) : MouseAdapter(), mainView(_mainView), mode(e
 	mater->setDiffuse(osg::Material::Face::FRONT_AND_BACK, osg::Vec4(1.0,0.0,0.0,1.0));
 //					mater->setEmission(osg::Material::Face::FRONT_AND_BACK, osg::Vec4(1.0,0.0,1.0,1.0));
 	selectedNodesState->setAttributeAndModes(mater);
+
+	selectedNode= NULL;
 
 }
 
@@ -360,7 +374,7 @@ void Editor::CreateVisuals()
 		norm->push_back(osg::Vec3(0,0,1));
 		geom->setVertexArray( v );
 		geom->setNormalArray( norm );
-		geom->setNormalBinding( osg::Geometry::BIND_PER_VERTEX );
+		geom->setNormalBinding( osg::Geometry::BIND_OVERALL );
 		geom->setUseDisplayList(true);
 
 
@@ -459,7 +473,7 @@ void Editor::CreateVisuals()
 		norm->push_back(osg::Vec3(0,0,1));
 		geom->setVertexArray( v );
 		geom->setNormalArray( norm );
-		geom->setNormalBinding( osg::Geometry::BIND_PER_VERTEX );
+		geom->setNormalBinding( osg::Geometry::BIND_OVERALL );
 
 		geode= new osg::Geode();
 		geode->setNodeMask(nm_Nodes);
@@ -512,7 +526,7 @@ void Editor::CreateVisuals()
 		norm->push_back(osg::Vec3(0,0,1));
 		geom->setVertexArray( v );
 		geom->setNormalArray( norm );
-		geom->setNormalBinding( osg::Geometry::BIND_PER_VERTEX );
+		geom->setNormalBinding( osg::Geometry::BIND_OVERALL );
 		geom->setUseDisplayList(true);
 
 
@@ -631,6 +645,7 @@ void Editor::updateNodeDesc()
 
 void Editor::selectMaterial(int i)
 {
+	printf("select material!\n");
 	if (i<0 || !materials[i].valid())
 	{
 		material= NULL;
@@ -1359,7 +1374,7 @@ bool Editor::onPush(unsigned int button, unsigned int state)
 			if (button==1)
 //				&&				viewer->computeIntersections(ea.getXnormalized(), ea.getYnormalized(), srtmRoot.get(), hits))
 			{
-				int what= 0;
+				int what= 0;	//terrain or srtm, HACK :(
 				hitPt= getPointOnTerrain(getWorldX(),getWorldY(),true,true,&what);
 //				hitPt.set(getWorldX(), getWorldY(),0);
 //				hitPt.z()= srtmData.getHeight(hitPt.x(),hitPt.y());

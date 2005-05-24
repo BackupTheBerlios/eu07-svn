@@ -86,6 +86,7 @@ void edNode::setVisual(osg::AutoTransform *visual, osg::Switch *swtch)
 
 void edNode::updateVisual()
 {
+//	return;
 	if (!transform.valid()) 
 	{
 		transform= new osg::AutoTransform();

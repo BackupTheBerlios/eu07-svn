@@ -37,7 +37,9 @@ class ReflMapCallback : public osg::Drawable::DrawCallback
 	{
 		static osg::ref_ptr<CubeMapCallback> cmc= new CubeMapCallback();
 		static osg::ref_ptr<ReflMapCallback> rmc= new ReflMapCallback();
-		file >> UID >> type;
+		file >> type;
+//		if (UID<=0)
+//			return;
 		switch (type)
 		{
 			case 0: file >> tex >> texDim.x() >> texDim.y() >> reflectionTex; break;
