@@ -264,7 +264,8 @@ void edFlexTrack::updateVisual()
 	{
 		osg::Texture2D *tex2d= NULL;
 		osg::Material *mater= NULL;
-		osg::StateSet *dstate= NULL;
+		osg::StateSet *ballast_dstate= NULL;
+		osg::StateSet *rails_dstate= NULL;
 		osg::Geode *geode= NULL;
 		osg::Geometry *geom= NULL;
 		double minDist= 0;
@@ -275,8 +276,8 @@ void edFlexTrack::updateVisual()
 
 		bool curve= true;
 		osg::ref_ptr<osg::LineSegment> ls= new osg::LineSegment(trackPieces[0]->segment.GetPt1(),trackPieces[0]->segment.GetPt2());
-		if (ls->intersect(osg::BoundingSphere(trackPieces[0]->segment.GetCPt1(),0.01)) && 
-			ls->intersect(osg::BoundingSphere(trackPieces[0]->segment.GetCPt2(),0.01)))
+		if (ls->intersect(osg::BoundingSphere(trackPieces[0]->segment.GetCPt1(),0.1)) && 
+			ls->intersect(osg::BoundingSphere(trackPieces[0]->segment.GetCPt2(),0.1)))
 			curve= false;
 
 //		curve= false;
@@ -307,6 +308,33 @@ void edFlexTrack::updateVisual()
 		double lastDist= 3000;
 
 
+		tex2d= new osg::Texture2D();
+		tex2d->setDataVariance(osg::Node::STATIC);
+		ballastTex2D= tex2d;
+		ballast_dstate= new osg::StateSet();
+		ballast_dstate->setDataVariance(osg::Node::STATIC);
+//		tex2d->setUseHardwareMipMapGeneration(false);
+		tex2d->setWrap(osg::Texture::WRAP_S, osg::Texture::REPEAT);
+		tex2d->setWrap(osg::Texture::WRAP_T, osg::Texture::REPEAT);
+		tex2d->setImage(osgDB::readImageFile(ballastTex.c_str()));
+//		tex2d->setImage(osgDB::readImageFile("TpD1.dds",osgDB::Registry::CACHE_ALL));
+		ballast_dstate->setTextureAttributeAndModes(0, tex2d, osg::StateAttribute::ON );
+//			dstate->setMode( GL_CULL_FACE, osg::StateAttribute::OFF );
+
+		tex2d= new osg::Texture2D();
+		tex2d->setDataVariance(osg::Node::STATIC);
+		railsTex2D= tex2d;
+		rails_dstate= new osg::StateSet();
+		rails_dstate->setDataVariance(osg::Node::STATIC);
+//		tex2d->setUseHardwareMipMapGeneration(false);
+		tex2d->setWrap(osg::Texture::WRAP_S, osg::Texture::REPEAT);
+		tex2d->setWrap(osg::Texture::WRAP_T, osg::Texture::REPEAT);
+		tex2d->setImage(osgDB::readImageFile(railsTex.c_str()));
+//		tex2d->setImage(osgDB::readImageFile("Rail_screw_used1.dds",osgDB::Registry::CACHE_ALL));
+		rails_dstate->setTextureAttributeAndModes(0, tex2d, osg::StateAttribute::ON );
+//			dstate->setMode( GL_CULL_FACE, osg::StateAttribute::OFF );
+
+
 		do 
 		{
 			if (step>trackPieces[0]->segment.GetLength()*0.9)
@@ -318,21 +346,9 @@ void edFlexTrack::updateVisual()
 		geom->setUserData(this);
 		geom->setDataVariance(osg::Node::STATIC);
 
-		tex2d= new osg::Texture2D();
-		tex2d->setDataVariance(osg::Node::STATIC);
-		ballastTex2D= tex2d;
-		dstate= new osg::StateSet();
-		dstate->setDataVariance(osg::Node::STATIC);
 		geode= new osg::Geode();
 		geode->setDataVariance(osg::Node::STATIC);
-//		tex2d->setUseHardwareMipMapGeneration(false);
-		tex2d->setWrap(osg::Texture::WRAP_S, osg::Texture::REPEAT);
-		tex2d->setWrap(osg::Texture::WRAP_T, osg::Texture::REPEAT);
-		tex2d->setImage(osgDB::readImageFile(ballastTex.c_str()));
-//		tex2d->setImage(osgDB::readImageFile("TpD1.dds",osgDB::Registry::CACHE_ALL));
-		dstate->setTextureAttributeAndModes(0, tex2d, osg::StateAttribute::ON );
-//			dstate->setMode( GL_CULL_FACE, osg::StateAttribute::OFF );
-		geode->setStateSet(dstate);
+		geode->setStateSet(ballast_dstate);
 		geode->addDrawable(geom);
 		geode->setUserData(this);
 //		addVisual(geode);
@@ -382,21 +398,9 @@ void edFlexTrack::updateVisual()
 		geom->setDataVariance(osg::Node::STATIC);
 		geom->setUserData(this);
 
-		tex2d= new osg::Texture2D();
-		tex2d->setDataVariance(osg::Node::STATIC);
-		railsTex2D= tex2d;
-		dstate= new osg::StateSet();
-		dstate->setDataVariance(osg::Node::STATIC);
 		geode= new osg::Geode();
 		geode->setDataVariance(osg::Node::STATIC);
-//		tex2d->setUseHardwareMipMapGeneration(false);
-		tex2d->setWrap(osg::Texture::WRAP_S, osg::Texture::REPEAT);
-		tex2d->setWrap(osg::Texture::WRAP_T, osg::Texture::REPEAT);
-		tex2d->setImage(osgDB::readImageFile(railsTex.c_str()));
-//		tex2d->setImage(osgDB::readImageFile("Rail_screw_used1.dds",osgDB::Registry::CACHE_ALL));
-		dstate->setTextureAttributeAndModes(0, tex2d, osg::StateAttribute::ON );
-//			dstate->setMode( GL_CULL_FACE, osg::StateAttribute::OFF );
-		geode->setStateSet(dstate);
+		geode->setStateSet(rails_dstate);
 		geode->addDrawable(geom);
 //		geode->setUserData(this);
 //		addVisual(geode);

@@ -3,6 +3,7 @@
 #include "parser.h"
 #include "tracks.h"
 #include "templateTracks.h"
+#include "editor.h"
 
 #include <osg/ref_ptr>
 
@@ -24,10 +25,20 @@ edSCNImport::~edSCNImport()
 	printf("edSCNImport deleted :)");
 }
 
+void fixupTexName(std::string &name)
+{
+	unsigned int n= name.find_first_of('.');
+	if (n>=name.length())
+		name+= ".dds";
+
+}
+
 bool edSCNImport::import(osg::Vec3d pos, double r)
 {
+	std::string railsTex,ballastTex;
 	std::vector<edTrack*> tracks;
 	edTrack* trk= NULL;
+	Editor::instance()->disableRedraws();
 	if (scnFile.empty())
 		return false;
 	try
@@ -64,9 +75,11 @@ bool edSCNImport::import(osg::Vec3d pos, double r)
 						parser.getTokens();	parser >> token;
 						parser.getTokens();	parser >> token;
 						parser.getTokens();	parser >> token;
+						parser.getTokens();	parser >> railsTex;
+						fixupTexName(railsTex);
 						parser.getTokens();	parser >> token;
-						parser.getTokens();	parser >> token;
-						parser.getTokens();	parser >> token;
+						parser.getTokens();	parser >> ballastTex;
+						fixupTexName(ballastTex);
 						parser.getTokens();	parser >> token;
 						parser.getTokens();	parser >> token;
 						parser.getTokens();	parser >> token;
@@ -126,6 +139,8 @@ bool edSCNImport::import(osg::Vec3d pos, double r)
 
 							ft->moveTo(osg::Quat(osg::DegreesToRadians(angle),osg::Vec3d(0,0,1))*center+pos);
 							ft->setRotation(osg::Quat(osg::DegreesToRadians(angle),osg::Vec3d(0,0,1)));
+							ft->setRailsTex(railsTex.c_str());
+							ft->setBallastTex(ballastTex.c_str());
 							trk= ft;
 					}
 					else if (token=="switch")
@@ -218,8 +233,12 @@ bool edSCNImport::import(osg::Vec3d pos, double r)
 	}
 	catch (...)
 	{
+		Editor::instance()->enableRedraws();
 		return false;
 	}
+	Editor::instance()->enableRedraws();
+	Editor::instance()->redrawAll();
+
 /*
 	for (unsigned int i=0; i<tracks.size(); i++)
 		for (unsigned int j=i+1; j<tracks.size(); j++)
