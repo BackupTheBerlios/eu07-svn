@@ -1,4 +1,4 @@
-/* -*-c++-*- OpenSceneGraph - Copyright (C) 1998-2003 Robert Osfield
+/* -*-c++-*- OpenSceneGraph - Copyright (C) 1998-2005 Robert Osfield
  *
  * This library is open source and may be redistributed and/or modified under
  * the terms of the OpenSceneGraph Public License (OSGPL) version 0.0 or
@@ -15,10 +15,10 @@
 #define OSG_DRAWABLE 1
 
 #include <osg/BoundingBox>
-#include <osg/NodeVisitor>
 #include <osg/Shape>
 #include <osg/BufferObject>
 #include <osg/PrimitiveSet>
+#include <osg/State>
 
 
 #ifndef GL_NV_occlusion_query
@@ -51,6 +51,7 @@ class Vec3f;
 class Vec4f;
 class UByte4;
 class Geometry;
+class NodeVisitor;
 
 // this is defined to alter the way display lists are compiled inside the
 // the draw method, it has been found that the NVidia drivers fail completely
@@ -77,7 +78,7 @@ class Geometry;
  *  <tt>Geode</tt>s, so that the same geometry (loaded to memory just once) can
  *  be used in different parts of the scene graph.
 */
-class SG_EXPORT Drawable : public Object
+class OSG_EXPORT Drawable : public Object
 {
     public:
 
@@ -134,7 +135,7 @@ class SG_EXPORT Drawable : public Object
         /** Set the StateSet attached to the Drawable.
             Previously attached StateSet are automatically unreferenced on
             assignment of a new drawstate.*/
-        inline void setStateSet(StateSet *state) { _stateset = state; }
+        void setStateSet(StateSet* stateset);
 
         /** Get the attached StateSet.*/
         inline StateSet* getStateSet() { return _stateset.get();}
@@ -148,6 +149,12 @@ class SG_EXPORT Drawable : public Object
         StateSet* getOrCreateStateSet();
 
 
+        /** Set the intial bounding volume to use when computing the overall bounding volume.*/
+        void setInitialBound(const osg::BoundingBox& bbox) { _initialBound = bbox; dirtyBound(); }
+
+        /** Set the intial bounding volume to use when computing the overall bounding volume.*/
+        const BoundingBox& getInitialBound() const { return _initialBound; }
+
         /** Dirty the bounding box, forcing a computeBound() on the next call
           * to getBound(). Should be called in the internal geometry of the Drawable
           * is modified.*/
@@ -159,10 +166,43 @@ class SG_EXPORT Drawable : public Object
           */
         inline const BoundingBox& getBound() const
         {
-            if( !_bbox_computed)
-                computeBound();
-            return _bbox;
+            if(!_boundingBoxComputed)
+            {
+                _boundingBox = _initialBound;
+                if (_computeBoundCallback.valid()) 
+                    _boundingBox.expandBy(_computeBoundCallback->computeBound(*this));
+                else
+                    _boundingBox.expandBy(computeBound());
+                    
+                _boundingBoxComputed = true;
+            }
+            return _boundingBox;
         }
+
+
+        /** Compute the bounding box around Drawables's geometry.*/
+        virtual BoundingBox computeBound() const;
+
+        /** Callback to allow users to override the default computation of bounding volume.*/
+        struct ComputeBoundingBoxCallback : public osg::Object
+        {
+            ComputeBoundingBoxCallback() {}
+
+            ComputeBoundingBoxCallback(const ComputeBoundingBoxCallback&,const CopyOp&) {}
+
+            META_Object(osg,ComputeBoundingBoxCallback);
+
+            virtual BoundingBox computeBound(const osg::Drawable&) const  { return BoundingBox(); }
+        };
+
+        /** Set the compute bound callback to override the default computeBound.*/
+        void setComputeBoundingBoxCallback(ComputeBoundingBoxCallback* callback) { _computeBoundCallback = callback; }
+
+        /** Get the compute bound callback.*/
+        ComputeBoundingBoxCallback* getComputeBoundingBoxCallback() { return _computeBoundCallback.get(); }
+
+        /** Get the const compute bound callback.*/
+        const ComputeBoundingBoxCallback* getComputeBoundingBoxCallback() const { return _computeBoundCallback.get(); }
 
 
         /** Set the Shape of the \c Drawable. The shape can be used to
@@ -237,10 +277,9 @@ class SG_EXPORT Drawable : public Object
         */
         virtual void compileGLObjects(State& state) const;
 
-        /**
-            if osg::State object is supplied: release any OpenGL display lists associated with graphics context specified
-            or
-            if state pointer is NULL: release all display lists for all graphics contexts */
+        /** If State is non-zero, this function releases OpenGL objects for
+          * the specified graphics context. Otherwise, releases OpenGL objexts
+          * for all graphics contexts. */
         virtual void releaseGLObjects(State* state=0) const;
 
         struct UpdateCallback : public virtual osg::Object
@@ -264,6 +303,9 @@ class SG_EXPORT Drawable : public Object
         /** Get the const UpdateCallback.*/
         const UpdateCallback* getUpdateCallback() const { return _updateCallback.get(); }
 
+        /** Return whether this Drawable has update callbacks associated with it, and therefore must be traversed.*/
+        bool requiresUpdateTraversal() const { return _updateCallback.valid() || (_stateset.valid() && _stateset->requiresUpdateTraversal()); }
+
 
         struct EventCallback : public virtual osg::Object
         {
@@ -285,6 +327,9 @@ class SG_EXPORT Drawable : public Object
 
         /** Get the const EventCallback.*/
         const EventCallback* getEventCallback() const { return _eventCallback.get(); }
+
+        /** Return whether this Drawable has event callbacks associated with it, and therefore must be traversed.*/
+        bool requiresEventTraversal() const { return _eventCallback.valid() || (_stateset.valid() && _stateset->requiresEventTraversal()); }
 
 
         struct CullCallback : public virtual osg::Object
@@ -488,16 +533,16 @@ class SG_EXPORT Drawable : public Object
         /** Extensions class which encapsulates the querying of extensions and
         * associated function pointers, and provide convenience wrappers to
         * check for the extensions or use the associated functions.*/
-        class SG_EXPORT Extensions : public osg::Referenced
+        class OSG_EXPORT Extensions : public osg::Referenced
         {
         public:
-            Extensions();
+            Extensions(unsigned int contextID);
 
             Extensions(const Extensions& rhs);
 
             void lowestCommonDenominator(const Extensions& rhs);
 
-            void setupGLExtenions();
+            void setupGLExtenions(unsigned int contextID);
 
             void setVertexProgramSupported(bool flag) { _isVertexProgramSupported=flag; }
             bool isVertexProgramSupported() const { return _isVertexProgramSupported; }
@@ -688,9 +733,6 @@ class SG_EXPORT Drawable : public Object
 
         virtual ~Drawable();
 
-        /** Compute the bounding box of the drawable. Method must be 
-            implemented by subclasses.*/
-        virtual bool computeBound() const;
 
         /** set the bounding box .*/
         void setBound(const BoundingBox& bb) const;
@@ -701,13 +743,16 @@ class SG_EXPORT Drawable : public Object
         ParentList _parents;
         friend class Node;
         friend class Geode;
+        friend class StateSet;
 
         ref_ptr<StateSet>       _stateset;
 
-        mutable BoundingBox     _bbox;
-        mutable bool            _bbox_computed;
+        BoundingBox                         _initialBound;
+        ref_ptr<ComputeBoundingBoxCallback> _computeBoundCallback;
+        mutable BoundingBox                 _boundingBox;
+        mutable bool                        _boundingBoxComputed;
 
-        ref_ptr<Shape>           _shape;
+        ref_ptr<Shape>          _shape;
 
         bool                    _supportsDisplayList;
         bool                    _useDisplayList;
@@ -719,7 +764,15 @@ class SG_EXPORT Drawable : public Object
         mutable GLObjectList    _vboList;
 
         ref_ptr<UpdateCallback> _updateCallback;
+        unsigned int _numChildrenRequiringUpdateTraversal;
+        void setNumChildrenRequiringUpdateTraversal(unsigned int num);
+        unsigned int getNumChildrenRequiringUpdateTraversal() const { return _numChildrenRequiringUpdateTraversal; }
+
         ref_ptr<EventCallback>  _eventCallback;
+        unsigned int _numChildrenRequiringEventTraversal;
+        void setNumChildrenRequiringEventTraversal(unsigned int num);
+        unsigned int getNumChildrenRequiringEventTraversal() const { return _numChildrenRequiringEventTraversal; }
+
         ref_ptr<CullCallback>   _cullCallback;
         ref_ptr<DrawCallback>   _drawCallback;
 };

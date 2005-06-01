@@ -1,4 +1,4 @@
-/* -*-c++-*- OpenSceneGraph - Copyright (C) 1998-2003 Robert Osfield 
+/* -*-c++-*- OpenSceneGraph - Copyright (C) 1998-2005 Robert Osfield 
  *
  * This library is open source and may be redistributed and/or modified under  
  * the terms of the OpenSceneGraph Public License (OSGPL) version 0.0 or 
@@ -24,7 +24,7 @@ namespace osg {
     differently at different times, for instance a OccluderNode could be used 
     to represent the different states of a traffic light.
 */
-class SG_EXPORT OccluderNode : public Group
+class OSG_EXPORT OccluderNode : public Group
 {
     public :
         
@@ -45,14 +45,13 @@ class SG_EXPORT OccluderNode : public Group
         /** Get the const ConvexPlanarOccluder* attached to a OccluderNode.*/            
         const ConvexPlanarOccluder* getOccluder() const { return _occluder.get(); }
 
+        /** Overrides Group's computeBound.*/
+        virtual BoundingSphere computeBound() const;
 
     protected :
     
         virtual ~OccluderNode() {}
         
-        /** Overrides Group's computeBound.*/
-        virtual bool computeBound() const;
-
         ref_ptr<ConvexPlanarOccluder>   _occluder;
 };
 

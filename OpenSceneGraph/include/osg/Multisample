@@ -1,4 +1,4 @@
-/* -*-c++-*- OpenSceneGraph - Copyright (C) 1998-2003 Robert Osfield 
+/* -*-c++-*- OpenSceneGraph - Copyright (C) 1998-2005 Robert Osfield 
  *
  * This library is open source and may be redistributed and/or modified under  
  * the terms of the OpenSceneGraph Public License (OSGPL) version 0.0 or 
@@ -39,7 +39,7 @@
 namespace osg {
 
 /** Multisample - encapsulates the OpenGL Multisample state.*/
-class SG_EXPORT Multisample : public StateAttribute
+class OSG_EXPORT Multisample : public StateAttribute
 {
     public :
 
@@ -96,16 +96,16 @@ class SG_EXPORT Multisample : public StateAttribute
         /** Extensions class which encapsulates the querying of extensions and
           * associated function pointers, and provide convenience wrappers to 
           * check for the extensions or use the associated functions.*/        
-        class SG_EXPORT Extensions : public osg::Referenced
+        class OSG_EXPORT Extensions : public osg::Referenced
         {
             public:
-                Extensions();
+                Extensions(unsigned int contextID);
 
                 Extensions(const Extensions& rhs);
                 
                 void lowestCommonDenominator(const Extensions& rhs);
                 
-                void setupGLExtenions();
+                void setupGLExtenions(unsigned int contextID);
 
                 void setMultisampleSupported(bool flag) { _isMultisampleSupported=flag; }
                 void setMultisampleFilterHintSupported(bool flag) { _isMultisampleFilterHintSupported=flag; }

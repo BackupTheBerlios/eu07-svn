@@ -1,4 +1,4 @@
-/* -*-c++-*- OpenSceneGraph - Copyright (C) 1998-2003 Robert Osfield 
+/* -*-c++-*- OpenSceneGraph - Copyright (C) 1998-2005 Robert Osfield 
  *
  * This library is open source and may be redistributed and/or modified under  
  * the terms of the OpenSceneGraph Public License (OSGPL) version 0.0 or 
@@ -54,6 +54,7 @@ public:
     class GlyphTexture;
     class FontImplementation;
 
+public:
     Font(FontImplementation* implementation=0);
 
     virtual osg::Object* cloneType() const { return 0; } // cloneType() not appropriate
@@ -63,13 +64,6 @@ public:
     virtual const char* libraryName() const { return "osgText"; }
 
     virtual std::string getFileName() const;
-
-#ifdef USE_DEPRECATED_API
-    virtual void setSize(unsigned int width, unsigned int height) { setFontResolution(width,height); }
-    
-    unsigned int getWidth() const { return getFontWidth(); }
-    unsigned int getHeight() const { return getFontHeight(); }
-#endif
 
     /** Set the pixel width and height hint.*/
     virtual void setFontResolution(unsigned int width, unsigned int height);
@@ -117,6 +111,10 @@ public:
     FontImplementation* getImplementation();
     const FontImplementation* getImplementation() const;
 
+     /** If State is non-zero, this function releases OpenGL objects for
+       * the specified graphics context. Otherwise, releases OpenGL objexts
+       * for all graphics contexts. */
+    virtual void releaseGLObjects(osg::State* state=0) const;
 
 protected:
 

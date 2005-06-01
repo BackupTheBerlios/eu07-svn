@@ -1,4 +1,4 @@
-/* -*-c++-*- OpenSceneGraph - Copyright (C) 1998-2003 Robert Osfield 
+/* -*-c++-*- OpenSceneGraph - Copyright (C) 1998-2005 Robert Osfield 
  *
  * This library is open source and may be redistributed and/or modified under  
  * the terms of the OpenSceneGraph Public License (OSGPL) version 0.0 or 
@@ -48,14 +48,6 @@ public:
     /** Get the font. Return 0 if default is being used.*/    
     const Font* getFont() const { return _font.get(); }
 
-#ifdef USE_DEPRECATED_API
-
-    /* deprecated */
-    void setFontSize(unsigned int width, unsigned int height)
-    {
-        setFontResolution(width,height);
-    }
-#endif
     
     /** Set the Font reference width and height resolution in texels.
       * Note, the size may not be supported by current font, 
@@ -235,6 +227,10 @@ public:
     /** accept a PrimtiveFunctor and call its methods to tell it about the interal primtives that this Drawable has.*/
     virtual void accept(osg::PrimitiveFunctor& pf) const;
 
+    /** If State is non-zero, this function releases OpenGL objects for
+      * the specified graphics context. Otherwise, releases OpenGL objexts
+      * for all graphics contexts. */
+    virtual void releaseGLObjects(osg::State* state=0) const;
 
     // make Font a friend to allow it set the _font to 0 if the font is 
     // forcefully unloaded.
@@ -288,11 +284,11 @@ public:
         return _textureGlyphQuadMap;
     }
 
+    virtual osg::BoundingBox computeBound() const;
+
 protected:
 
     virtual ~Text();
-
-    virtual bool computeBound() const;
 
     Font* getActiveFont();
     const Font* getActiveFont() const;

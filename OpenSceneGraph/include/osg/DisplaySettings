@@ -1,4 +1,4 @@
-/* -*-c++-*- OpenSceneGraph - Copyright (C) 1998-2003 Robert Osfield 
+/* -*-c++-*- OpenSceneGraph - Copyright (C) 1998-2005 Robert Osfield 
  *
  * This library is open source and may be redistributed and/or modified under  
  * the terms of the OpenSceneGraph Public License (OSGPL) version 0.0 or 
@@ -27,7 +27,7 @@ class ApplicationUsage;
 
 /** DisplaySettings class for encapsulating what visuals are required and
   * have been set up, and the status of stereo viewing.*/
-class SG_EXPORT DisplaySettings : public osg::Referenced
+class OSG_EXPORT DisplaySettings : public osg::Referenced
 {
 
     public:

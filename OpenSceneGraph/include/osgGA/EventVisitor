@@ -1,4 +1,4 @@
-/* -*-c++-*- OpenSceneGraph - Copyright (C) 1998-2003 Robert Osfield 
+/* -*-c++-*- OpenSceneGraph - Copyright (C) 1998-2005 Robert Osfield 
  *
  * This library is open source and may be redistributed and/or modified under  
  * the terms of the OpenSceneGraph Public License (OSGPL) version 0.0 or 
@@ -23,7 +23,6 @@
 #include <osg/LightSource>
 #include <osg/Transform>
 #include <osg/Projection>
-#include <osg/Impostor>
 #include <osg/OccluderNode>
 
 #include <osgGA/GUIEventAdapter>
@@ -81,7 +80,6 @@ class OSGGA_EXPORT EventVisitor : public osg::NodeVisitor
         virtual void apply(osg::Projection& node)   { handle_callbacks_and_traverse(node); }
         virtual void apply(osg::Switch& node)       { handle_callbacks_and_traverse(node); }
         virtual void apply(osg::LOD& node)          { handle_callbacks_and_traverse(node); }
-        virtual void apply(osg::Impostor& node)     { handle_callbacks_and_traverse(node); }
         virtual void apply(osg::OccluderNode& node) { handle_callbacks_and_traverse(node); }
 
 
@@ -93,8 +91,18 @@ class OSGGA_EXPORT EventVisitor : public osg::NodeVisitor
         /** Prevent unwanted copy operator.*/
         EventVisitor& operator = (const EventVisitor&) { return *this; }
         
+        inline void handle_callbacks(osg::StateSet* stateset)
+        {
+            if (stateset && stateset->requiresEventTraversal())
+            {
+                stateset->runEventCallbacks(this);
+            }
+        }
+
         inline void handle_callbacks_and_traverse(osg::Node& node)
         {
+            handle_callbacks(node.getStateSet());
+
             osg::NodeCallback* callback = node.getEventCallback();
             if (callback) (*callback)(&node,this);
             else if (node.getNumChildrenRequiringEventTraversal()>0) traverse(node);
@@ -102,6 +110,8 @@ class OSGGA_EXPORT EventVisitor : public osg::NodeVisitor
 
         inline void handle_geode_callbacks(osg::Geode& node)
         {
+            handle_callbacks(node.getStateSet());
+
             osg::NodeCallback* callback = node.getEventCallback();
             if (callback) (*callback)(&node,this);
             /*else if (node.getNumChildrenRequiringEventTraversal()>0)*/ 
@@ -117,6 +127,8 @@ class OSGGA_EXPORT EventVisitor : public osg::NodeVisitor
             {
                 osg::Drawable::EventCallback* callback = geode.getDrawable(i)->getEventCallback();
                 if (callback) callback->event(this,geode.getDrawable(i));
+
+                handle_callbacks(geode.getDrawable(i)->getStateSet());
             }
         }
         

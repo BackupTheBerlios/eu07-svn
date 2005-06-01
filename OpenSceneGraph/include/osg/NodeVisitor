@@ -1,4 +1,4 @@
-/* -*-c++-*- OpenSceneGraph - Copyright (C) 1998-2003 Robert Osfield 
+/* -*-c++-*- OpenSceneGraph - Copyright (C) 1998-2005 Robert Osfield 
  *
  * This library is open source and may be redistributed and/or modified under  
  * the terms of the OpenSceneGraph Public License (OSGPL) version 0.0 or 
@@ -20,24 +20,24 @@
 
 namespace osg {
 
-class Geode;
 class Billboard;
-class LightSource;
+class ClearNode;
 class ClipNode;
-class TexGenNode;
+class CoordinateSystemNode;
+class Geode;
 class Group;
-class Transform;
+class LightSource;
+class LOD;
 class MatrixTransform;
+class OccluderNode;
+class PagedLOD;
 class PositionAttitudeTransform;
 class Projection;
-class LOD;
-class PagedLOD;
-class Switch;
-class Impostor;
-class ClearNode;
-class OccluderNode;
+class ProxyNode;
 class Sequence;
-class CoordinateSystemNode;
+class Switch;
+class TexGenNode;
+class Transform;
 
 /** Visitor for type safe operations on osg::Nodes.
     Based on GOF's Visitor pattern. The NodeVisitor 
@@ -53,7 +53,7 @@ class CoordinateSystemNode;
     myVisitor.apply(*root).  The later method will bypass the double
     dispatch and the appropriate NodeVisitor::apply(..) method will
     not be called. */ 
-class SG_EXPORT NodeVisitor : public virtual Referenced
+class OSG_EXPORT NodeVisitor : public virtual Referenced
 {
     public:
 
@@ -222,6 +222,8 @@ class SG_EXPORT NodeVisitor : public virtual Referenced
         
         virtual void apply(Group& node)                     { apply((Node&)node); }
 
+        virtual void apply(ProxyNode& node)                 { apply((Group&)node); }
+
         virtual void apply(Projection& node)                { apply((Group&)node); }
 
         virtual void apply(CoordinateSystemNode& node)      { apply((Group&)node); }
@@ -238,7 +240,6 @@ class SG_EXPORT NodeVisitor : public virtual Referenced
         virtual void apply(Sequence& node)                  { apply((Group&)node); }
         virtual void apply(LOD& node)                       { apply((Group&)node); }
         virtual void apply(PagedLOD& node)                  { apply((LOD&)node); }
-        virtual void apply(Impostor& node)                  { apply((LOD&)node); }
         virtual void apply(ClearNode& node)                 { apply((Group&)node); }
         virtual void apply(OccluderNode& node)              { apply((Group&)node); }
 

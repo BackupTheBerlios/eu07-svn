@@ -1,4 +1,4 @@
-/* -*-c++-*- OpenSceneGraph - Copyright (C) 1998-2003 Robert Osfield
+/* -*-c++-*- OpenSceneGraph - Copyright (C) 1998-2005 Robert Osfield
  *
  * This library is open source and may be redistributed and/or modified under
  * the terms of the OpenSceneGraph Public License (OSGPL) version 0.0 or
@@ -25,7 +25,7 @@ namespace osg {
   * are represented by objects from the \c Drawable class, so a \c Geode is a
   * \c Node whose purpose is grouping <tt>Drawable</tt>s.
 */
-class SG_EXPORT Geode : public Node
+class OSG_EXPORT Geode : public Node
 {
     public:
 
@@ -38,6 +38,7 @@ class SG_EXPORT Geode : public Node
 
         META_Node(osg, Geode);
 
+        
         /** Add a \c Drawable to the \c Geode.
           * If \c drawable is not \c NULL and is not contained in the \c Geode
           * then increment its reference count, add it to the drawables list and
@@ -121,6 +122,9 @@ class SG_EXPORT Geode : public Node
             return _drawables.size(); // drawable not found.
         }
 
+        /** Get the list of drawables.*/
+        const DrawableList& getDrawableList() const { return _drawables; }
+
         /** Compile OpenGL Display List for each drawable.*/
         void compileDrawables(State& state);
 
@@ -128,15 +132,22 @@ class SG_EXPORT Geode : public Node
           * bounding boxes of the geode's drawables.*/
         inline const BoundingBox& getBoundingBox() const
         {
-            if(!_bsphere_computed) computeBound();
+            if(!_boundingSphereComputed) getBound();
             return _bbox;
         }
+
+        virtual BoundingSphere computeBound() const;
+
+        /** If State is non-zero, this function releases any associated OpenGL objects for
+           * the specified graphics context. Otherwise, releases OpenGL objexts
+           * for all graphics contexts. */
+        virtual void releaseGLObjects(osg::State* = 0) const;
+
 
     protected:
 
         virtual ~Geode();
 
-        virtual bool computeBound() const;
 
         mutable osg::BoundingBox        _bbox;
         DrawableList                    _drawables;

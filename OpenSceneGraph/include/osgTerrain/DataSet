@@ -1,4 +1,4 @@
-/* -*-c++-*- OpenSceneGraph - Copyright (C) 1998-2003 Robert Osfield 
+/* -*-c++-*- OpenSceneGraph - Copyright (C) 1998-2005 Robert Osfield 
  *
  * This library is open source and may be redistributed and/or modified under  
  * the terms of the OpenSceneGraph Public License (OSGPL) version 0.0 or 
@@ -128,7 +128,7 @@ class OSGTERRAIN_EXPORT DataSet : public osg::Referenced
             ModelList                                   _models;
         };
 
-        struct SourceData : public osg::Referenced, public SpatialProperties
+        struct OSGTERRAIN_EXPORT SourceData : public osg::Referenced, public SpatialProperties
         {
         
             SourceData(Source* source=0):
@@ -166,7 +166,7 @@ class OSGTERRAIN_EXPORT DataSet : public osg::Referenced
         };
 
 
-        class Source : public osg::Referenced, public SpatialProperties
+        class OSGTERRAIN_EXPORT Source : public osg::Referenced, public SpatialProperties
         {
         public:
         
@@ -342,7 +342,7 @@ class OSGTERRAIN_EXPORT DataSet : public osg::Referenced
             PAGED_LOD
         };
         
-        class CompositeSource : public osg::Referenced, public SpatialProperties
+        class OSGTERRAIN_EXPORT CompositeSource : public osg::Referenced, public SpatialProperties
         {
         public:
             
@@ -626,7 +626,7 @@ class OSGTERRAIN_EXPORT DataSet : public osg::Referenced
             {
                 DefaultSourceAdvancer() {}
                 
-                bool isActive(const CompositeSource& composite,int index)
+                bool isActive(const CompositeSource& /*composite*/,int /*index*/)
                 {
                     return true;
                 }
@@ -683,7 +683,7 @@ class OSGTERRAIN_EXPORT DataSet : public osg::Referenced
         };
         
         
-        class DestinationTile : public osg::Referenced, public SpatialProperties
+        class OSGTERRAIN_EXPORT DestinationTile : public osg::Referenced, public SpatialProperties
         {
         public:
         
@@ -760,6 +760,7 @@ class OSGTERRAIN_EXPORT DataSet : public osg::Referenced
             unsigned int                                _level;
             unsigned int                                _tileX;
             unsigned int                                _tileY;
+            GLenum                                      _pixelFormat;                                    
             
             struct ImageData
             {
@@ -803,7 +804,7 @@ class OSGTERRAIN_EXPORT DataSet : public osg::Referenced
 
         };
 
-        class CompositeDestination : public osg::Referenced, public SpatialProperties
+        class OSGTERRAIN_EXPORT CompositeDestination : public osg::Referenced, public SpatialProperties
         {
         public:   
         
@@ -996,9 +997,12 @@ class OSGTERRAIN_EXPORT DataSet : public osg::Referenced
 
         enum TextureType
         {
-            RGB_24_BIT,
-            RGB_16_BIT,
-            COMPRESSED_TEXTURE
+            RGB_24,
+            RGBA,
+            RGB_16,
+            RGBA_16,
+            COMPRESSED_TEXTURE,
+            COMPRESSED_RGBA_TEXTURE
         };
         void setTextureType(TextureType type) { _textureType = type; }
         TextureType getTextureType() const { return _textureType; }

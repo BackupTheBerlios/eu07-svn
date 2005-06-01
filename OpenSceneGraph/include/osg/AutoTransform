@@ -1,4 +1,4 @@
-/* -*-c++-*- OpenSceneGraph - Copyright (C) 1998-2003 Robert Osfield 
+/* -*-c++-*- OpenSceneGraph - Copyright (C) 1998-2005 Robert Osfield 
  *
  * This library is open source and may be redistributed and/or modified under  
  * the terms of the OpenSceneGraph Public License (OSGPL) version 0.0 or 
@@ -23,7 +23,7 @@ namespace osg {
 /** AutoTransform is a derived form of Transform that automatically
   * scales or rotates to keep its children aligned with screen coordinates.
 */
-class SG_EXPORT AutoTransform : public Transform
+class OSG_EXPORT AutoTransform : public Transform
 {
     public :
         AutoTransform();

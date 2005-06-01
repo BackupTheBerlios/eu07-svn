@@ -1,4 +1,4 @@
-/* -*-c++-*- OpenSceneGraph - Copyright (C) 1998-2003 Robert Osfield 
+/* -*-c++-*- OpenSceneGraph - Copyright (C) 1998-2005 Robert Osfield 
  *
  * This library is open source and may be redistributed and/or modified under  
  * the terms of the OpenSceneGraph Public License (OSGPL) version 0.0 or 
@@ -37,7 +37,7 @@
 namespace osg {
 
 /** Encapsulates OpenGL BlendEquation state. */
-class SG_EXPORT BlendEquation : public StateAttribute
+class OSG_EXPORT BlendEquation : public StateAttribute
 {
     public :
 
@@ -94,16 +94,16 @@ class SG_EXPORT BlendEquation : public StateAttribute
         /** Encapsulates queries of extension availability, obtains extension
           * function pointers, and provides convinience wrappers for
           * calling extension functions. */        
-        class SG_EXPORT Extensions : public osg::Referenced
+        class OSG_EXPORT Extensions : public osg::Referenced
         {
             public:
-                Extensions();
+                Extensions(unsigned int contextID);
 
                 Extensions(const Extensions& rhs);
                 
                 void lowestCommonDenominator(const Extensions& rhs);
                 
-                void setupGLExtenions();
+                void setupGLExtenions(unsigned int contextID);
 
                 void setBlendEquationSupported(bool flag) { _isBlendEquationSupported=flag; }
                 bool isBlendEquationSupported() const { return _isBlendEquationSupported; }

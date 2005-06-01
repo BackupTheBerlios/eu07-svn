@@ -1,4 +1,4 @@
-/* -*-c++-*- OpenSceneGraph - Copyright (C) 1998-2003 Robert Osfield 
+/* -*-c++-*- OpenSceneGraph - Copyright (C) 1998-2005 Robert Osfield 
  *
  * This library is open source and may be redistributed and/or modified under  
  * the terms of the OpenSceneGraph Public License (OSGPL) version 0.0 or 
@@ -36,7 +36,8 @@ class OSGUTIL_EXPORT RenderStage : public RenderBin
     public:
     
 
-        RenderStage(SortMode mode=SORT_BY_STATE);
+        RenderStage();
+        RenderStage(SortMode mode);
         
         RenderStage(const RenderStage& rhs,const osg::CopyOp& copyop=osg::CopyOp::SHALLOW_COPY);
         
@@ -133,9 +134,7 @@ class OSGUTIL_EXPORT RenderStage : public RenderBin
         /** Extract stats for current draw list. */
         bool getStats(Statistics* primStats); 
         
-#ifndef USE_DEPRECATED_API
     protected:
-#endif
         
         virtual ~RenderStage();
 

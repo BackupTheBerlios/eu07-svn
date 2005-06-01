@@ -1,4 +1,4 @@
-/* -*-c++-*- OpenSceneGraph - Copyright (C) 1998-2003 Robert Osfield 
+/* -*-c++-*- OpenSceneGraph - Copyright (C) 1998-2005 Robert Osfield 
  *
  * This library is open source and may be redistributed and/or modified under  
  * the terms of the OpenSceneGraph Public License (OSGPL) version 0.0 or 
@@ -25,7 +25,7 @@ class BoundingSphere;
 
 /** A class for representing components of convex clipping volumes.
   * ConvexPlanarPolygon normals should point inwards (into the volume) */
-class SG_EXPORT ConvexPlanarPolygon
+class OSG_EXPORT ConvexPlanarPolygon
 {
 
     public:

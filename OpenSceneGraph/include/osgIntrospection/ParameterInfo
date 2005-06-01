@@ -1,3 +1,17 @@
+/* -*-c++-*- OpenSceneGraph - Copyright (C) 1998-2005 Robert Osfield 
+ *
+ * This library is open source and may be redistributed and/or modified under  
+ * the terms of the OpenSceneGraph Public License (OSGPL) version 0.0 or 
+ * (at your option) any later version.  The full license is in LICENSE file
+ * included with this distribution, and on the openscenegraph.org website.
+ * 
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the 
+ * OpenSceneGraph Public License for more details.
+*/
+//osgIntrospection - Copyright (C) 2005 Marco Jez
+
 #ifndef OSGINTROSPECTION_PARAMETERINFO_
 #define OSGINTROSPECTION_PARAMETERINFO_
 
@@ -29,19 +43,19 @@ namespace osgIntrospection
         };
 
         /// Direct initialization constructor.
-        inline ParameterInfo(const std::string &name, const Type &type, int attribs, const Value &defval = Value());
+        inline ParameterInfo(const std::string& name, const Type& type, int attribs, const Value& defval = Value());
 
         /// Returns the parameter's name.
-        inline const std::string &getName() const;
+        inline const std::string& getName() const;
 
         /// Returns the parameter's type.
-        inline const Type &getParameterType() const;
+        inline const Type& getParameterType() const;
 
         /// Returns the parameter's attributes.
         inline int getAttributes() const;
         
         /// Returns the default value.
-        inline const Value &getDefaultValue() const;
+        inline const Value& getDefaultValue() const;
 
         /// Returns whether the parameter has the IN attribute.
         inline bool isIn() const { return (attribs_ & IN) != 0; }
@@ -54,30 +68,30 @@ namespace osgIntrospection
         inline bool isInOut() const { return isIn() && isOut(); }
 
     private:
-        std::string name_;
-        const Type &type_;
+        std::string _name;
+        const Type& _type;
         int attribs_;
         Value default_;
     };
 
     // INLINE METHODS
 
-    inline ParameterInfo::ParameterInfo(const std::string &name, const Type &type, int attribs, const Value &defval)
-    :   name_(name),
-        type_(type),
+    inline ParameterInfo::ParameterInfo(const std::string& name, const Type& type, int attribs, const Value& defval)
+    :   _name(name),
+        _type(type),
         attribs_(attribs),
         default_(defval)
     {
     }
 
-    inline const std::string &ParameterInfo::getName() const
+    inline const std::string& ParameterInfo::getName() const
     {
-        return name_;
+        return _name;
     }
 
-    inline const Type &ParameterInfo::getParameterType() const
+    inline const Type& ParameterInfo::getParameterType() const
     {
-        return type_;
+        return _type;
     }
 
     inline int ParameterInfo::getAttributes() const
@@ -85,9 +99,9 @@ namespace osgIntrospection
         return attribs_;
     }
     
-    inline const Value &ParameterInfo::getDefaultValue() const
+    inline const Value& ParameterInfo::getDefaultValue() const
     {
-		return default_;
+        return default_;
     }
 
 }

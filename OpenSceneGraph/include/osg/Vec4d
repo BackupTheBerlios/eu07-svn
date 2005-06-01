@@ -1,4 +1,4 @@
-/* -*-c++-*- OpenSceneGraph - Copyright (C) 1998-2003 Robert Osfield 
+/* -*-c++-*- OpenSceneGraph - Copyright (C) 1998-2005 Robert Osfield 
  *
  * This library is open source and may be redistributed and/or modified under  
  * the terms of the OpenSceneGraph Public License (OSGPL) version 0.0 or 
@@ -236,16 +236,8 @@ class Vec4d
             return( norm );
         }
 
-        friend inline std::ostream& operator << (std::ostream& output, const Vec4d& vec)
-        {
-        output << vec._v[0] << " "
-                   << vec._v[1] << " "
-                   << vec._v[2] << " "
-                   << vec._v[3];
-        return output;     // to enable cascading
-    }
-
 };    // end of class Vec4d
+
 
 
 /** Compute the dot product of a (Vec3,1.0) and a Vec4d. */

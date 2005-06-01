@@ -1,4 +1,4 @@
-/* -*-c++-*- OpenSceneGraph - Copyright (C) 1998-2003 Robert Osfield 
+/* -*-c++-*- OpenSceneGraph - Copyright (C) 1998-2005 Robert Osfield 
  *
  * This library is open source and may be redistributed and/or modified under  
  * the terms of the OpenSceneGraph Public License (OSGPL) version 0.0 or 
@@ -108,20 +108,11 @@ class OSGUTIL_EXPORT SceneView : public osg::Referenced, public osg::CullSetting
         inline osg::DisplaySettings* getDisplaySettings() { return _displaySettings.get(); }
 
 
-#ifdef USE_DEPRECATED_API
-        /** Set the background color used in glClearColor().
-            Defaults to an off blue color.*/
-        void setBackgroundColor(const osg::Vec4& color) { _clearColor=color; }
-        /** Get the background color.*/
-        const osg::Vec4& getBackgroundColor() const { return _clearColor; }
-#endif
-
         /** Set the color used in glClearColor().
             Defaults to an off blue color.*/
         void setClearColor(const osg::Vec4& color) { _clearColor=color; }
         /** Get the color used in glClearColor.*/
         const osg::Vec4& getClearColor() const { return _clearColor; }
-
 
 
         void setGlobalStateSet(osg::StateSet* state) { _globalStateSet = state; }
@@ -131,6 +122,30 @@ class OSGUTIL_EXPORT SceneView : public osg::Referenced, public osg::CullSetting
         void setLocalStateSet(osg::StateSet* state) { _localStateSet = state; }
         osg::StateSet* getLocalStateSet() { return _localStateSet.get(); }
         const osg::StateSet* getLocalStateSet() const { return _localStateSet.get(); }
+        
+        enum ActiveUniforms
+        {
+            FRAME_NUMBER_UNIFORM            = 0x1,
+            FRAME_TIME_UNIFORM              = 0x2,
+            DELTA_FRAME_TIME_UNIFORM        = 0x4,
+            VIEW_MATRIX_UNIFORM             = 0x8,
+            INVERSE_VIEW_MATRIX_UNIFORM     = 0x16,
+            DEFAULT_UNIFORMS                = FRAME_NUMBER_UNIFORM |
+                                              FRAME_TIME_UNIFORM |
+                                              DELTA_FRAME_TIME_UNIFORM |
+                                              VIEW_MATRIX_UNIFORM |
+                                              INVERSE_VIEW_MATRIX_UNIFORM,
+            ALL_UNIFORMS                    = 0xFFFFFFFF
+        };
+
+        /** Set the uniforms that SceneView should set set up on each frame.*/        
+        void setActiveUniforms(int activeUniforms) { _activeUniforms = activeUniforms; }
+
+        /** Get the uniforms that SceneView should set set up on each frame.*/        
+        int getActiveUniforms() const { return _activeUniforms; }
+
+        void updateUniforms();
+        
 
         typedef Options LightingMode;
 
@@ -485,6 +500,9 @@ class OSGUTIL_EXPORT SceneView : public osg::Referenced, public osg::CullSetting
         GLenum                                      _drawBufferValue;
         
         bool                                        _requiresFlush;
+        
+        int                                         _activeUniforms;        
+        double                                      _previousFrameTime;
         
 };
 

@@ -1,4 +1,4 @@
-/* -*-c++-*- OpenSceneGraph - Copyright (C) 1998-2003 Robert Osfield 
+/* -*-c++-*- OpenSceneGraph - Copyright (C) 1998-2005 Robert Osfield 
  *
  * This library is open source and may be redistributed and/or modified under  
  * the terms of the OpenSceneGraph Public License (OSGPL) version 0.0 or 
@@ -16,14 +16,12 @@
 
 #include <iostream>
 
-#include <Producer/Keyboard>
-
 #include <osgGA/MatrixManipulator>
 #include <osg/Node>
 #include <osg/Matrix>
 
     /**
-      \class UFOManipulator
+      \class osgGA::UFOManipulator
       \brief A UFO manipulator driven with keybindings.
 
       The UFOManipulator is better suited for applications that employ 
@@ -58,9 +56,9 @@ namespace osgGA {
 class OSGGA_EXPORT UFOManipulator : public osgGA::MatrixManipulator
 {
 
-	public:
+    public:
         /** Default constructor */
-		UFOManipulator();
+        UFOManipulator();
 
         /** return className
           \return returns constant "UFO"
@@ -70,23 +68,23 @@ class OSGGA_EXPORT UFOManipulator : public osgGA::MatrixManipulator
         /** Set the current position with a matrix 
           \param matrix  A viewpoint matrix.
          */
-		virtual void setByMatrix( const osg::Matrixd &matrix ) ;
+        virtual void setByMatrix( const osg::Matrixd &matrix ) ;
 
         /** Set the current position with the invers matrix
-          \param invmatrix The inverse of a viewpoint matrix
+          \param invmat The inverse of a viewpoint matrix
           */
-		virtual void setByInverseMatrix( const osg::Matrixd &invmat);
+        virtual void setByInverseMatrix( const osg::Matrixd &invmat);
 
         /** Get the current viewmatrix */
-		virtual osg::Matrixd getMatrix() const;
+        virtual osg::Matrixd getMatrix() const;
 
         /** Get the current inverse view matrix */
-		virtual osg::Matrixd getInverseMatrix() const ;
+        virtual osg::Matrixd getInverseMatrix() const ;
 
         /** Set the  subgraph this manipulator is driving the eye through.
             \param node     root of subgraph
          */
-        virtual void setNode(osg::Node*);
+        virtual void setNode(osg::Node* node);
 
         /** Get the root node of the subgraph this manipulator is driving the eye through (const)*/
         virtual const osg::Node* getNode() const;
@@ -105,7 +103,7 @@ class OSGGA_EXPORT UFOManipulator : public osgGA::MatrixManipulator
         virtual void init(const GUIEventAdapter& ,GUIActionAdapter&);
 
         /** Handles incoming osgGA events */
-		bool handle(const osgGA::GUIEventAdapter& ea,osgGA::GUIActionAdapter &aa);
+        bool handle(const osgGA::GUIEventAdapter& ea,osgGA::GUIActionAdapter &aa);
 
         /** Reports Usage parameters to the application */
         void getUsage(osg::ApplicationUsage& usage) const;
@@ -115,11 +113,11 @@ class OSGGA_EXPORT UFOManipulator : public osgGA::MatrixManipulator
 
         protected:
 
-	private:
+    private:
         osg::ref_ptr<osg::Node> _node;
-		float       _viewAngle;
-		osg::Matrixd _matrix;
-		osg::Matrixd _inverseMatrix;
+        float       _viewAngle;
+        osg::Matrixd _matrix;
+        osg::Matrixd _inverseMatrix;
         osg::Matrixd _offset;
 
         double    _minHeightAboveGround;

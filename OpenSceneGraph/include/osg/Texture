@@ -1,4 +1,4 @@
-/* -*-c++-*- OpenSceneGraph - Copyright (C) 1998-2003 Robert Osfield 
+/* -*-c++-*- OpenSceneGraph - Copyright (C) 1998-2005 Robert Osfield 
  *
  * This library is open source and may be redistributed and/or modified under  
  * the terms of the OpenSceneGraph Public License (OSGPL) version 0.0 or 
@@ -184,7 +184,7 @@ namespace osg {
 /** Texture pure virtual base class that encapsulates OpenGl texture
   * functionality common to the various types of OSG textures.
 */
-class SG_EXPORT Texture : public osg::StateAttribute
+class OSG_EXPORT Texture : public osg::StateAttribute
 {
 
     public :
@@ -293,6 +293,15 @@ class SG_EXPORT Texture : public osg::StateAttribute
 
         /** Gets whether to use client storage for the texture. */
         inline bool getClientStorageHint() const { return _clientStorageHint; }
+
+        /** Sets whether to force the texture to resize images that have dimensions 
+          * that are not a power of two. If enabled, NPOT images will be resized,
+          * whether or not NPOT textures are supported by the hardware. If disabled,
+          * NPOT images will not be resized if supported by hardware. */
+        inline void setResizeNonPowerOfTwoHint(bool flag) { _resizeNonPowerOfTwoHint = flag; }
+
+        /** Gets whether texture will force non power to two images to be resized. */
+        inline bool getResizeNonPowerOfTwoHint() const { return _resizeNonPowerOfTwoHint; }
 
         enum InternalFormatMode {
             USE_IMAGE_DATA_FORMAT,
@@ -411,16 +420,16 @@ class SG_EXPORT Texture : public osg::StateAttribute
         /** Encapsulates queries of extension availability, obtains extension
           * function pointers, and provides convinience wrappers for
           * calling extension functions. */        
-        class SG_EXPORT Extensions : public osg::Referenced
+        class OSG_EXPORT Extensions : public osg::Referenced
         {
             public:
-                Extensions();
+                Extensions(unsigned int contextID);
 
                 Extensions(const Extensions& rhs);
                 
                 void lowestCommonDenominator(const Extensions& rhs);
                 
-                void setupGLExtensions();
+                void setupGLExtensions(unsigned int contextID);
 
                 void setMultiTexturingSupported(bool flag) { _isMultiTexturingSupported=flag; }
                 bool isMultiTexturingSupported() const { return _isMultiTexturingSupported; }
@@ -470,7 +479,13 @@ class SG_EXPORT Texture : public osg::StateAttribute
                 void glGetCompressedTexImage(GLenum target, GLint level, GLvoid *data) const;
 
                 bool isClientStorageSupported() const { return _isClientStorageSupported; }
-              
+
+                bool isNonPowerOfTwoTextureSupported(GLenum filter) const
+                {
+                    return (filter==GL_LINEAR || filter==GL_NEAREST) ? 
+                            _isNonPowerOfTwoTextureNonMipMappedSupported :
+                            _isNonPowerOfTwoTextureMipMappedSupported;
+                }
 
             protected:
 
@@ -487,6 +502,8 @@ class SG_EXPORT Texture : public osg::StateAttribute
                 bool    _isShadowSupported;
                 bool    _isShadowAmbientSupported;
                 bool    _isClientStorageSupported;
+                bool    _isNonPowerOfTwoTextureMipMappedSupported;
+                bool    _isNonPowerOfTwoTextureNonMipMappedSupported;
                 
                 GLint   _maxTextureSize;
                 GLint   _numTextureUnits;
@@ -554,6 +571,7 @@ class SG_EXPORT Texture : public osg::StateAttribute
         bool            _useHardwareMipMapGeneration;
         bool            _unrefImageDataAfterApply;
         bool            _clientStorageHint;
+        bool            _resizeNonPowerOfTwoHint;
 
         Vec4            _borderColor;
         GLint           _borderWidth;

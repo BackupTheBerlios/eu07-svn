@@ -1,4 +1,4 @@
-/* -*-c++-*- OpenSceneGraph - Copyright (C) 1998-2003 Robert Osfield 
+/* -*-c++-*- OpenSceneGraph - Copyright (C) 1998-2005 Robert Osfield 
  *
  * This library is open source and may be redistributed and/or modified under  
  * the terms of the OpenSceneGraph Public License (OSGPL) version 0.0 or 
@@ -44,7 +44,7 @@ class Transform;
 /** Base class for all internal nodes in the scene graph.
     Provides interface for most common node operations (Composite Pattern).
 */
-class SG_EXPORT Node : public Object
+class OSG_EXPORT Node : public Object
 {
     public:
 
@@ -135,8 +135,8 @@ class SG_EXPORT Node : public Object
         /** Get const update node callback, called during update traversal. */
         inline const NodeCallback* getUpdateCallback() const { return _updateCallback.get(); }
 
-        /** Get the number of Children of this node which require App traversal,
-          * since they have an AppCallback attached to them or their children.*/
+        /** Get the number of Children of this node which require Update traversal,
+          * since they have an Update Callback attached to them or their children.*/
         inline unsigned int getNumChildrenRequiringUpdateTraversal() const { return _numChildrenRequiringUpdateTraversal; }
 
 
@@ -149,8 +149,8 @@ class SG_EXPORT Node : public Object
         /** Get const update node callback, called during update traversal. */
         inline const NodeCallback* getEventCallback() const { return _eventCallback.get(); }
 
-        /** Get the number of Children of this node which require App traversal,
-          * since they have an AppCallback attached to them or their children.*/
+        /** Get the number of Children of this node which require Event traversal,
+          * since they have an Event Callback attached to them or their children.*/
         inline unsigned int getNumChildrenRequiringEventTraversal() const { return _numChildrenRequiringEventTraversal; }
 
 
@@ -221,7 +221,7 @@ class SG_EXPORT Node : public Object
 
 
         /** Set the node's StateSet.*/
-        inline void setStateSet(osg::StateSet* dstate) { _stateset = dstate; }
+        void setStateSet(osg::StateSet* stateset);
 
         /** return the node's StateSet, if one does not already exist create it
           * set the node and return the newly created StateSet. This ensures
@@ -231,21 +231,68 @@ class SG_EXPORT Node : public Object
         /** Return the node's StateSet. returns NULL if a stateset is not attached.*/
         inline osg::StateSet* getStateSet() { return _stateset.get(); }
 
-        /** return the node's const StateSet. Returns NULL if a stateset is not attached.*/
+        /** Return the node's const StateSet. Returns NULL if a stateset is not attached.*/
         inline const osg::StateSet* getStateSet() const { return _stateset.get(); }
 
-        /** get the bounding sphere of node.
-           Using lazy evaluation computes the bounding sphere if it is 'dirty'.*/
-        inline const BoundingSphere& getBound() const
-        {
-            if(!_bsphere_computed) computeBound();
-            return _bsphere;
-        }
+        /** Set the intial bounding volume to use when computing the overall bounding volume.*/
+        void setInitialBound(const osg::BoundingSphere& bsphere) { _initialBound = bsphere; dirtyBound(); }
 
+        /** Set the intial bounding volume to use when computing the overall bounding volume.*/
+        const BoundingSphere& getInitialBound() const { return _initialBound; }
 
         /** Mark this node's bounding sphere dirty.
             Forcing it to be computed on the next call to getBound().*/
         void dirtyBound();
+
+        /** Get the bounding sphere of node.
+           Using lazy evaluation computes the bounding sphere if it is 'dirty'.*/
+        inline const BoundingSphere& getBound() const
+        {
+            if(!_boundingSphereComputed)
+            {
+                _boundingSphere = _initialBound;
+                if (_computeBoundCallback.valid()) 
+                    _boundingSphere.expandBy(_computeBoundCallback->computeBound(*this));
+                else
+                    _boundingSphere.expandBy(computeBound());
+                    
+                _boundingSphereComputed = true;
+            }
+            return _boundingSphere;
+        }
+
+
+        /** Compute the bounding sphere around Node's geometry or children.
+            This method is automatically called by getBound() when the bounding
+            sphere has been marked dirty via dirtyBound().*/
+        virtual BoundingSphere computeBound() const;
+
+        /** Callback to allow users to override the default computation of bounding volume.*/
+        struct ComputeBoundingSphereCallback : public osg::Object
+        {
+            ComputeBoundingSphereCallback() {}
+
+            ComputeBoundingSphereCallback(const ComputeBoundingSphereCallback&,const CopyOp&) {}
+
+            META_Object(osg,ComputeBoundingSphereCallback);
+
+           virtual BoundingSphere computeBound(const osg::Node&) const { return BoundingSphere(); }
+        };
+
+        /** Set the compute bound callback to override the default computeBound.*/
+        void setComputeBoundingSphereCallback(ComputeBoundingSphereCallback* callback) { _computeBoundCallback = callback; }
+
+        /** Get the compute bound callback.*/
+        ComputeBoundingSphereCallback* getComputeBoundingSphereCallback() { return _computeBoundCallback.get(); }
+
+        /** Get the const compute bound callback.*/
+        const ComputeBoundingSphereCallback* getComputeBoundingSphereCallback() const { return _computeBoundCallback.get(); }
+
+
+        /** If State is non-zero, this function releases any associated OpenGL objects for
+           * the specified graphics context. Otherwise, releases OpenGL objexts
+           * for all graphics contexts. */
+        virtual void releaseGLObjects(osg::State* = 0) const;
 
 
     protected:
@@ -260,13 +307,11 @@ class SG_EXPORT Node : public Object
         virtual ~Node();
 
 
-        /** Compute the bounding sphere around Node's geometry or children.
-            This method is automatically called by getBound() when the bounding
-            sphere has been marked dirty via dirtyBound().*/
-        virtual bool computeBound() const;
 
-        mutable BoundingSphere _bsphere;
-        mutable bool _bsphere_computed;
+        BoundingSphere                          _initialBound;
+        ref_ptr<ComputeBoundingSphereCallback>  _computeBoundCallback;
+        mutable BoundingSphere                  _boundingSphere;
+        mutable bool                            _boundingSphereComputed;
 
         std::string _name;
 
@@ -276,6 +321,7 @@ class SG_EXPORT Node : public Object
         ParentList _parents;
         friend class osg::Group;
         friend class osg::Drawable;
+        friend class osg::StateSet;
 
         ref_ptr<NodeCallback> _updateCallback;
         unsigned int _numChildrenRequiringUpdateTraversal;

@@ -1,4 +1,4 @@
-/* -*-c++-*- OpenSceneGraph - Copyright (C) 1998-2003 Robert Osfield 
+/* -*-c++-*- OpenSceneGraph - Copyright (C) 1998-2005 Robert Osfield 
  *
  * This library is open source and may be redistributed and/or modified under  
  * the terms of the OpenSceneGraph Public License (OSGPL) version 0.0 or 
@@ -25,7 +25,7 @@ typedef std::vector< ref_ptr<Node> > NodeList;
   * Children are reference counted. This allows children to be shared
   * with memory management handled automatically via osg::Referenced.
 */
-class SG_EXPORT Group : public Node
+class OSG_EXPORT Group : public Node
 {
     public :
 
@@ -120,12 +120,17 @@ class SG_EXPORT Group : public Node
             return _children.size(); // node not found.
         }
 
+        /** If State is non-zero, this function releases any associated OpenGL objects for
+           * the specified graphics context. Otherwise, releases OpenGL objexts
+           * for all graphics contexts. */
+        virtual void releaseGLObjects(osg::State* = 0) const;
+
+        virtual BoundingSphere computeBound() const;
+        
     protected:
 
         virtual ~Group();
 
-        virtual bool computeBound() const;
-        
         virtual void childRemoved(unsigned int /*pos*/, unsigned int /*numChildrenToRemove*/) {}
         virtual void childInserted(unsigned int /*pos*/) {}
 

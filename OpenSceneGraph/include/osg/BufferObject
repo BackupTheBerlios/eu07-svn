@@ -1,4 +1,4 @@
-/* -*-c++-*- OpenSceneGraph - Copyright (C) 1998-2003 Robert Osfield
+/* -*-c++-*- OpenSceneGraph - Copyright (C) 1998-2005 Robert Osfield
  *
  * This library is open source and may be redistributed and/or modified under
  * the terms of the OpenSceneGraph Public License (OSGPL) version 0.0 or
@@ -14,7 +14,8 @@
 #ifndef OSG_BUFFEROBJECT
 #define OSG_BUFFEROBJECT 1
 
-#include <osg/State>
+#include <osg/GL>
+#include <osg/Object>
 #include <osg/buffered_value>
 
 #ifndef GL_ARB_vertex_buffer_object
@@ -77,7 +78,9 @@
 namespace osg 
 {
 
-class SG_EXPORT BufferObject : public Object
+class State;
+
+class OSG_EXPORT BufferObject : public Object
 {
     public:
 
@@ -133,21 +136,21 @@ class SG_EXPORT BufferObject : public Object
 
         /** flush all the cached display list which need to be deleted
           * in the OpenGL context related to contextID.*/
-        void BufferObject::flushDeletedBufferObjects(unsigned int contextID,double /*currentTime*/, double& availableTime);
+        void flushDeletedBufferObjects(unsigned int contextID,double /*currentTime*/, double& availableTime);
 
         /** Extensions class which encapsulates the querying of extensions and
         * associated function pointers, and provide convenience wrappers to
         * check for the extensions or use the associated functions.*/
-        class SG_EXPORT Extensions : public osg::Referenced
+        class OSG_EXPORT Extensions : public osg::Referenced
         {
         public:
-            Extensions();
+            Extensions(unsigned int contextID);
 
             Extensions(const Extensions& rhs);
 
             void lowestCommonDenominator(const Extensions& rhs);
 
-            void setupGLExtenions();
+            void setupGLExtenions(unsigned int contextID);
 
             bool isBufferObjectSupported() const { return _glGenBuffers!=0; }
 
@@ -208,8 +211,6 @@ class SG_EXPORT BufferObject : public Object
     
         virtual ~BufferObject();
         
-        unsigned int computeRequiredTotalSize() const;
-        
         typedef osg::buffered_value<GLuint> GLObjectList;
 
         typedef std::pair< BufferEntry, ref_ptr<Array> >        BufferEntryArrayPair;
@@ -223,7 +224,7 @@ class SG_EXPORT BufferObject : public Object
 };
 
 class Image;
-class SG_EXPORT PixelBufferObject : public BufferObject
+class OSG_EXPORT PixelBufferObject : public BufferObject
 {
     public:
 
@@ -250,8 +251,6 @@ class SG_EXPORT PixelBufferObject : public BufferObject
     protected:
     
         virtual ~PixelBufferObject();
-        
-        unsigned int computeRequiredTotalSize() const;
         
         BufferEntryImagePair _bufferEntryImagePair;
 };

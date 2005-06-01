@@ -1,4 +1,4 @@
-/* -*-c++-*- OpenSceneGraph - Copyright (C) 1998-2003 Robert Osfield 
+/* -*-c++-*- OpenSceneGraph - Copyright (C) 1998-2005 Robert Osfield 
  *
  * This library is open source and may be redistributed and/or modified under  
  * the terms of the OpenSceneGraph Public License (OSGPL) version 0.0 or 
@@ -45,7 +45,7 @@ class ConstShapeVisitor;
   * Shapes are used to either for culling and collision detection or
   * to define the geometric shape of procedurally generate Geometry.
 */
-class SG_EXPORT Shape : public Object
+class OSG_EXPORT Shape : public Object
 {
     public:
 
@@ -474,7 +474,7 @@ class ConvexHull : public TriangleMesh
     	~ConvexHull() {}
 };
 
-class SG_EXPORT HeightField : public Shape
+class OSG_EXPORT HeightField : public Shape
 {
     public:
     
@@ -503,9 +503,6 @@ class SG_EXPORT HeightField : public Shape
     	typedef std::vector<float> HeightList;
 
     	void allocate(unsigned int numColumns,unsigned int numRows);
-
-	// deprecated.
-    	void allocateGrid(unsigned int numColumns,unsigned int numRows) { allocate(numColumns,numRows); }
 
 	inline unsigned int getNumColumns() const { return _columns; }
 	inline unsigned int getNumRows() const { return _rows; }

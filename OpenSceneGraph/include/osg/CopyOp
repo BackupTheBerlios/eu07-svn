@@ -1,4 +1,4 @@
-/* -*-c++-*- OpenSceneGraph - Copyright (C) 1998-2003 Robert Osfield 
+/* -*-c++-*- OpenSceneGraph - Copyright (C) 1998-2005 Robert Osfield 
  *
  * This library is open source and may be redistributed and/or modified under  
  * the terms of the OpenSceneGraph Public License (OSGPL) version 0.0 or 
@@ -21,10 +21,10 @@ namespace osg {
 class Referenced;
 class Object;
 class Image;
-//class Texture;
 class Texture;
 class StateSet;
 class StateAttribute;
+class Uniform;
 class Node;
 class Drawable;
 class Array;
@@ -33,7 +33,7 @@ class Shape;
 
 /** Copy Op(erator) used to control whether shallow or deep copy is used
   * during copy construction and clone operation.*/
-class SG_EXPORT CopyOp
+class OSG_EXPORT CopyOp
 {
 
     public:
@@ -51,6 +51,7 @@ class SG_EXPORT CopyOp
             DEEP_COPY_ARRAYS 	    	= 128,
             DEEP_COPY_PRIMITIVES    	= 256,
             DEEP_COPY_SHAPES 	    	= 512,
+            DEEP_COPY_UNIFORMS 	    	= 1024,
             DEEP_COPY_ALL   	    	= 0xffffffff
         };
 
@@ -70,6 +71,7 @@ class SG_EXPORT CopyOp
         virtual Array*          operator() (const Array* array) const;
         virtual PrimitiveSet*   operator() (const PrimitiveSet* primitives) const;
         virtual Shape*      	operator() (const Shape* shape) const;
+        virtual Uniform*      	operator() (const Uniform* shape) const;
 
     protected:
     

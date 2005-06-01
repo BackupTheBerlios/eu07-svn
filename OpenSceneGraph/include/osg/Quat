@@ -1,4 +1,4 @@
-/* -*-c++-*- OpenSceneGraph - Copyright (C) 1998-2003 Robert Osfield 
+/* -*-c++-*- OpenSceneGraph - Copyright (C) 1998-2005 Robert Osfield 
  *
  * This library is open source and may be redistributed and/or modified under  
  * the terms of the OpenSceneGraph Public License (OSGPL) version 0.0 or 
@@ -26,7 +26,7 @@ class Matrixf;
 class Matrixd;
 
 /** A quaternion class. It can be used to represent an orientation in 3D space.*/
-class SG_EXPORT Quat
+class OSG_EXPORT Quat
 {
 
     public:
@@ -383,21 +383,10 @@ class SG_EXPORT Quat
             uuv *= 2.0f; 
             return v + uv + uuv;
         }
-               
-        friend inline std::ostream& operator << (std::ostream& output, const Quat& vec);
         
     protected:
     
 };    // end of class prototype
-
-inline std::ostream& operator << (std::ostream& output, const Quat& vec)
-{
-    output << vec._v[0] << " "
-       << vec._v[1] << " "
-       << vec._v[2] << " "
-       << vec._v[3];
-    return output;     // to enable cascading
-}
 
 }    // end of namespace
 

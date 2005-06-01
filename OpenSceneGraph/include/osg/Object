@@ -1,4 +1,4 @@
-/* -*-c++-*- OpenSceneGraph - Copyright (C) 1998-2003 Robert Osfield 
+/* -*-c++-*- OpenSceneGraph - Copyright (C) 1998-2005 Robert Osfield 
  *
  * This library is open source and may be redistributed and/or modified under  
  * the terms of the OpenSceneGraph Public License (OSGPL) version 0.0 or 
@@ -20,6 +20,9 @@
 
 namespace osg {
 
+// forward declare
+class State;
+
 /** META_Object macro define the standard clone, isSameKindAs and className methods.
   * Use when subclassing from Object to make it more convenient to define 
   * the standard pure virtual clone, isSameKindAs and className methods 
@@ -36,7 +39,7 @@ namespace osg {
     cloning and reference counting.
     Based on GOF Composite, Prototype and Template Method patterns.
 */
-class SG_EXPORT Object : public Referenced
+class OSG_EXPORT Object : public Referenced
 {
     public:
 
@@ -101,6 +104,11 @@ class SG_EXPORT Object : public Referenced
         /** Get const user data.*/
         inline const Referenced* getUserData() const { return _userData.get(); }
 
+
+        /** If State is non-zero, this function releases any associated OpenGL objects for
+           * the specified graphics context. Otherwise, releases OpenGL objexts
+           * for all graphics contexts. */
+        virtual void releaseGLObjects(osg::State* = 0) const {}
 
     protected:
 

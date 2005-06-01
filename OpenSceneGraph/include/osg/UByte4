@@ -1,4 +1,4 @@
-/* -*-c++-*- OpenSceneGraph - Copyright (C) 1998-2003 Robert Osfield 
+/* -*-c++-*- OpenSceneGraph - Copyright (C) 1998-2005 Robert Osfield 
  *
  * This library is open source and may be redistributed and/or modified under  
  * the terms of the OpenSceneGraph Public License (OSGPL) version 0.0 or 
@@ -15,8 +15,6 @@
 #define OSG_UBYTE4 1
 
 #include <osg/Vec3>
-
-#include <ostream>
 
 namespace osg {
 
@@ -147,18 +145,7 @@ class UByte4
             return *this;
         }
 
-        friend inline std::ostream& operator << (std::ostream& output, const UByte4& vec)
-        {
-	    output << (int)vec._v[0] << " "
-                   << (int)vec._v[1] << " "
-                   << (int)vec._v[2] << " "
-                   << (int)vec._v[3];
-	    return output; 	// to enable cascading
-	}
-
 };	// end of class UByte4
-
-
 
 }	// end of namespace osg
 

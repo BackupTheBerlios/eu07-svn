@@ -1,4 +1,4 @@
-/* -*-c++-*- OpenSceneGraph - Copyright (C) 1998-2003 Robert Osfield 
+/* -*-c++-*- OpenSceneGraph - Copyright (C) 1998-2005 Robert Osfield 
  *
  * This library is open source and may be redistributed and/or modified under  
  * the terms of the OpenSceneGraph Public License (OSGPL) version 0.0 or 
@@ -111,6 +111,7 @@ class OSGDB_EXPORT Registry : public osg::Referenced
         osg::Object*         readObject(Input& fr);
         osg::Image*          readImage(Input& fr);
         osg::Drawable*       readDrawable(Input& fr);
+        osg::Uniform*        readUniform(Input& fr);
         osg::StateAttribute* readStateAttribute(Input& fr);
         osg::Node*           readNode(Input& fr);
         
@@ -348,7 +349,11 @@ class OSGDB_EXPORT Registry : public osg::Referenced
         
         /** Remove all archives from the archive cache.*/
         void clearArchiveCache();
-
+        
+         /** If State is non-zero, this function releases OpenGL objects for
+           * the specified graphics context. Otherwise, releases OpenGL objexts
+           * for all graphics contexts. */
+        void releaseGLObjects(osg::State* state=0);
 
         /** get the attached library with specified name.*/
         DynamicLibrary*              getLibrary(const std::string& fileName);
@@ -449,6 +454,7 @@ class OSGDB_EXPORT Registry : public osg::Referenced
         DotOsgWrapperMap   _imageWrapperMap;
         DotOsgWrapperMap   _drawableWrapperMap;
         DotOsgWrapperMap   _stateAttrWrapperMap;
+        DotOsgWrapperMap   _uniformWrapperMap;
         DotOsgWrapperMap   _nodeWrapperMap;
         
         DotOsgWrapperMap   _classNameWrapperMap;

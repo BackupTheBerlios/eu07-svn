@@ -1,4 +1,4 @@
-/* -*-c++-*- OpenSceneGraph - Copyright (C) 1998-2003 Robert Osfield 
+/* -*-c++-*- OpenSceneGraph - Copyright (C) 1998-2005 Robert Osfield 
  *
  * This library is open source and may be redistributed and/or modified under  
  * the terms of the OpenSceneGraph Public License (OSGPL) version 0.0 or 
@@ -30,7 +30,7 @@ namespace osg {
   * AnimationPathCallback can be attached directly to Transform nodes to
   * move subgraphs around the scene.
 */
-class SG_EXPORT AnimationPath : public virtual osg::Object
+class OSG_EXPORT AnimationPath : public virtual osg::Object
 {
     public:
     
@@ -109,9 +109,8 @@ class SG_EXPORT AnimationPath : public virtual osg::Object
                 matrix.preMult(osg::Matrixd::translate(-_position));
             }
 	    
- #ifdef USE_DEPRECATED_API
     	protected:
-#endif
+
             osg::Vec3d _position;
             osg::Quat _rotation;
             osg::Vec3d _scale;
@@ -201,7 +200,7 @@ class SG_EXPORT AnimationPath : public virtual osg::Object
 };
 
 
-class SG_EXPORT AnimationPathCallback : public NodeCallback
+class OSG_EXPORT AnimationPathCallback : public NodeCallback
 {
     public:
 

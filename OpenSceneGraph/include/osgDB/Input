@@ -1,4 +1,4 @@
-/* -*-c++-*- OpenSceneGraph - Copyright (C) 1998-2003 Robert Osfield 
+/* -*-c++-*- OpenSceneGraph - Copyright (C) 1998-2005 Robert Osfield 
  *
  * This library is open source and may be redistributed and/or modified under  
  * the terms of the OpenSceneGraph Public License (OSGPL) version 0.0 or 
@@ -47,6 +47,7 @@ class OSGDB_EXPORT Input : public FieldReaderIterator
         virtual osg::Image*          readImage();
         virtual osg::Drawable*       readDrawable();
         virtual osg::StateAttribute* readStateAttribute();
+        virtual osg::Uniform*        readUniform();
         virtual osg::Node*           readNode();
 
         virtual osg::Object*         readObject(const std::string& fileName);

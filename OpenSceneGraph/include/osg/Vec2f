@@ -1,4 +1,4 @@
-/* -*-c++-*- OpenSceneGraph - Copyright (C) 1998-2003 Robert Osfield 
+/* -*-c++-*- OpenSceneGraph - Copyright (C) 1998-2005 Robert Osfield 
  *
  * This library is open source and may be redistributed and/or modified under  
  * the terms of the OpenSceneGraph Public License (OSGPL) version 0.0 or 
@@ -13,8 +13,6 @@
 
 #ifndef OSG_VEC2F
 #define OSG_VEC2F 1
-
-#include <ostream>
 
 #include <osg/Math>
 
@@ -162,14 +160,9 @@ class Vec2f
             }
             return( norm );
         }
-
-        friend inline std::ostream& operator << (std::ostream& output, const Vec2f& vec)
-        {
-            output << vec._v[0] << " " << vec._v[1];
-            return output;     // to enable cascading
-        }
-
+		
 };    // end of class Vec2f
 
 }    // end of namespace osg
 #endif
+

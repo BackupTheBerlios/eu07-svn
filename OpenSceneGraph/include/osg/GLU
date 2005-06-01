@@ -1,4 +1,4 @@
-/* -*-c++-*- OpenSceneGraph - Copyright (C) 1998-2003 Robert Osfield 
+/* -*-c++-*- OpenSceneGraph - Copyright (C) 1998-2005 Robert Osfield 
  *
  * This library is open source and may be redistributed and/or modified under  
  * the terms of the OpenSceneGraph Public License (OSGPL) version 0.0 or 
@@ -15,9 +15,11 @@
 #define OSG_GLU 1
 
 #ifdef __APPLE__
-	#include <OpenGL/glu.h>
+    #include <OpenGL/glu.h>
+    #define GLU_TESS_CALLBACK GLvoid (CALLBACK*)(...)
 #else
-	#include <GL/glu.h>
+    #include <GL/glu.h>
+    #define GLU_TESS_CALLBACK GLvoid (CALLBACK*)()
 #endif
 
 #endif  // __osgGLU_h

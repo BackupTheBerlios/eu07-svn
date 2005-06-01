@@ -1,4 +1,4 @@
-/* -*-c++-*- OpenSceneGraph - Copyright (C) 1998-2003 Robert Osfield 
+/* -*-c++-*- OpenSceneGraph - Copyright (C) 1998-2005 Robert Osfield 
  *
  * This library is open source and may be redistributed and/or modified under  
  * the terms of the OpenSceneGraph Public License (OSGPL) version 0.0 or 
@@ -21,7 +21,7 @@ namespace osg {
 
 /** State Class for setting OpenGL's polygon culling mode.
 */     
-class SG_EXPORT PolygonMode : public StateAttribute
+class OSG_EXPORT PolygonMode : public StateAttribute
 {
     public :
     
@@ -66,7 +66,7 @@ class SG_EXPORT PolygonMode : public StateAttribute
         enum Face {
             FRONT_AND_BACK,
             FRONT,
-            BACK,
+            BACK
         };
     
         void setMode(Face face,Mode mode);

@@ -1,4 +1,4 @@
-/* -*-c++-*- OpenSceneGraph - Copyright (C) 1998-2003 Robert Osfield 
+/* -*-c++-*- OpenSceneGraph - Copyright (C) 1998-2005 Robert Osfield 
  *
  * This library is open source and may be redistributed and/or modified under  
  * the terms of the OpenSceneGraph Public License (OSGPL) version 0.0 or 
@@ -25,11 +25,11 @@ namespace osg {
 // forward declare
 class ApplicationUsage;
 
-class SG_EXPORT ArgumentParser
+class OSG_EXPORT ArgumentParser
 {
     public:
 
-        class SG_EXPORT Parameter
+        class OSG_EXPORT Parameter
         {
         public:
             enum ParameterType
@@ -38,7 +38,7 @@ class SG_EXPORT ArgumentParser
                 DOUBLE_PARAMETER,
                 INT_PARAMETER,
                 UNSIGNED_INT_PARAMETER,
-                STRING_PARAMETER,
+                STRING_PARAMETER
             };
         
             union ValueUnion

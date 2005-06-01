@@ -1,4 +1,4 @@
-/* -*-c++-*- OpenSceneGraph - Copyright (C) 1998-2003 Robert Osfield 
+/* -*-c++-*- OpenSceneGraph - Copyright (C) 1998-2005 Robert Osfield 
  *
  * This library is open source and may be redistributed and/or modified under  
  * the terms of the OpenSceneGraph Public License (OSGPL) version 0.0 or 
@@ -23,7 +23,7 @@
 namespace osg {
 
 /** TextureCubeMap state class which encapsulates OpenGL texture cubemap functionality. */
-class SG_EXPORT TextureCubeMap : public Texture
+class OSG_EXPORT TextureCubeMap : public Texture
 {
 
     public :
@@ -88,7 +88,7 @@ class SG_EXPORT TextureCubeMap : public Texture
         }
 
 
-        class SG_EXPORT SubloadCallback : public Referenced
+        class OSG_EXPORT SubloadCallback : public Referenced
         {
             public:
                 virtual void load(const TextureCubeMap& texture,State& state) const = 0;
@@ -120,16 +120,16 @@ class SG_EXPORT TextureCubeMap : public Texture
           * associated function pointers, and provides convinience wrappers to 
           * check for the extensions or use the associated functions.
         */
-        class SG_EXPORT Extensions : public osg::Referenced
+        class OSG_EXPORT Extensions : public osg::Referenced
         {
             public:
-                Extensions();
+                Extensions(unsigned int contextID);
 
                 Extensions(const Extensions& rhs);
                 
                 void lowestCommonDenominator(const Extensions& rhs);
                 
-                void setupGLExtenions();
+                void setupGLExtenions(unsigned int contextID);
 
                 void setCubeMapSupported(bool flag) { _isCubeMapSupported=flag; }
                 bool isCubeMapSupported() const { return _isCubeMapSupported; }

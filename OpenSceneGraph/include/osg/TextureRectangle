@@ -1,4 +1,4 @@
-/* -*-c++-*- OpenSceneGraph - Copyright (C) 1998-2003 Robert Osfield 
+/* -*-c++-*- OpenSceneGraph - Copyright (C) 1998-2005 Robert Osfield 
  *
  * This library is open source and may be redistributed and/or modified under  
  * the terms of the OpenSceneGraph Public License (OSGPL) version 0.0 or 
@@ -27,7 +27,7 @@
 namespace osg {
 
 /** Texture state class which encapsulates OpenGL texture functionality. */
-class SG_EXPORT TextureRectangle : public Texture
+class OSG_EXPORT TextureRectangle : public Texture
 {
 
     public :
@@ -105,6 +105,21 @@ class SG_EXPORT TextureRectangle : public Texture
         void setSubloadCallback(SubloadCallback* cb) { _subloadCallback = cb;; }
         SubloadCallback* getSubloadCallback() { return _subloadCallback.get(); }
         const SubloadCallback* getSubloadCallback() const { return _subloadCallback.get(); }
+
+        /** Copies pixels into a 2D texture image, as per glCopyTexImage2D.
+          * Creates an OpenGL texture object from the current OpenGL background
+          * framebuffer contents at position \a x, \a y with width \a width and
+          * height \a height. \a width and \a height must be a power of two. */
+        void copyTexImage2D(State& state, int x, int y, int width, int height );
+
+        /** Copies a two-dimensional texture subimage, as per
+          * glCopyTexSubImage2D. Updates a portion of an existing OpenGL
+          * texture object from the current OpenGL background framebuffer
+          * contents at position \a x, \a y with width \a width and height
+          * \a height. Loads framebuffer data into the texture using offsets
+          * \a xoffset and \a yoffset. \a width and \a height must be powers
+          * of two. */
+        void copyTexSubImage2D(State& state, int xoffset, int yoffset, int x, int y, int width, int height );
 
         /** On first apply (unless already compiled), create and bind the 
           * texture, subsequent apply will simply bind to texture.

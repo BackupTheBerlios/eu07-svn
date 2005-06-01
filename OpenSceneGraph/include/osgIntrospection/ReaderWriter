@@ -1,3 +1,17 @@
+/* -*-c++-*- OpenSceneGraph - Copyright (C) 1998-2005 Robert Osfield 
+ *
+ * This library is open source and may be redistributed and/or modified under  
+ * the terms of the OpenSceneGraph Public License (OSGPL) version 0.0 or 
+ * (at your option) any later version.  The full license is in LICENSE file
+ * included with this distribution, and on the openscenegraph.org website.
+ * 
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the 
+ * OpenSceneGraph Public License for more details.
+*/
+//osgIntrospection - Copyright (C) 2005 Marco Jez
+
 #ifndef OSGINTROSPECTION_READERWRITER_
 #define OSGINTROSPECTION_READERWRITER_
 
@@ -13,50 +27,6 @@
 
 #include <iostream>
 
-namespace osg
-{
-
-    /// ----------------------------------------------------------------------
-    /// TEMPORARY FIX
-    /// (currently osg::Vec? classes don't support input streaming)
-    /// (currently osg::ref_ptr<> class doesn't support I/O streaming)
-    inline std::istream& operator >> (std::istream& input, Vec2f& vec)
-    {
-        input >> vec._v[0] >> vec._v[1];
-        return input;
-    }
-
-    inline std::istream& operator >> (std::istream& input, Vec3f& vec)
-    {
-        input >> vec._v[0] >> vec._v[1] >> vec._v[2];
-        return input;
-    }
-
-    inline std::istream& operator >> (std::istream& input, Vec4& vec)
-    {
-        input >> vec._v[0] >> vec._v[1] >> vec._v[2] >> vec._v[3];
-        return input;
-    }
-
-    template<typename T>
-    std::ostream &operator << (std::ostream &s, const osg::ref_ptr<T> &r)
-    {
-        return s << r.get();
-    }
-
-    template<typename T>
-    std::istream &operator >> (std::istream &s, osg::ref_ptr<T> &r)
-    {
-        void *ptr;
-        s >> ptr;
-        r = (T *)ptr;
-        return s;
-    }
-
-    ///
-    /// END OF TEMPORARY FIX
-    /// ----------------------------------------------------------------------
-}
 
 namespace osgIntrospection
 {
@@ -86,16 +56,16 @@ namespace osgIntrospection
         };
 
         /// Writes a textual representation of the value's content to a stream.
-        virtual std::ostream &writeTextValue(std::ostream &, const Value &v, const Options* = 0) const { throw StreamingNotSupportedException(StreamingNotSupportedException::TEXT_WRITE, v.getType().getStdTypeInfo()); }
+        virtual std::ostream &writeTextValue(std::ostream &, const Value& v, const Options* = 0) const { throw StreamingNotSupportedException(StreamingNotSupportedException::TEXT_WRITE, v.getType().getStdTypeInfo()); }
 
         /// Reads a textual representation of the value's content from a stream.
-        virtual std::istream &readTextValue(std::istream &, Value &v, const Options* = 0) const { throw StreamingNotSupportedException(StreamingNotSupportedException::TEXT_READ, v.getType().getStdTypeInfo()); }
+        virtual std::istream &readTextValue(std::istream &, Value& v, const Options* = 0) const { throw StreamingNotSupportedException(StreamingNotSupportedException::TEXT_READ, v.getType().getStdTypeInfo()); }
 
         /// Writes a binary representation of the value's content to a stream.
-        virtual std::ostream &writeBinaryValue(std::ostream &, const Value &v, const Options* = 0) const { throw StreamingNotSupportedException(StreamingNotSupportedException::BINARY_WRITE, v.getType().getStdTypeInfo()); }
+        virtual std::ostream &writeBinaryValue(std::ostream &, const Value& v, const Options* = 0) const { throw StreamingNotSupportedException(StreamingNotSupportedException::BINARY_WRITE, v.getType().getStdTypeInfo()); }
 
         /// Reads a binary representation of the value's content from a stream.
-        virtual std::istream &readBinaryValue(std::istream &, Value &v, const Options* = 0) const { throw StreamingNotSupportedException(StreamingNotSupportedException::BINARY_READ, v.getType().getStdTypeInfo()); }
+        virtual std::istream &readBinaryValue(std::istream &, Value& v, const Options* = 0) const { throw StreamingNotSupportedException(StreamingNotSupportedException::BINARY_READ, v.getType().getStdTypeInfo()); }
 
         /// Virtual destructor.
         virtual ~ReaderWriter() {}
@@ -113,23 +83,23 @@ namespace osgIntrospection
     class StdReaderWriter: public ReaderWriter
     {
     public:
-        virtual std::ostream &writeTextValue(std::ostream &os, const Value &v, const Options * = 0) const
+        virtual std::ostream &writeTextValue(std::ostream &os, const Value& v, const Options * = 0) const
         {
             return (os << variant_cast<T>(v));
         }
 
-        virtual std::istream &readTextValue(std::istream &is, Value &v, const Options * = 0) const
+        virtual std::istream &readTextValue(std::istream &is, Value& v, const Options * = 0) const
         {
             if (v.isEmpty()) v = Value(T());
             return (is >> variant_cast<T &>(v));
         }
 
-        virtual std::ostream &writeBinaryValue(std::ostream &os, const Value &v, const Options * = 0) const
+        virtual std::ostream &writeBinaryValue(std::ostream &os, const Value& v, const Options * = 0) const
         {
             return os.write(reinterpret_cast<const char *>(extract_raw_data<T>(v)), sizeof(T));
         }
 
-        virtual std::istream &readBinaryValue(std::istream &is, Value &v, const Options * = 0) const
+        virtual std::istream &readBinaryValue(std::istream &is, Value& v, const Options * = 0) const
         {
             if (v.isEmpty()) v = Value(T());
             return is.read(reinterpret_cast<char *>(extract_raw_data<T>(v)), sizeof(T));
@@ -144,14 +114,14 @@ namespace osgIntrospection
     template<typename T>
     class EnumReaderWriter: public ReaderWriter
     {
-        virtual std::ostream &writeTextValue(std::ostream &os, const Value &v, const Options *options = 0) const
+        virtual std::ostream &writeTextValue(std::ostream &os, const Value& v, const Options *options = 0) const
         {
             int numeric = static_cast<int>(variant_cast<T>(v));
 
             if (!options || !options->getForceNumericOutput())
             {
-                const Type &type = v.getType();
-                const EnumLabelMap &elm = type.getEnumLabels();
+                const Type& type = v.getType();
+                const EnumLabelMap& elm = type.getEnumLabels();
                 EnumLabelMap::const_iterator i = elm.find(numeric);
                 if (i != elm.end())
                 {
@@ -188,7 +158,7 @@ namespace osgIntrospection
             return os << numeric;
         }
 
-        virtual std::istream &readTextValue(std::istream &is, Value &v, const Options * = 0) const
+        virtual std::istream &readTextValue(std::istream &is, Value& v, const Options * = 0) const
         {
             if (v.isEmpty()) v = Value(T());
 
@@ -204,8 +174,8 @@ namespace osgIntrospection
             std::string s;            
             if (is >> s)
             {
-                const Type &type = v.getType();
-                const EnumLabelMap &elm = type.getEnumLabels();
+                const Type& type = v.getType();
+                const EnumLabelMap& elm = type.getEnumLabels();
                 for (EnumLabelMap::const_iterator i=elm.begin(); i!=elm.end(); ++i)
                 {
                     if (i->second.compare(s) == 0)
@@ -219,12 +189,12 @@ namespace osgIntrospection
             return is;
         }
 
-        virtual std::ostream &writeBinaryValue(std::ostream &os, const Value &v, const Options * = 0) const
+        virtual std::ostream &writeBinaryValue(std::ostream &os, const Value& v, const Options * = 0) const
         {
             return os.write(reinterpret_cast<const char *>(extract_raw_data<T>(v)), sizeof(T));
         }
 
-        virtual std::istream &readBinaryValue(std::istream &is, Value &v, const Options * = 0) const
+        virtual std::istream &readBinaryValue(std::istream &is, Value& v, const Options * = 0) const
         {
             if (v.isEmpty())
                 v = Value(T());
@@ -239,12 +209,12 @@ namespace osgIntrospection
     class PtrReaderWriter: public ReaderWriter
     {
     public:
-        virtual std::ostream &writeTextValue(std::ostream &os, const Value &v, const Options* = 0) const
+        virtual std::ostream &writeTextValue(std::ostream &os, const Value& v, const Options* = 0) const
         {
             return (os << (void*)variant_cast<T>(v));
         }
 
-        virtual std::istream &readTextValue(std::istream &is, Value &v, const Options* = 0) const
+        virtual std::istream &readTextValue(std::istream &is, Value& v, const Options* = 0) const
         {
             void *ptr;
             is >> ptr;
@@ -252,12 +222,12 @@ namespace osgIntrospection
             return is;
         }
 
-        virtual std::ostream &writeBinaryValue(std::ostream &os, const Value &v, const Options* = 0) const
+        virtual std::ostream &writeBinaryValue(std::ostream &os, const Value& v, const Options* = 0) const
         {
             return os.write(reinterpret_cast<const char *>(extract_raw_data<T>(v)), sizeof(T));
         }
 
-        virtual std::istream &readBinaryValue(std::istream &is, Value &v, const Options* = 0) const
+        virtual std::istream &readBinaryValue(std::istream &is, Value& v, const Options* = 0) const
         {
             T ptr;
             is.read(reinterpret_cast<char *>(&ptr), sizeof(T));
