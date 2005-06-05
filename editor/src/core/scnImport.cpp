@@ -30,6 +30,9 @@ void fixupTexName(std::string &name)
 	unsigned int n= name.find_first_of('.');
 	if (n>=name.length())
 		name+= ".dds";
+	else
+		if (name.substr(n).compare(".tex")==0)
+			name= name.substr(0,n)+".dds";
 
 }
 

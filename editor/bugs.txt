@@ -1,3 +1,0 @@
-fill i duza liczba punktow
-fence i zbyt dluga linia
-getPointOnTerrain uwzglednia rowniez aktualnie wybrany obiekt

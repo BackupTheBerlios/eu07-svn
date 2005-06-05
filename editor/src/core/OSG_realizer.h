@@ -17,6 +17,7 @@
 #include <osg/lightsource>
 #include <osg/Notify>
 #include <osg/Quat>
+#include <osg/AlphaFunc>
 
 #include <osgUtil/SceneView>
 #include <osgUtil/Optimizer>
