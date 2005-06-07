@@ -145,6 +145,11 @@ sel /sys/servers/input
 	    .map relmouse0:btn1.down		"script: /world/camera.pick 1"
 #	    .map relmouse0:btn2.down		"script: /world/camera.pick 2"
 
+		.map relmouse0:-zbtn.down		"script: /world/camera.pick 0"
+	    .map relmouse0:+zbtn.down		"script: /world/camera.pick 1"
+		.map relmouse0:-zbtn.up			"script: /world.releasemomentary"
+	    .map relmouse0:+zbtn.up			"script: /world.releasemomentary"
+
 	    .map relmouse0:btn0.up			"script: /world.releasemomentary"
 	    .map relmouse0:btn1.up			"script: /world.releasemomentary"
 #	    .map relmouse0:btn2.up			"script: /world.releasemomentary"
