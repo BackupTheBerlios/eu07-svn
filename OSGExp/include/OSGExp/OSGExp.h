@@ -28,6 +28,7 @@
 #include <osg/PositionAttitudeTransform>
 #include <osg/Math>
 #include <osg/BlendFunc>
+#include <osg/AlphaFunc>
 #include <osg/TexEnv>
 #include <osg/TexGen>
 #include <osg/LOD>
@@ -35,7 +36,7 @@
 #include <osg/Math>
 #include <osgDB/Registry>
 #include <osgDB/WriteFile>
-#include <osg/Impostor>
+//#include <osg/Impostor>
 
 // 3dsMax includes
 #include "Max.h"

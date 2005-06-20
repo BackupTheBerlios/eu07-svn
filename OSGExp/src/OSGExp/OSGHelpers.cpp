@@ -624,6 +624,7 @@ osg::ref_ptr<osg::Group> OSGExp::createImpostorFromHelperObject(osg::Group* root
 	if(_options->getUseDefaultNodeMaskValue())
 		group->setNodeMask(_options->getDefaultNodeMaskValue());
 
+	/*
 	// The impostor properties are saved in a parameter block.
 	IParamBlock2* pblock2 = (IParamBlock2*)obj->GetParamBlock();
 	Interval iv;
@@ -684,7 +685,7 @@ osg::ref_ptr<osg::Group> OSGExp::createImpostorFromHelperObject(osg::Group* root
 				} // End geometry node.
 			}
 		}
-	}
+	}*/
 	// Return impostor.
 	return group;
 }
