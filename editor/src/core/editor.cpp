@@ -62,6 +62,7 @@ left=-5
 #include "signals.h"
 #include "templateTracks.h"
 #include "scnImport.h"
+#include "options.h"
 
 osg::ref_ptr<osgDB::ReaderWriter> Editor::iveReaderWriter;
 const double Editor::cellDim= 1000.0;
@@ -84,7 +85,7 @@ Editor *Editor::instance()
 
 #define registerClass(CLAZZ) addKit(CLAZZ::getClassID(),CLAZZ::getClassProps());
 
-Editor::Editor(TopView *_mainView) : MouseAdapter(), mainView(_mainView), mode(em_Select), allowRedraws(false)
+Editor::Editor(TopView *_mainView) : MouseAdapter(), mainView(_mainView), mode(em_Select), allowRedraws(false), options(NULL)
 {
 	material= NULL;
 	self= this;
@@ -222,6 +223,8 @@ Editor::Editor(TopView *_mainView) : MouseAdapter(), mainView(_mainView), mode(e
 	registerClass(edSignal);
 	registerClass(edSCNImport);
 	setKitOwnerWithWrite(edSCNImport::instance());
+	registerClass(edOptions);
+	setKitOwnerWithWrite(edOptions::instance());
 //	registerClass(edRailLine);
 //	addKit('PTFT',edPointFeature::getClassProps());
 //	addKit('FTRK',edFlexTrack::getClassProps());
@@ -624,7 +627,7 @@ void Editor::deselectNode()
 		node->onDeselect();
 	selectedNode= NULL;
 	updateNodeDesc();
-	activateKit(unsigned int(0));
+	activateKit(edOptions::instance());
 }
 
 void Editor::updateNodeDesc()
@@ -1298,7 +1301,7 @@ void Editor::addObject(osg::MatrixTransform *gmt, osg::MatrixTransform *mt, floa
 
 osg::Vec3d Editor::getPointOnTerrain(double x, double y, bool useSRTM, bool useTerrain, int *whatHeight)
 {
-	osg::Vec3d retPt(x,y,0);
+	osg::Vec3d retPt(x,y,edOptions::instance()->defaultHeight);
 	osgUtil::IntersectVisitor::HitList hits;
 //	if (useTerrain && mainView->computeIntersections(getWorldX(),getWorldY(),terrainRoot.get(), hits))
 	if (whatHeight)
@@ -1363,7 +1366,7 @@ bool Editor::onPush(unsigned int button, unsigned int state)
 		case em_Import:
 			if (button==1)
 			{
-				edSCNImport::instance()->import(getPointOnTerrain(getWorldX(),getWorldY(),true,true),0);
+				edSCNImport::instance()->import(getPointOnTerrain(getWorldX(),getWorldY(),edOptions::instance()->useSRTM,edOptions::instance()->useTerrain),0);
 				redrawAll();
 			}
 		break;
@@ -1375,7 +1378,7 @@ bool Editor::onPush(unsigned int button, unsigned int state)
 //				&&				viewer->computeIntersections(ea.getXnormalized(), ea.getYnormalized(), srtmRoot.get(), hits))
 			{
 				int what= 0;	//terrain or srtm, HACK :(
-				hitPt= getPointOnTerrain(getWorldX(),getWorldY(),true,true,&what);
+				hitPt= getPointOnTerrain(getWorldX(),getWorldY(),edOptions::instance()->useSRTM,edOptions::instance()->useTerrain,&what);
 //				hitPt.set(getWorldX(), getWorldY(),0);
 //				hitPt.z()= srtmData.getHeight(hitPt.x(),hitPt.y());
 				//hits[0].getWorldIntersectPoint();
@@ -1501,7 +1504,7 @@ bool Editor::onPush(unsigned int button, unsigned int state)
 					pt= dynamic_cast<edPoint*>(pickVisitor->pickedNode.get());
 				else
 				{
-					hitPt= getPointOnTerrain(getWorldX(),getWorldY(),true,true);
+					hitPt= getPointOnTerrain(getWorldX(),getWorldY(),edOptions::instance()->useSRTM,edOptions::instance()->useTerrain);
 	//				hitPt.set(getWorldX(), getWorldY(),0);
 	//				hitPt.z()= srtmData.getHeight(hitPt.x(),hitPt.y());
 					if (mode==em_CreateCatenary)
@@ -1595,7 +1598,7 @@ bool Editor::onPush(unsigned int button, unsigned int state)
 			if (button==1 && !mainView->computeIntersections(getWorldX(), getWorldY(), terrainRoot.get(), hits))
 //				viewer->computeIntersections(ea.getXnormalized(), ea.getYnormalized(), srtmRoot.get(), hits))
 			{
-				hitPt= getPointOnTerrain(getWorldX(),getWorldY(),true,true);
+				hitPt= getPointOnTerrain(getWorldX(),getWorldY(),edOptions::instance()->useSRTM,edOptions::instance()->useTerrain);
 //				hitPt.set(getWorldX(), getWorldY(),0);
 //				hitPt.z()= srtmData.getHeight(hitPt.x(),hitPt.y());
 					/*
@@ -1733,7 +1736,7 @@ bool Editor::onDoubleClick(unsigned int button, unsigned int state)
 
 //		hitPt.set(getWorldX(), getWorldY(),0);
 //		hitPt.z()= srtmData.getHeight(hitPt.x(),hitPt.y());
-		hitPt= getPointOnTerrain(getWorldX(),getWorldY(),true,true);
+		hitPt= getPointOnTerrain(getWorldX(),getWorldY(),edOptions::instance()->useSRTM,edOptions::instance()->useTerrain);
 		(*perspectiveViews.begin())->setTarget(hitPt);
 		(*perspectiveViews.begin())->exposed();
 	}
@@ -1756,7 +1759,7 @@ bool Editor::onDrag(unsigned int state)
 		{
 			pos= selectedNode->getPosition()+osg::Vec3d(getWorldDX(),getWorldDY(),0.0);
 			if (!(state&GDK_SHIFT_MASK))
-				pos= getPointOnTerrain(pos.x(),pos.y(),true,true);
+				pos= getPointOnTerrain(pos.x(),pos.y(),edOptions::instance()->useSRTM,edOptions::instance()->useTerrain);
 //				pos.z()= srtmData.getHeight(pos.x(),pos.y());
 			selectedNode->moveTo(pos);
 		}

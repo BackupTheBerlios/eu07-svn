@@ -286,6 +286,8 @@ protected:
 
 
 	osg::ref_ptr<osgDB::ReaderWriter::Options> defaultOptions;
+
+	class edOptions *options;
 //private:
 //	Editor() {};
 };

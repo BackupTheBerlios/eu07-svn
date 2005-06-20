@@ -360,6 +360,12 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="..\src\core\options.cpp">
+			</File>
+			<File
+				RelativePath="..\src\core\options.h">
+			</File>
+			<File
 				RelativePath="..\src\core\OSG_realizer.cpp">
 			</File>
 			<File
