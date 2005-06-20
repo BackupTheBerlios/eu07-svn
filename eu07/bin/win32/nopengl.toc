@@ -1,7 +1,7 @@
 #--------------------------------------------------------------------
 # /bin/win32/nopengl.toc
 # MACHINE GENERATED, DON'T EDIT!
-# Fri Apr 15 09:33:47 Środkowoeuropejski czas letni 2005
+# Mon May 30 18:11:31 Środkowoeuropejski czas letni 2005
 #--------------------------------------------------------------------
 $nopengl
 %nglserver

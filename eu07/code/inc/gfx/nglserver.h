@@ -45,6 +45,7 @@
 #include <osg/Timer>
 #include <osg/LightSource>
 #include <osg/LineSegment>
+#include <osg/AlphaFunc>
 
 #define GL_GLEXT_PROTOTYPES (1)
 
