@@ -23,6 +23,7 @@ nMover::nMover() : I1Ctrl(NULL), I2Ctrl(NULL), fuse(NULL), slip(NULL), compresso
 {
 	hMV= 0xFFFFFFFF;
 	channelServer= (nChannelServer*)kernelServer->Lookup("/sys/servers/channel");
+	IChan= channelServer->GenChannel("Current");
 	I1Chan= channelServer->GenChannel("I1");
 	I2Chan= channelServer->GenChannel("I2");
 	CylHamChan= channelServer->GenChannel("CylHam");
@@ -207,6 +208,7 @@ double nMover::Update(double dt)
 
 void nMover::UpdateChannels()
 {
+	
 //	channelServer->SetChannel1f(I1Chan,I1*0.001);
 //	channelServer->SetChannel1f(I2Chan,I2*0.001);
 	channelServer->SetChannel1f(CylHamChan,CylHam);
@@ -228,6 +230,7 @@ void nMover::UpdateChannels()
 
 void nMover::UpdateAudioChannels()
 {
+	channelServer->SetChannel1f(IChan,I1);
 	channelServer->SetChannel1f(MotorFrChanID,fTachoVelocity);
 	channelServer->SetChannel1f(MotorVolChanID,fTachoVelocity);
 

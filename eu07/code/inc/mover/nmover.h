@@ -58,7 +58,7 @@ public:
 
 	unsigned int hMV;
 
-	int I1Chan, I2Chan, CylHamChan, PrzGlChan, ZbGlChan, Hiss1Chan, Hiss2Chan, VentChan, VentPlayChan, EnginePowerChan;
+	int I1Chan, I2Chan, CylHamChan, PrzGlChan, ZbGlChan, Hiss1Chan, Hiss2Chan, VentChan, VentPlayChan, EnginePowerChan, IChan;
 	int VelChanID;
 	int MotorFrChanID;
 	int MotorVolChanID;

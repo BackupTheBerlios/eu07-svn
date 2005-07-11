@@ -118,7 +118,7 @@ void edFenceFeature::applyFeature()
 	float fenceLen= sqrtf((p1.x()-p2.x())*(p1.x()-p2.x())+(p1.y()-p2.y())*(p1.y()-p2.y()));
 	osg::Vec3d side((osg::Vec3d(0,0,1)^(p2-p1)));
 	side.normalize();
-	osg::Vec3d height(osg::Vec3d(0,0,height));
+	osg::Vec3d height(osg::Vec3d(0,0,this->height));
 	unsigned int i= 0;
 	float tu= ceil((fenceLen/(length/segments)))/segments;
 	if ((sides&LEFT)!=0)

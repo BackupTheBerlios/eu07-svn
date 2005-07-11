@@ -103,7 +103,7 @@ bool OSG_realizer::initOsg()
         globalStateSet->setAttributeAndModes(alphafunc, osg::StateAttribute::ON);
        
 		osg::LightModel *lm= new osg::LightModel();
-		lm->setAmbientIntensity(osg::Vec4(0.5,0.5,0.5,0));
+		lm->setAmbientIntensity(osg::Vec4(0.8,0.8,0.8,0));
         globalStateSet->setAttributeAndModes(lm, osg::StateAttribute::ON);
 
         osg::LightSource* lightsource = new osg::LightSource;

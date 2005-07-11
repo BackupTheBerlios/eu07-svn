@@ -1755,7 +1755,7 @@ bool Editor::onDrag(unsigned int state)
 		}
 		else if (state&GDK_CONTROL_MASK)
 			selectedNode->rotate(osg::Quat(DegToRad(getNormDX()*400),osg::Vec3d(0,0,1)));
-		else 
+		else  if (dynamic_cast<edFlexTrack*>(selectedNode.get())==NULL)
 		{
 			pos= selectedNode->getPosition()+osg::Vec3d(getWorldDX(),getWorldDY(),0.0);
 			if (!(state&GDK_SHIFT_MASK))
