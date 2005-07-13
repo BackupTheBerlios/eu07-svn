@@ -314,6 +314,7 @@ public:
 
 	virtual void onSelect(osg::Geode *geom);
 	virtual void onDeselect();
+	virtual void freeGeometry();
 	virtual void free();
 
 	virtual bool canFreeTransforms() { return true; };

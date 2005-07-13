@@ -267,7 +267,7 @@ void Segment::ComputeTsBuffer()
     }
 }
 
-osg::Geometry *Segment::CreateLoft(const osg::Vec3d *ShapePoints, const int *Shapes, int iNumShapes, double fTextureLength, double step, osg::Vec3d origin)
+osg::Geometry *Segment::CreateLoft(const osg::Vec3d *ShapePoints, const int *Shapes, int iNumShapes, double fTextureLength, double step, osg::Vec3d origin, bool blend)
 {
 	osg::Vec3Array *v;
 	osg::Vec3Array *norm;
@@ -307,8 +307,15 @@ osg::Geometry *Segment::CreateLoft(const osg::Vec3d *ShapePoints, const int *Sha
 		v	 = new osg::Vec3Array;
 		norm = new osg::Vec3Array;
 		tex	 = new osg::Vec2Array;
-		col  = new osg::Vec4Array(1);
-		(*col)[0].set(1,1,1,1);
+		col  = new osg::Vec4Array;
+
+		if (blend)
+			col->reserve(n);
+		else
+		{
+			col->resize(1);
+			(*col)[0].set(1,1,1,1);
+		}
 
 		v->reserve(n);
 		norm->reserve(n);
@@ -339,6 +346,12 @@ osg::Geometry *Segment::CreateLoft(const osg::Vec3d *ShapePoints, const int *Sha
 					v->push_back(pt+parallel*sp.x()+osg::Vec3d(0,0,sp.y()));
 					norm->push_back(osg::Vec3(0,0,1));
 					tex->push_back(osg::Vec2(sp.z(),ds/fTextureLength));
+					
+					if (blend)
+					{
+						col->push_back(osg::Vec4f(1,1,1,t));
+						col->push_back(osg::Vec4f(1,1,1,t));
+					}
 				}
 				firstVert+= (steps+1)*2;
 			}
@@ -348,13 +361,15 @@ osg::Geometry *Segment::CreateLoft(const osg::Vec3d *ShapePoints, const int *Sha
 		geom->setNormalArray( norm );
 		geom->setNormalBinding( osg::Geometry::BIND_PER_VERTEX );
 		geom->setTexCoordArray( 0, tex );
+		if (blend)
+			geom->setTexCoordArray( 1, tex );
 		geom->setColorArray( col );
-		geom->setColorBinding( osg::Geometry::BIND_OVERALL );
+		geom->setColorBinding( blend ? osg::Geometry::BIND_PER_VERTEX : osg::Geometry::BIND_OVERALL );
 //}
 	return geom;
 }
 
-osg::Geometry *Segment::CreateLoft(const ShapesList &Shapes, double fTextureLength, double step, osg::Vec3d origin)
+osg::Geometry *Segment::CreateLoft(const ShapesList &Shapes, double fTextureLength, double step, osg::Vec3d origin, bool blend)
 {
 	osg::Vec3d sp[100];
 	int sh[20];
@@ -365,7 +380,7 @@ osg::Geometry *Segment::CreateLoft(const ShapesList &Shapes, double fTextureLeng
 		for (unsigned int j=0; j<Shapes[i].size(); j++)
 			sp[n++]= Shapes[i][j];
 	}
-	return CreateLoft(sp,sh,Shapes.size(),fTextureLength,step,origin);
+	return CreateLoft(sp,sh,Shapes.size(),fTextureLength,step,origin,blend);
 
 //		n+= 
 }

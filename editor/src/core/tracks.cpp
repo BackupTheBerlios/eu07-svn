@@ -41,6 +41,10 @@ edFlexTrack *edFlexTrack::clone()
 void edFlexTrack::load(std::istream &stream, int version, CollectNodes *cn)
 {
 	edTrack::load(stream, version, cn);
+	if (version<=2)
+		blend= false;
+	else
+		read(stream, blend);
 	rails.resize(readUI(stream));
 	for (unsigned int i=0; i<rails.size(); i++)
 	{
@@ -70,6 +74,7 @@ void edFlexTrack::load(std::istream &stream, int version, CollectNodes *cn)
 void edFlexTrack::save(std::ostream &stream)
 {
 	edTrack::save(stream);
+	write(stream, blend);
 	write(stream, rails.size());
 	for (unsigned int i=0; i<rails.size(); i++)
 	{
@@ -232,6 +237,7 @@ edFlexTrack::edFlexTrack() : edTrack()
 	connections.reserve(2);
 	connections.push_back(new Connection(this));
 	connections.push_back(new Connection(this));
+	blend= false;
 }
 
 void edFlexTrack::setBezier(osg::Vec3f pt1, osg::Vec3f cpt1, osg::Vec3f cpt2, osg::Vec3f pt2, float roll1, float roll2)
@@ -268,10 +274,28 @@ void edFlexTrack::updateVisual()
 		osg::StateSet *rails_dstate= NULL;
 		osg::Geode *geode= NULL;
 		osg::Geometry *geom= NULL;
+		osg::TexEnvCombine *envComb= NULL;
 		double minDist= 0;
 		double maxDist= 0;
 		double minDist2= 0;
 		double maxDist2= 0;
+
+
+		edFlexTrack *prev= ( getConnection(0)->getConnected() ? dynamic_cast<edFlexTrack*>(getConnection(0)->getConnected()->getOwner()) : NULL );
+		edFlexTrack *next= ( getConnection(1)->getConnected() ? dynamic_cast<edFlexTrack*>(getConnection(1)->getConnected()->getOwner()) : NULL );
+
+		bool ballastBlend=	false;
+		bool railsBlend=	false;
+		if ( blend && prev && next && !prev->blend && !next->blend )
+		{
+			next->updateVisual();
+			prev->updateVisual();
+
+			ballastBlend=	prev->ballastTex2D.valid() && next->ballastTex2D.valid() && prev->ballastTex!=next->ballastTex;
+			railsBlend=		prev->railsTex2D.valid() && next->railsTex2D.valid() && prev->railsTex!=next->railsTex;
+		}
+
+
 
 
 		bool curve= true;
@@ -307,32 +331,84 @@ void edFlexTrack::updateVisual()
 		bool lastLod= lod==NULL;
 		double lastDist= 3000;
 
-
-		tex2d= new osg::Texture2D();
-		tex2d->setDataVariance(osg::Node::STATIC);
-		ballastTex2D= tex2d;
 		ballast_dstate= new osg::StateSet();
-		ballast_dstate->setDataVariance(osg::Node::STATIC);
-//		tex2d->setUseHardwareMipMapGeneration(false);
-		tex2d->setWrap(osg::Texture::WRAP_S, osg::Texture::REPEAT);
-		tex2d->setWrap(osg::Texture::WRAP_T, osg::Texture::REPEAT);
-		tex2d->setImage(osgDB::readImageFile(ballastTex.c_str()));
-//		tex2d->setImage(osgDB::readImageFile("TpD1.dds",osgDB::Registry::CACHE_ALL));
-		ballast_dstate->setTextureAttributeAndModes(0, tex2d, osg::StateAttribute::ON );
-//			dstate->setMode( GL_CULL_FACE, osg::StateAttribute::OFF );
+//		ballast_dstate->setMode(GL_LIGHTING,osg::StateAttribute::ON);
 
-		tex2d= new osg::Texture2D();
-		tex2d->setDataVariance(osg::Node::STATIC);
-		railsTex2D= tex2d;
-		rails_dstate= new osg::StateSet();
-		rails_dstate->setDataVariance(osg::Node::STATIC);
-//		tex2d->setUseHardwareMipMapGeneration(false);
-		tex2d->setWrap(osg::Texture::WRAP_S, osg::Texture::REPEAT);
-		tex2d->setWrap(osg::Texture::WRAP_T, osg::Texture::REPEAT);
-		tex2d->setImage(osgDB::readImageFile(railsTex.c_str()));
-//		tex2d->setImage(osgDB::readImageFile("Rail_screw_used1.dds",osgDB::Registry::CACHE_ALL));
-		rails_dstate->setTextureAttributeAndModes(0, tex2d, osg::StateAttribute::ON );
+		if (ballastBlend)
+		{
+			ballast_dstate->setTextureAttributeAndModes(0, prev->ballastTex2D.get(), osg::StateAttribute::ON );
+			ballast_dstate->setTextureAttributeAndModes(1, next->ballastTex2D.get(), osg::StateAttribute::ON );
+
+			envComb= new osg::TexEnvCombine;
+			envComb->setSource0_RGB(osg::TexEnvCombine::TEXTURE1);
+			envComb->setSource1_RGB(osg::TexEnvCombine::TEXTURE0);
+			envComb->setSource2_RGB(osg::TexEnvCombine::PRIMARY_COLOR);
+			envComb->setCombine_RGB(osg::TexEnvCombine::INTERPOLATE); 
+			ballast_dstate->setTextureAttribute(0, envComb);
+
+			envComb= new osg::TexEnvCombine;
+			envComb->setSource0_RGB(osg::TexEnvCombine::PREVIOUS);
+			envComb->setSource1_RGB(osg::TexEnvCombine::PRIMARY_COLOR);
+			envComb->setCombine_RGB(osg::TexEnvCombine::MODULATE); 
+			ballast_dstate->setTextureAttribute(1, envComb);	
+
+			ballast_dstate->setMode( GL_ALPHA_TEST, osg::StateAttribute::OFF ); 
+		}
+		else
+		{
+			tex2d= new osg::Texture2D();
+			tex2d->setDataVariance(osg::Node::STATIC);
+			ballastTex2D= tex2d;
+			
+			ballast_dstate->setDataVariance(osg::Node::STATIC);
+	//		tex2d->setUseHardwareMipMapGeneration(false);
+			tex2d->setWrap(osg::Texture::WRAP_S, osg::Texture::REPEAT);
+			tex2d->setWrap(osg::Texture::WRAP_T, osg::Texture::REPEAT);
+			tex2d->setImage(osgDB::readImageFile(ballastTex.c_str()));
+	//		tex2d->setImage(osgDB::readImageFile("TpD1.dds",osgDB::Registry::CACHE_ALL));
+
+			ballast_dstate->setTextureAttributeAndModes(0, tex2d, osg::StateAttribute::ON );
 //			dstate->setMode( GL_CULL_FACE, osg::StateAttribute::OFF );
+		}
+
+		rails_dstate= new osg::StateSet();
+//		rails_dstate->setMode(GL_LIGHTING,osg::StateAttribute::ON);
+
+		if (railsBlend)
+		{
+			rails_dstate->setTextureAttributeAndModes(0, prev->railsTex2D.get(), osg::StateAttribute::ON );
+			rails_dstate->setTextureAttributeAndModes(1, next->railsTex2D.get(), osg::StateAttribute::ON );
+
+			envComb= new osg::TexEnvCombine;
+			envComb->setSource0_RGB(osg::TexEnvCombine::TEXTURE1);
+			envComb->setSource1_RGB(osg::TexEnvCombine::TEXTURE0);
+			envComb->setSource2_RGB(osg::TexEnvCombine::PRIMARY_COLOR);
+			envComb->setCombine_RGB(osg::TexEnvCombine::INTERPOLATE); 
+			rails_dstate->setTextureAttribute(0, envComb);
+
+			envComb= new osg::TexEnvCombine;
+			envComb->setSource0_RGB(osg::TexEnvCombine::PREVIOUS);
+			envComb->setSource1_RGB(osg::TexEnvCombine::PRIMARY_COLOR);
+			envComb->setCombine_RGB(osg::TexEnvCombine::MODULATE); 
+			rails_dstate->setTextureAttribute(1, envComb);	
+
+			rails_dstate->setMode( GL_ALPHA_TEST, osg::StateAttribute::OFF ); 
+		}
+		else
+		{
+			tex2d= new osg::Texture2D();
+			tex2d->setDataVariance(osg::Node::STATIC);
+			railsTex2D= tex2d;
+			rails_dstate->setDataVariance(osg::Node::STATIC);
+	//		tex2d->setUseHardwareMipMapGeneration(false);
+			tex2d->setWrap(osg::Texture::WRAP_S, osg::Texture::REPEAT);
+			tex2d->setWrap(osg::Texture::WRAP_T, osg::Texture::REPEAT);
+			tex2d->setImage(osgDB::readImageFile(railsTex.c_str()));
+	//		tex2d->setImage(osgDB::readImageFile("Rail_screw_used1.dds",osgDB::Registry::CACHE_ALL));
+			rails_dstate->setTextureAttributeAndModes(0, tex2d, osg::StateAttribute::ON );
+//			dstate->setMode( GL_CULL_FACE, osg::StateAttribute::OFF );
+		}
+
 
 
 		do 
@@ -342,7 +418,7 @@ void edFlexTrack::updateVisual()
 
 		if (ballast.size()>0 && ballast[0].size()>1)
 		{
-		geom= trackPieces[0]->segment.CreateLoft(ballast, 5, step, osg::Vec3d(0,0,0));
+		geom= trackPieces[0]->segment.CreateLoft(ballast, 5, step, osg::Vec3d(0,0,0), ballastBlend);
 		geom->setUserData(this);
 		geom->setDataVariance(osg::Node::STATIC);
 
@@ -394,7 +470,7 @@ void edFlexTrack::updateVisual()
 		
 		if ((minDist==0 || maxDist<500) && rails.size()>0 && rails[0].size()>1)
 		{
-		geom= trackPieces[0]->segment.CreateLoft(rails, 5, step, osg::Vec3d(0,0,0));
+		geom= trackPieces[0]->segment.CreateLoft(rails, 5, step, osg::Vec3d(0,0,0), railsBlend);
 		geom->setDataVariance(osg::Node::STATIC);
 		geom->setUserData(this);
 
@@ -437,6 +513,19 @@ void edFlexTrack::updateVisual()
 		for (unsigned int i=0; i<visualsTransforms.size(); i++)
 			visualsTransforms[i]->setMatrix(geomTransform->getMatrix());
 }
+
+void edFlexTrack::setBlendI(int val) 
+{
+	if (blend!= (val==1))
+	{
+		Editor::instance()->deselectNode();
+		blend= (val==1); 
+		edGeomNode::freeGeometry();
+		updateVisual();
+		redrawAll(); 
+	}
+};
+
 
 void edTrack::free()
 {

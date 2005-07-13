@@ -71,7 +71,7 @@ Editor::ObjectsCache Editor::objectsCache;
 //bool Editor::releaseGeometry= true;
 
 const unsigned int	dwMagic= 'BSCN';
-const int			version= 2;
+const int			version= 3;
 
 Editor *Editor::lastInstance()
 {
@@ -1003,9 +1003,11 @@ bool Editor::loadFromFile(const char *fileName)
 			if (trk)
 			{
 				trk->load(file,ver,&cn);
-				trk->updateVisual();
+//				trk->updateVisual();
 			}
 		}
+		for (unsigned int i=0; i<numTrks; i++)
+			cn.trackNodesList[i]->updateVisual();
 	} 
 	catch (char *txt) {
 		printf(txt);

@@ -164,6 +164,8 @@ public:
 		registerProp(pr,"ballast tex",setBallastTex,getBallastTex,"TpD1.dds","\\texture","*.dds");
 		registerProp(pr,"rails tex",setRailsTex,getRailsTex,"Rail_screw_used1.dds","\\texture","*.dds");
 		registerProp(pr,"flags",setFlags,getFlags,"0");
+		registerProp(pr,"blend textures",setBlendI,getBlendI,0);
+		registerProp(pr,"split",splitButton,NULL);
 	}
 	//	virtual unsigned int getType() { return 'FTRK'; };
 
@@ -176,6 +178,7 @@ public:
 	virtual void save(std::ostream &stream);
 	virtual void export(std::ostream &stream);
 
+	void splitButton(int s) { if (s==0) split(); };
 	virtual FlexPair split(float maxLen= 10000);
 
 	virtual void updateVisual();
@@ -183,6 +186,9 @@ public:
 	void setBezier(osg::Vec3f pt1, osg::Vec3f cpt1, osg::Vec3f cpt2, osg::Vec3f pt2, float roll1, float roll2);
 	inline void setRailsShape(const Segment::ShapesList &shapes) { rails= shapes; };
 	inline void setBallastShape(const Segment::ShapesList &shapes) { ballast= shapes; };
+
+	void setBlendI(int val);
+	int getBlendI() { return (blend?1:0); };
 
 	Segment::ShapesList rails;
 	Segment::ShapesList ballast;
@@ -196,6 +202,8 @@ protected:
 	const char* getFlags() { static char buf[16]; sprintf(buf,"%08x",flags); return buf; };
 
 	unsigned int flags;
+
+	bool blend;
 
 	static int totalFexTracks;
 //	osg::ref_ptr<osg::Geode> visual;

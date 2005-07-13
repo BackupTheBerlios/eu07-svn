@@ -79,8 +79,8 @@ public:
     
     inline float __fastcall GetLength() { return fLength; };
 
-	osg::Geometry *CreateLoft(const osg::Vec3d *ShapePoints, const int *Shapes, int iNumShapes, double fTextureLength, double step, osg::Vec3d origin);
-	osg::Geometry *CreateLoft(const ShapesList &Shapes, double fTextureLength, double step, osg::Vec3d origin);
+	osg::Geometry *CreateLoft(const osg::Vec3d *ShapePoints, const int *Shapes, int iNumShapes, double fTextureLength, double step, osg::Vec3d origin, bool blend);
+	osg::Geometry *CreateLoft(const ShapesList &Shapes, double fTextureLength, double step, osg::Vec3d origin, bool blend);
 	//bool __fastcall RenderLoft(const dvector3 *ShapePoints, int iNumShapePoints,
       //  float fTextureLength, int iSkip=0, int iQualityFactor=1);
     //bool __fastcall RenderSwitchRail(const dvector3 *ShapePoints1, const dvector3 *ShapePoints2,

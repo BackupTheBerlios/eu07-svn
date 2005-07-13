@@ -3,7 +3,7 @@
 
 edNode::~edNode() 
 {
-	free();
+//	free();
 	printf("node deleted!!!\n");
 }
 
@@ -493,9 +493,8 @@ void edGeomNode::updateVisual()
 	
 }
 
-void edGeomNode::free()
+void edGeomNode::freeGeometry()
 {
-//	osg::ref_ptr<edGeomNode> cont= this;
 	printf("node refs (before): %d\n",referenceCount());
 	if (canFreeTransforms())
 	{
@@ -562,6 +561,7 @@ void edGeomNode::free()
 		printf("selectedVisuals[i]->referenceCount(): %d\n",selectedVisuals[i]->referenceCount());
 		selectedVisuals[i]= NULL;
 	}
+	selectedVisuals.clear();
 
 	printf("node refs (after/before): %d\n",referenceCount());
 	if (geomTransform.valid())
@@ -570,10 +570,13 @@ void edGeomNode::free()
 			geomTransform->getParent(0)->removeChild(geomTransform.get());
 		geomTransform= NULL;
 	}
-	printf("node refs (after): %d\n",referenceCount());
+	printf("geom node refs (after): %d\n",referenceCount());
+}
+
+void edGeomNode::free()
+{
+	freeGeometry();
 	edNode::free();
-//	printf("TerrainNode num_refs: %d  v: %d  sv: %d\n",referenceCount(),visuals.size(),selectedVisuals.size());
-//	cont= NULL;
 }
 
 void edGeomNode::onSelect(osg::Geode *geom)
