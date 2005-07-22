@@ -509,8 +509,10 @@ Kit::Item Kit::addFileSel(const char *prop_name, const char *dir_path, const cha
                    return;
                 }
 
+				//MW - coby pamietal sciezke na ktorej skonczylismy
 				gchar *dir_path = gtk_file_chooser_get_current_folder(filechooser);
 			    g_object_set_data_full ( G_OBJECT(item), "dirpath", g_string_new(dir_path), my_gstring_free );
+				//MW
 
 
                 gchar *full_name = gtk_file_chooser_get_filename(filechooser);
