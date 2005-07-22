@@ -1,7 +1,7 @@
 MatrixTransform {
   DataVariance STATIC
   name "Scene Root"
-  nodeMask 0xff
+  nodeMask 0xffffffff
   cullingActive TRUE
   StateSet {
     UniqueID StateSet_0
@@ -9,18 +9,19 @@ MatrixTransform {
     rendering_hint DEFAULT_BIN
     renderBinMode INHERIT
   }
-  referenceFrame RELATIVE_TO_PARENTS
+  referenceFrame RELATIVE
   Matrix {
     1 0 0 0
     0 1 0 0
     0 0 1 0
     0 0 0 1
   }
-  num_children 3
+  num_children 4
   Geode {
     UniqueID Geode_1
     DataVariance STATIC
-    nodeMask 0xff
+    name "Plane03"
+    nodeMask 0xffffffff
     cullingActive TRUE
     num_drawables 1
     Geometry {
@@ -34,7 +35,6 @@ MatrixTransform {
         0xba1 OVERRIDE|OFF
         GL_ALPHA_TEST ON
         Material {
-          UniqueID Material_3
           DataVariance STATIC
           ColorMode OFF
           ambientColor 1 1 1 1
@@ -44,7 +44,6 @@ MatrixTransform {
           shininess 12.8
         }
         AlphaFunc {
-          UniqueID AlphaFunc_4
           DataVariance STATIC
           comparisonFunc GREATER
           referenceValue 0.5
@@ -65,6 +64,7 @@ MatrixTransform {
             useHardwareMipMapGeneration FALSE
             unRefImageDataAfterApply TRUE
             internalFormatMode USE_IMAGE_DATA_FORMAT
+            resizeNonPowerOfTwo FALSE
           }
         }
       }
@@ -99,23 +99,36 @@ MatrixTransform {
     }
   }
   Geode {
-    UniqueID Geode_5
+    UniqueID Geode_3
     DataVariance STATIC
-    nodeMask 0xff
+    name "Plane04"
+    nodeMask 0xffffffff
     cullingActive TRUE
     num_drawables 1
     Geometry {
       DataVariance DYNAMIC
       StateSet {
-        UniqueID StateSet_6
+        UniqueID StateSet_4
         DataVariance STATIC
         rendering_hint DEFAULT_BIN
         renderBinMode INHERIT
         GL_CULL_FACE ON
         0xba1 OVERRIDE|OFF
         GL_ALPHA_TEST ON
-        Use Material_3
-        Use AlphaFunc_4
+        Material {
+          DataVariance STATIC
+          ColorMode OFF
+          ambientColor 1 1 1 1
+          diffuseColor 1 1 1 1
+          specularColor 0 0 0 1
+          emissionColor 0 0 0 1
+          shininess 12.8
+        }
+        AlphaFunc {
+          DataVariance STATIC
+          comparisonFunc GREATER
+          referenceValue 0.5
+        }
         textureUnit 0 {
           GL_TEXTURE_2D ON
           Texture2D {
@@ -132,6 +145,7 @@ MatrixTransform {
             useHardwareMipMapGeneration FALSE
             unRefImageDataAfterApply TRUE
             internalFormatMode USE_IMAGE_DATA_FORMAT
+            resizeNonPowerOfTwo FALSE
           }
         }
       }
@@ -166,23 +180,36 @@ MatrixTransform {
     }
   }
   Geode {
-    UniqueID Geode_7
+    UniqueID Geode_5
     DataVariance STATIC
-    nodeMask 0xff
+    name "Plane05"
+    nodeMask 0xffffffff
     cullingActive TRUE
     num_drawables 1
     Geometry {
       DataVariance DYNAMIC
       StateSet {
-        UniqueID StateSet_8
+        UniqueID StateSet_6
         DataVariance STATIC
         rendering_hint DEFAULT_BIN
         renderBinMode INHERIT
         GL_CULL_FACE ON
         0xba1 OVERRIDE|OFF
         GL_ALPHA_TEST ON
-        Use Material_3
-        Use AlphaFunc_4
+        Material {
+          DataVariance STATIC
+          ColorMode OFF
+          ambientColor 1 1 1 1
+          diffuseColor 1 1 1 1
+          specularColor 0 0 0 1
+          emissionColor 0 0 0 1
+          shininess 12.8
+        }
+        AlphaFunc {
+          DataVariance STATIC
+          comparisonFunc GREATER
+          referenceValue 0.5
+        }
         textureUnit 0 {
           GL_TEXTURE_2D ON
           Texture2D {
@@ -199,6 +226,7 @@ MatrixTransform {
             useHardwareMipMapGeneration FALSE
             unRefImageDataAfterApply TRUE
             internalFormatMode USE_IMAGE_DATA_FORMAT
+            resizeNonPowerOfTwo FALSE
           }
         }
       }
@@ -214,6 +242,87 @@ MatrixTransform {
         -34000 0 0
         -17000 18500.1 0
         -17000 0 0
+      }
+      NormalBinding PER_VERTEX
+      NormalArray Vec3Array 4
+      {
+        0 0 1
+        0 0 1
+        0 0 1
+        0 0 1
+      }
+      TexCoordArray 0 Vec2Array 4
+      {
+        0 -1
+        0 0
+        1 -1
+        1 0
+      }
+    }
+  }
+  Geode {
+    UniqueID Geode_7
+    DataVariance STATIC
+    name "Plane01"
+    nodeMask 0xffffffff
+    cullingActive TRUE
+    num_drawables 1
+    Geometry {
+      DataVariance DYNAMIC
+      StateSet {
+        UniqueID StateSet_8
+        DataVariance STATIC
+        rendering_hint DEFAULT_BIN
+        renderBinMode INHERIT
+        GL_CULL_FACE ON
+        0xba1 OVERRIDE|OFF
+        GL_ALPHA_TEST ON
+        Material {
+          DataVariance STATIC
+          ColorMode OFF
+          ambientColor 1 1 1 1
+          diffuseColor 1 1 1 1
+          specularColor 0 0 0 1
+          emissionColor 0 0 0 1
+          shininess 12.8
+        }
+        AlphaFunc {
+          DataVariance STATIC
+          comparisonFunc GREATER
+          referenceValue 0.5
+        }
+        textureUnit 0 {
+          GL_TEXTURE_2D ON
+          Texture2D {
+            DataVariance STATIC
+            file "images\n-34-098-d.dds"
+            wrap_s CLAMP_TO_EDGE
+            wrap_t REPEAT
+            wrap_r CLAMP_TO_EDGE
+            min_filter LINEAR
+            mag_filter LINEAR
+            maxAnisotropy 1
+            borderColor 0 0 0 0
+            borderWidth 0
+            useHardwareMipMapGeneration FALSE
+            unRefImageDataAfterApply TRUE
+            internalFormatMode USE_IMAGE_DATA_FORMAT
+            resizeNonPowerOfTwo FALSE
+          }
+        }
+      }
+      useDisplayList TRUE
+      useVertexBufferObjects FALSE
+      PrimitiveSets 1
+      {
+        DrawArrays TRIANGLE_STRIP 0 4
+      }
+      VertexArray Vec3Array 4
+      {
+        -17000 18500.1 0
+        -17000 0 0
+        0 18500.1 0
+        0 0 0
       }
       NormalBinding PER_VERTEX
       NormalArray Vec3Array 4
