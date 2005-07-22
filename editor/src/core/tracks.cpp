@@ -23,6 +23,7 @@
 #include "TrackPiece.h"
 
 #include <osg/PolygonMode>
+#include <osgUtil/GLObjectsVisitor>
 
 edFlexTrack *edFlexTrack::clone()
 {
@@ -331,11 +332,11 @@ void edFlexTrack::updateVisual()
 		bool lastLod= lod==NULL;
 		double lastDist= 3000;
 
-		ballast_dstate= new osg::StateSet();
 //		ballast_dstate->setMode(GL_LIGHTING,osg::StateAttribute::ON);
 
 		if (ballastBlend)
 		{
+			ballast_dstate= new osg::StateSet();
 			ballast_dstate->setTextureAttributeAndModes(0, prev->ballastTex2D.get(), osg::StateAttribute::ON );
 			ballast_dstate->setTextureAttributeAndModes(1, next->ballastTex2D.get(), osg::StateAttribute::ON );
 
@@ -356,6 +357,12 @@ void edFlexTrack::updateVisual()
 		}
 		else
 		{
+			ballast_dstate= dynamic_cast<osg::StateSet*>(Editor::getObjectFromCache(ballastTex));
+			if (ballast_dstate==NULL)
+			{
+				ballast_dstate= new osg::StateSet();
+				Editor::insertObjectToCache(ballastTex,ballast_dstate);
+			}
 			tex2d= new osg::Texture2D();
 			tex2d->setDataVariance(osg::Node::STATIC);
 			ballastTex2D= tex2d;
@@ -371,11 +378,13 @@ void edFlexTrack::updateVisual()
 //			dstate->setMode( GL_CULL_FACE, osg::StateAttribute::OFF );
 		}
 
-		rails_dstate= new osg::StateSet();
+		
 //		rails_dstate->setMode(GL_LIGHTING,osg::StateAttribute::ON);
 
 		if (railsBlend)
 		{
+			rails_dstate= new osg::StateSet();
+
 			rails_dstate->setTextureAttributeAndModes(0, prev->railsTex2D.get(), osg::StateAttribute::ON );
 			rails_dstate->setTextureAttributeAndModes(1, next->railsTex2D.get(), osg::StateAttribute::ON );
 
@@ -396,6 +405,12 @@ void edFlexTrack::updateVisual()
 		}
 		else
 		{
+			rails_dstate= dynamic_cast<osg::StateSet*>(Editor::getObjectFromCache(railsTex));
+			if (rails_dstate==NULL)
+			{
+				rails_dstate= new osg::StateSet();
+				Editor::insertObjectToCache(railsTex,rails_dstate);
+			}
 			tex2d= new osg::Texture2D();
 			tex2d->setDataVariance(osg::Node::STATIC);
 			railsTex2D= tex2d;
@@ -424,9 +439,9 @@ void edFlexTrack::updateVisual()
 
 		geode= new osg::Geode();
 		geode->setDataVariance(osg::Node::STATIC);
-		geode->setStateSet(ballast_dstate);
 		geode->addDrawable(geom);
 		geode->setUserData(this);
+		geode->setStateSet(ballast_dstate);
 //		addVisual(geode);
 		geom->setUseDisplayList(true);
 		geom->setDataVariance(osg::Object::DataVariance::STATIC);
@@ -506,6 +521,11 @@ void edFlexTrack::updateVisual()
 
 		step*= 2;
 		} while (!lastLod);
+
+		osgUtil::GLObjectsVisitor glv(osgUtil::GLObjectsVisitor::COMPILE_DISPLAY_LISTS|osgUtil::GLObjectsVisitor::COMPILE_STATE_ATTRIBUTES);
+		geomTransform->accept(glv);
+//		osg::ref_ptr<osgUtil::GLObjectsVisitor> glv= new osgUtil::GLObjectsVisitor();
+//		geomTransform->accept(*glv);
 
 	}
 	//else

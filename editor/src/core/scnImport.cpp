@@ -11,12 +11,12 @@
 
 edSCNImport *edSCNImport::instance()
 {
-	static osg::ref_ptr<edSCNImport> self = new edSCNImport;
+	static osg::ref_ptr<edSCNImport> self = new edSCNImport();
 	//static edSCNImport self;
 	return self.get();
 }
 	
-edSCNImport::edSCNImport() : angle(0)
+edSCNImport::edSCNImport() : edNode(false), angle(0)
 {
 }
 

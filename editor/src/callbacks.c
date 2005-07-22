@@ -26,6 +26,7 @@
 #include "core/TopView.h"
 #include "core/PerspectiveView.h"
 #include "core/Editor.h"
+#include "core/options.h"
 #endif
 
 
@@ -157,7 +158,7 @@ void
 on_open_toolbutton_clicked (GtkToolButton * toolbutton, gpointer user_data)
 {
   GtkWidget *toplevel = gtk_widget_get_toplevel (GTK_WIDGET (toolbutton));
-  Editor::instance ()->loadFromFile ("test.bscn");
+  Editor::instance ()->loadFromFile (edOptions::instance()->sceneryFile.c_str());
 }
 
 
@@ -165,7 +166,7 @@ void
 on_save_toolbutton_clicked (GtkToolButton * toolbutton, gpointer user_data)
 {
   GtkWidget *toplevel = gtk_widget_get_toplevel (GTK_WIDGET (toolbutton));
-  Editor::instance ()->saveToFile ("test.bscn");
+  Editor::instance ()->saveToFile (edOptions::instance()->sceneryFile.c_str());
 }
 
 
@@ -186,14 +187,14 @@ on_open_mi_activate (GtkMenuItem * menuitem, gpointer user_data)
 void
 on_save_mi_activate (GtkMenuItem * menuitem, gpointer user_data)
 {
-  Editor::instance ()->saveToFile ("test.bscn");
+  Editor::instance ()->saveToFile (edOptions::instance()->sceneryFile.c_str());
 }
 
 
 void
 on_save_as_mi_activate (GtkMenuItem * menuitem, gpointer user_data)
 {
-  Editor::instance ()->saveToFile ("test.bscn");
+  Editor::instance ()->saveToFile (edOptions::instance()->sceneryFile.c_str());
 }
 
 
@@ -333,7 +334,7 @@ void
 on_export_mi_activate (GtkMenuItem * menuitem, gpointer user_data)
 {
   Editor::instance ()->saveToFile ("tmp.bscn");
-  Editor::instance ()->exportToDirectory ("..\\eu07\\scenery\\test\\");
+  Editor::instance ()->exportToDirectory (edOptions::instance()->exportDir.c_str());
   gtk_main_quit();
 //  Editor::instance ()->freeNodes ();
 }

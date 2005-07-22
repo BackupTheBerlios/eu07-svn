@@ -1,7 +1,8 @@
 #include "terrainNode.h"
 #include "editor.h"
-#include <osgUtil/IntersectVisitor>
 #include <osg/PolygonMode>
+#include <osgUtil/IntersectVisitor>
+#include <osgUtil/SmoothingVisitor>
 
 TerrainMaterial *Triangle::getValidMaterial(int i)
 {
@@ -127,6 +128,7 @@ void edTerrainNode::save(std::ostream &stream)
 
 void edTerrainNode::updateVisual()
 {
+	osg::ref_ptr<osgUtil::SmoothingVisitor> sv= new osgUtil::SmoothingVisitor();
 //	double cellDim= 1000.0;
 	CellCoords coords;
 	osg::Vec3d center;
@@ -194,6 +196,7 @@ void edTerrainNode::updateVisual()
 			{
 				if (!material.valid())
 				{
+//					DoubleMaterialTris singleMatTris;
 					DoubleMaterialTris dblMatTris;
 					TrippleMaterialTris trplMatTris;
 					TerrainMaterial* mats[]= { NULL,NULL,NULL };
@@ -225,7 +228,7 @@ void edTerrainNode::updateVisual()
 						if (matPair.first>matPair.second)
 							std::swap(matPair.second,matPair.first);
 						
-						if (matPair.first!=matPair.second)
+//						if (matPair.first!=matPair.second)
 							dblMatTris[matPair].push_back(*tri_iter);
 
 					}
@@ -286,6 +289,7 @@ void edTerrainNode::updateVisual()
 							geode = new osg::Geode;
 							geode->addDrawable( geom );
 							geode->setUserData(this);
+							geode->setNodeMask(getNodeMask());
 //							geode->setStateSet( material->dstate.get() );
 
 								dstate= new osg::StateSet;
@@ -323,6 +327,9 @@ void edTerrainNode::updateVisual()
 
 								geode->setStateSet( dstate );
 
+							sv->reset();
+							geode->accept(*sv.get());
+
 //							addVisual(geode);
 							trans->addChild(geode);
 							addVisual(geode);
@@ -330,6 +337,7 @@ void edTerrainNode::updateVisual()
 							geode = new osg::Geode;
 							geode->addDrawable( geom );
 							geode->setUserData(this);
+							geode->setNodeMask(Editor::nm_SelectedGeometry);
 //							dstate= new osg::StateSet();
 //							dstate->setRenderBinDetails(10,"RenderBin");
 //							dstate->setAttributeAndModes(new osg::Depth(osg::Depth::ALWAYS));
@@ -406,14 +414,18 @@ void edTerrainNode::updateVisual()
 					geode = new osg::Geode;
 					geode->addDrawable( geom );
 					geode->setUserData(this);
+					geode->setNodeMask(getNodeMask());
 					geode->setStateSet( material->dstate.get() );
 //					addVisual(geode);
+					sv->reset();
+					geode->accept(*sv.get());
 					trans->addChild(geode);
 					addVisual(geode);
 					printf("geode->referenceCount(): %d\n",geode->referenceCount());
 					geode = new osg::Geode;
 					geode->addDrawable( geom );
 					geode->setUserData(this);
+					geode->setNodeMask(Editor::nm_SelectedGeometry);
 					/*
 					dstate= new osg::StateSet();
 
@@ -485,3 +497,13 @@ int edTerrainNode::getMaterialI()
 {
 	return (material.valid() ? material->UID : 0);
 }
+
+unsigned int edTerrainNode::getNodeMask() 
+{ 
+	if ( material.valid() && material->type==2 )
+		return Editor::nm_DynamicFlatReflection;
+	else 
+		return Editor::nm_SolidTerrain;
+//	return ( material.valid() && material->type==3 ? Editor::nm_DynamicFlatReflection : Editor::nm_SolidTerrain ) ;
+}
+

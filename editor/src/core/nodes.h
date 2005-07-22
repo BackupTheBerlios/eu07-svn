@@ -43,7 +43,8 @@ public:
 	}
 
 //	virtual unsigned int getType() { return 'NODE'; };
-	edNode() : PropertySet(), relativeHeight(0.0), pos(0.0,0.0,0.0), flags(nf_DummyFlag), nodeUID(0xFFFFFFFF), marked(false) { self= this; resetUIDs();};
+	//edNode() : PropertySet(), relativeHeight(0.0), pos(0.0,0.0,0.0), flags(nf_DummyFlag), nodeUID(0xFFFFFFFF), marked(false) { self= this; resetUIDs();};
+	edNode(bool setSelf=true) : PropertySet(), relativeHeight(0.0), pos(0.0,0.0,0.0), flags(nf_DummyFlag), nodeUID(0xFFFFFFFF), marked(false) { if (setSelf) self= this; resetUIDs();};
 	virtual void activateKit();
 
 	virtual edNode *clone() { return NULL; };

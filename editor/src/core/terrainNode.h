@@ -84,6 +84,8 @@ public:
 	virtual void updateVisual();
 	virtual void moveTo(osg::Vec3d p) {};
 	virtual void setRotate(double _rot) {};
+
+	unsigned int getNodeMask();
 //	virtual void onSelect(osg::Geode *geom);
 //	virtual void onDeselect();
 //	virtual void free();

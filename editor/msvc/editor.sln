@@ -3,6 +3,14 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "editor", "editor.vcproj", "
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Core osg", "..\..\OpenSceneGraph\VisualStudio\osg\osg.vcproj", "{74C74902-F1F5-47C9-B396-845A00C9884E}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Core osgDB", "..\..\OpenSceneGraph\VisualStudio\osgDB\osgDB.vcproj", "{CF6C9DE1-064E-4DDD-B700-0E3570F7B262}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfiguration) = preSolution
 		Debug = Debug
@@ -13,6 +21,14 @@ Global
 		{F5B981DC-7058-40DF-B8FD-C63ADA4F83C3}.Debug.Build.0 = Debug|Win32
 		{F5B981DC-7058-40DF-B8FD-C63ADA4F83C3}.Release.ActiveCfg = Release|Win32
 		{F5B981DC-7058-40DF-B8FD-C63ADA4F83C3}.Release.Build.0 = Release|Win32
+		{74C74902-F1F5-47C9-B396-845A00C9884E}.Debug.ActiveCfg = Debug|Win32
+		{74C74902-F1F5-47C9-B396-845A00C9884E}.Debug.Build.0 = Debug|Win32
+		{74C74902-F1F5-47C9-B396-845A00C9884E}.Release.ActiveCfg = Release|Win32
+		{74C74902-F1F5-47C9-B396-845A00C9884E}.Release.Build.0 = Release|Win32
+		{CF6C9DE1-064E-4DDD-B700-0E3570F7B262}.Debug.ActiveCfg = Debug|Win32
+		{CF6C9DE1-064E-4DDD-B700-0E3570F7B262}.Debug.Build.0 = Debug|Win32
+		{CF6C9DE1-064E-4DDD-B700-0E3570F7B262}.Release.ActiveCfg = Release|Win32
+		{CF6C9DE1-064E-4DDD-B700-0E3570F7B262}.Release.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 	EndGlobalSection

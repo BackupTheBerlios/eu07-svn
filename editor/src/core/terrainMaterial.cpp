@@ -38,12 +38,14 @@ class ReflMapCallback : public osg::Drawable::DrawCallback
 		static osg::ref_ptr<CubeMapCallback> cmc= new CubeMapCallback();
 		static osg::ref_ptr<ReflMapCallback> rmc= new ReflMapCallback();
 		file >> type;
+		reflectionTex.clear();
 //		if (UID<=0)
 //			return;
 		switch (type)
 		{
 			case 0: file >> tex >> texDim.x() >> texDim.y() >> reflectionTex; break;
 			case 1: file >> tex >> texDim.x() >> texDim.y() >> texfront >> texright >> texback >> texleft >> texup >> texdown; break;
+			case 2: file >> tex >> texDim.x() >> texDim.y(); break;
 /* UID >> 1 >> texfront >> texright >> texback >> texup >> texdown >> texleft */
 		}
 		if (reflectionTex.compare("null")==0)
@@ -57,6 +59,9 @@ class ReflMapCallback : public osg::Drawable::DrawCallback
 		}
 		if (!tex.empty() && dstate.valid() && dstate->getTextureAttribute(0,osg::StateAttribute::TEXTURE)==NULL)
 		{
+			osg::TexGen *tg= NULL;
+			osg::TexEnvCombine *envComb= NULL;
+			osg::TextureCubeMap *tcm= NULL;
 			osg::Texture2D *tex2d = new osg::Texture2D;
 			tex2d->setWrap(osg::Texture::WRAP_S, osg::Texture::REPEAT);
 			tex2d->setWrap(osg::Texture::WRAP_T, osg::Texture::REPEAT);
@@ -74,12 +79,12 @@ class ReflMapCallback : public osg::Drawable::DrawCallback
 						tex2d->setImage(osgDB::readImageFile(reflectionTex));
 						dstate->setTextureAttributeAndModes(1, tex2d, osg::StateAttribute::ON );
 
-						osg::TexGen *tg = new osg::TexGen;
+						tg = new osg::TexGen;
 						tg->setMode(osg::TexGen::SPHERE_MAP);
 //						tg->setMode(osg::TexGen::REFLECTION_MAP);
 						dstate->setTextureAttributeAndModes(1, tg, osg::StateAttribute::ON);
 
-						osg::TexEnvCombine *envComb= new osg::TexEnvCombine();
+						envComb= new osg::TexEnvCombine();
 //						envComb->setSource0_RGB(osg::TexEnvCombine::TEXTURE);
 //						envComb->setCombine_RGB(osg::TexEnvCombine::REPLACE);
 						envComb->setSource0_RGB(osg::TexEnvCombine::PREVIOUS);
@@ -90,7 +95,7 @@ class ReflMapCallback : public osg::Drawable::DrawCallback
 					}
 				break;
 				case 1:
-					osg::TextureCubeMap *tcm = new osg::TextureCubeMap;
+					tcm= new osg::TextureCubeMap;
 					tcm->setWrap(osg::Texture::WRAP_S, osg::Texture::CLAMP);
 					tcm->setWrap(osg::Texture::WRAP_T, osg::Texture::CLAMP);
 					tcm->setWrap(osg::Texture::WRAP_R, osg::Texture::CLAMP);
@@ -106,11 +111,11 @@ class ReflMapCallback : public osg::Drawable::DrawCallback
 
 					dstate->setTextureAttributeAndModes(1, tcm, osg::StateAttribute::ON);
 
-						osg::TexGen *tg = new osg::TexGen;
+						tg = new osg::TexGen;
 						tg->setMode(osg::TexGen::REFLECTION_MAP);
 						dstate->setTextureAttributeAndModes(1, tg, osg::StateAttribute::ON);
 
-						osg::TexEnvCombine *envComb= new osg::TexEnvCombine();
+						envComb= new osg::TexEnvCombine();
 						envComb->setSource0_RGB(osg::TexEnvCombine::TEXTURE);
 						envComb->setCombine_RGB(osg::TexEnvCombine::REPLACE);
 //						envComb->setSource0_RGB(osg::TexEnvCombine::PREVIOUS);
@@ -118,6 +123,8 @@ class ReflMapCallback : public osg::Drawable::DrawCallback
 //						envComb->setCombine_RGB(osg::TexEnvCombine::ADD);
 						dstate->setTextureAttribute(1, envComb);
 					drawCallback= cmc.get();
+				break;
+				case 2:
 				break;
 			}
 		};

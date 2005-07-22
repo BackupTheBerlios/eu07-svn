@@ -54,7 +54,8 @@ class Editor : public TopView::MouseAdapter
 public:
 
 	typedef enum {  nm_Nodes=0x0000FF00, nm_Maps=0x00FF0000, nm_DynamicGeom=0x80000000, 
-					nm_Tracks=0x40000000, nm_Terrain=0x20000000, nm_SolidTerrain=0x10000000 } Masks;
+					nm_Tracks=0x40000000, nm_Terrain=0x20000000, nm_SolidTerrain=0x10000000,
+					nm_SelectedGeometry=0x00000F00, nm_DynamicFlatReflection= 0x11000000} Masks;
 
 	typedef enum {  em_Select=0, em_Move, em_Rotate, em_CreatePoints, em_CreatePointFeatures, 
 					em_CreateLines, em_ConnectPoints, em_CreateRailLines, em_CreateTracks, 
@@ -221,6 +222,8 @@ public:
 
 	static osg::Object* getObjectFromCache(const std::string &name);
 	static void insertObjectToCache(const std::string &name, osg::Object *object) { objectsCache[name]= object; };
+
+	void setLinesInPreview3D(bool v);
 
 	static osg::ref_ptr<osgDB::ReaderWriter> iveReaderWriter;
 

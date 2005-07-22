@@ -193,6 +193,7 @@ public:
 	}
 
 	PropertySet() { };
+	virtual ~PropertySet() { };
 /*
 	bool registerProp(std::string name, Property::SetInt setInt, Property::GetInt getInt)
 	{

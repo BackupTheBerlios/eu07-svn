@@ -253,6 +253,12 @@ Editor::Editor(TopView *_mainView) : MouseAdapter(), mainView(_mainView), mode(e
 
 Editor::~Editor()
 {
+//	activateKit(unsigned int(0));
+//	getKit(edOptions::getClassID())->setOwnerWithRead(NULL);
+//	getKit(edSCNImport::getClassID())->setOwnerWithRead(NULL);
+
+//	printf("scnimp refs: %d\n",edSCNImport::instance()->referenceCount());
+//	edOptions::instance(true);
 }
 
 void Editor::freeNodes()
@@ -2169,4 +2175,17 @@ void Editor::applyFeatures()
 	if (rl)
 		rl->applyFeature();
 */	
+}
+
+void Editor::setLinesInPreview3D(bool v)
+{
+	PerspectiveViewsList::iterator it;
+	for (it= perspectiveViews.begin(); it!=perspectiveViews.end(); it++)
+	{
+		if (v)
+			(*it)->setNodeMask(nm_Nodes);
+		else
+			(*it)->unsetNodeMask(nm_Nodes);
+		(*it)->exposed();
+	}
 }
