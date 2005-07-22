@@ -71,7 +71,7 @@ Editor::ObjectsCache Editor::objectsCache;
 //bool Editor::releaseGeometry= true;
 
 const unsigned int	dwMagic= 'BSCN';
-const int			version= 3;
+const int			version= 4;
 
 Editor *Editor::lastInstance()
 {
@@ -107,7 +107,7 @@ Editor::Editor(TopView *_mainView) : MouseAdapter(), mainView(_mainView), mode(e
 //	osgDB::PushAndPopDataPath srtm_path("srtm");
 //	osgDB::PushAndPopDataPath map_path("maps");
 //	osgDB::PushAndPopDataPath mat_path("materials");
-	osgDB::Registry::instance()->getDataFilePathList().push_back("texture");
+	osgDB::Registry::instance()->getDataFilePathList().push_back("textures");
 	osgDB::Registry::instance()->getDataFilePathList().push_back("models");
 	osgDB::Registry::instance()->getDataFilePathList().push_back("srtm");
 	osgDB::Registry::instance()->getDataFilePathList().push_back("maps");
@@ -115,6 +115,7 @@ Editor::Editor(TopView *_mainView) : MouseAdapter(), mainView(_mainView), mode(e
 //	osgDB::Registry::instance()->getDataFilePathList().push_back("models/pkp");		//HACK
 	osgDB::Registry::instance()->getDataFilePathList().push_back("models/signals");
 	osgDB::Registry::instance()->getDataFilePathList().push_back("models/tracks");
+	osgDB::Registry::instance()->getDataFilePathList().push_back("models/t.drzewa");
 
 	osg::StateSet *stateset= NULL;
 
@@ -821,39 +822,37 @@ edFlexTrack *Editor::createFlexTrack(osg::Vec3d pt1, osg::Vec3d cpt1, osg::Vec3d
 
 bool adjust(edPoint *pt, edWireFeature *wf)
 {
+	edWireFeature *wf2= NULL;
 	for (edPoint::LinesList::iterator it=pt->getLinesList().begin(); 
 		it!=pt->getLinesList().end(); it++)
 	{
-		edWireFeature *wf2= dynamic_cast<edWireFeature*>(*it);
+		wf2= dynamic_cast<edWireFeature*>(*it);
 		if (wf2!=wf && wf2!=NULL)
-		{
-			osg::Quat q;
+			break;
+		else 
+			wf2= NULL;
 
-//		osg::Vec3d dir= (osg::Vec3d(1,0,0)*wf->getRotation());
-//		dir.normalize();
-//		osg::Quat quat;
-		osg::Vec3d d1(1,0,0);
-		osg::Vec3d d2(wf->getRotation()*osg::Vec3d(1,0,0)+wf2->getRotation()*osg::Vec3d(1,0,0)); d2.z()= 0; d2.normalize();		
-		
-		if ( fabs(d1*d2 + 1.0) < 0.0000001 )
-			q.makeRotate(osg::DegreesToRadians(180.0),0,0,1);
-		else
-			q.makeRotate(d1,d2);
-
-
-/*		if (dir.x()>0)
-			q.makeRotate(osg::Vec3d(1,0,0),dir);
-		else
-			q.makeRotate(osg::Vec3d(-1,0,0),dir);*/
-
-//			q.slerp(0.5,wf2->getRotation(),wf->getRotation());
-			if (wf2->getPt1()==wf->getPt2() || wf->getPt1()==wf2->getPt2())
-				q*= osg::Quat(osg::DegreesToRadians(90.0),osg::Vec3d(0,0,1));
-			pt->setRotation(q);
-			return true;
-		}
 	}
-	return false;
+
+	osg::Quat q;
+
+	osg::Vec3d d1(1,0,0);
+	osg::Vec3d d2(wf->getRotation()*osg::Vec3d(1,0,0)); 
+	if (wf2)
+		d2+= wf2->getRotation()*osg::Vec3d(1,0,0);
+	
+	d2.z()= 0; d2.normalize();		
+	
+	if ( fabs(d1*d2 + 1.0) < 0.0000001 )
+		q.makeRotate(osg::DegreesToRadians(180.0),0,0,1);
+	else
+		q.makeRotate(d1,d2);
+
+
+	if (wf2==NULL || (wf2->getPt1()==wf->getPt2() || wf->getPt1()==wf2->getPt2()))
+		q*= osg::Quat(osg::DegreesToRadians(90.0),osg::Vec3d(0,0,1));
+	pt->setRotation(q);
+	return true;
 }
 
 edWireFeature *Editor::createWireFeature(edPoint *pt1, edPoint *pt2)
@@ -865,11 +864,11 @@ edWireFeature *Editor::createWireFeature(edPoint *pt1, edPoint *pt2)
 		wf= new edWireFeature();
 		wf->setPoints(pt1,pt2);
 		wf->update(NULL);
-		if (!adjust(pt1,wf))
-			pt1->setRotation(wf->getRotation()*osg::Quat(osg::DegreesToRadians(90.0),osg::Vec3d(0,0,1)));
+		adjust(pt1,wf);
+//			pt1->setRotation(wf->getRotation()*osg::Quat(osg::DegreesToRadians(90.0),osg::Vec3d(0,0,1)));
 		pt1->onMoved();
-		if (!adjust(pt2,wf))
-			pt2->setRotation(wf->getRotation()*osg::Quat(osg::DegreesToRadians(90.0),osg::Vec3d(0,0,1)));
+		adjust(pt2,wf);
+//			pt2->setRotation(wf->getRotation()*osg::Quat(osg::DegreesToRadians(90.0),osg::Vec3d(0,0,1)));
 		pt2->onMoved();
 //		adjust(pt2,wf);
 		wf->applyFeature();

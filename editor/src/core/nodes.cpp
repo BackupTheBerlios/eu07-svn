@@ -427,7 +427,7 @@ void edPointFeature::setModel(const char *model)
 	{
 //		modelName.substr(0,n);
 		std::ifstream file;
-		std::string fileName("templates/");
+		std::string fileName("models/");
 		fileName.append(modelName.substr(0,n));
 		fileName.append(".wrp");
 		try {
@@ -442,6 +442,11 @@ void edPointFeature::setModel(const char *model)
 				for (unsigned int i=0; i<n; i++)
 					file >> wirePoints[i].x() >> wirePoints[i].y() >> wirePoints[i].z();
 			}
+			if (!file.eof())
+				file >> numWires;
+			if (!file.eof())
+				file >> dh;
+
 		}
 		catch (char *txt) {
 			if (txt)

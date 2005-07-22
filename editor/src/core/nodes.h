@@ -257,12 +257,12 @@ public:
 	{
 		edPoint::setupProps(pr);
 //		registerProp(pr,"model",edPointFeature::setModelFile,edPointFeature::getModelFile,"szopastara1.ive");
-		registerProp(pr,"model",edPointFeature::setModelFile,edPointFeature::getModelFile,"szopastara1.ive","\\models","*.*");
+		registerProp(pr,"model",edPointFeature::setModelFile,edPointFeature::getModelFile,"szopastara1.ive","\\models","*.[oi][sv][ge]");
 		registerProp(pr,"terrain",setTerrain,getTerrain,0);
 		
 	}
 //	virtual unsigned int getType() { return 'PTFT'; };
-	edPointFeature() : edPoint() { setFlag(nf_ExportToDelanuay); };
+	edPointFeature() : edPoint(), numWires(3), dh(1)  { setFlag(nf_ExportToDelanuay); };
 
 	void setModelFile(const char *m) { setModel(m); };
 	const char * getModelFile() { return modelName.c_str(); };
@@ -286,6 +286,9 @@ public:
 	}
 
 	inline unsigned int getNumWirePoints() { return wirePoints.size(); };
+
+	int numWires;
+	float dh;
 
 protected:
 

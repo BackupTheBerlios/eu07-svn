@@ -11,6 +11,8 @@ void edWireFeature::load(std::istream &stream, int version, CollectNodes *cn)
 	read(stream,numWires);
 	read(stream,thickness);
 	read(stream,dh);
+	if (version>=4)
+		read(stream,overrideParams);
 	applyFeature();
 }
 
@@ -21,6 +23,7 @@ void edWireFeature::save(std::ostream &stream)
 	write(stream,numWires);
 	write(stream,thickness);
 	write(stream,dh);
+	write(stream,overrideParams);
 }
 
 bool edWireFeature::loadParams()
@@ -137,6 +140,12 @@ void edWireFeature::applyFeature()
 
 	if (n<=0)
 		return;
+
+	if (overrideParams)
+	{
+		dh= osg::maximum(pf1->dh,pf2->dh);
+		numWires= osg::minimum(pf1->numWires,pf2->numWires);
+	}
 
 	if (hasVisuals())
 		clearFeature();

@@ -73,7 +73,7 @@ public:
 	{
 		edGeomNode::setupProps(pr);
 		registerProp(pr,"material",setMaterialI,getMaterialI,1,0,100);
-		registerProp(pr,"culture file",setCultureFile,getCultureFile,"very_sparse_trees.clt",".","*.clt");
+		registerProp(pr,"culture file",setCultureFile,getCultureFile,"very_sparse_trees.clt","cultures","*.clt");
 		registerProp(pr,"apply culture",applyCultureI);
 	}
 //	virtual unsigned int getType() { return 'TERR'; };
