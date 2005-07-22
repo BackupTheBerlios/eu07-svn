@@ -363,7 +363,22 @@ class OSG_EXPORT Geometry : public Drawable
 
         /** Accept a PrimitiveFunctor and call its methods to tell it about the interal primitives that this Drawable has. */
         virtual void accept(PrimitiveIndexFunctor& pf) const;
-
+/*
+		virtual void compileGLObjects(State& state) const
+		{
+			Drawable::compileGLObjects(state);
+			if (getDataVariance()==DataVariance::STATIC)
+			{
+				const_cast<Geometry*>(this)->_primitives.clear();
+				const_cast<Geometry*>(this)->_vertexData.array= NULL;
+				const_cast<Geometry*>(this)->_normalData.array= NULL;
+				const_cast<Geometry*>(this)->_colorData.array= NULL;
+				const_cast<Geometry*>(this)->_secondaryColorData.array= NULL;
+				const_cast<Geometry*>(this)->_fogCoordData.array= NULL;
+				const_cast<Geometry*>(this)->_texCoordList.clear();
+				const_cast<Geometry*>(this)->_vertexAttribList.clear();
+			}
+		}*/
 
     protected:
 

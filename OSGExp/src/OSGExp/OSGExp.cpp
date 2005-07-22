@@ -742,7 +742,12 @@ BOOL OSGExp::nodeEnum(osg::Group* rootTransform, INode* node, osg::Transform* pa
 					break;
 				case HELPER_CLASS_ID:
 					if (_options->getExportHelpers()){
-						createHelperObject(rootTransform, node, os.obj, _ip->GetTime());
+						child= createHelperObject(rootTransform, node, os.obj, _ip->GetTime()).get();
+						if (child.valid())
+						{
+							parent->addChild(child.get());
+							applyNodeMaskValue(node, _ip->GetTime(), child.get());
+						}
 					}
 					break;
 			}

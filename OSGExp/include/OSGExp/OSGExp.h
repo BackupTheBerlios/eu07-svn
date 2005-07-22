@@ -99,7 +99,7 @@ class OSGExp : public SceneExport {
 		osg::ref_ptr<osg::Transform>		createCameraObject(osg::Group* rootTransform, INode *node, Object* obj, TimeValue t);
 		osg::ref_ptr<osg::MatrixTransform>	createLightObject(osg::Group* rootTransform, INode *node, Object* obj, TimeValue t);
 		osg::ref_ptr<osg::MatrixTransform>	createShapeObject(osg::Group* rootTransform, INode* node, Object* obj, TimeValue t);
-		void								createHelperObject(osg::Group* rootTransform, INode* node, Object* obj, TimeValue t);
+		osg::ref_ptr<osg::MatrixTransform>	createHelperObject(osg::Group* rootTransform, INode* node, Object* obj, TimeValue t);
 		osg::ref_ptr<osg::MatrixTransform>	createParticleSystemObject(osg::Group* rootTransform, INode* node, Object* obj, TimeValue t);
 		// Methods for getting/converting MAX's matrices into OSG matrices.
 		osg::Matrix							getNodeTransform(INode* node, TimeValue t);
@@ -126,6 +126,8 @@ class OSGExp : public SceneExport {
 		osg::ref_ptr<osg::Switch>			createSwitchFromHelperObject(osg::Group* rootTransform, INode* node, Object* obj, TimeValue t);
 		osg::ref_ptr<osg::Group>			createImpostorFromHelperObject(osg::Group* rootTransform, INode* node, Object* obj, TimeValue t);
 		void								createOccluderFromHelperObject(osg::Group* rootTransform, INode* node, Object* obj, TimeValue t);
+		osg::ref_ptr<osg::MatrixTransform>						createDummyObject(osg::Group* rootTransform, INode* node, Object* obj, TimeValue t);
+		osg::ref_ptr<osg::MatrixTransform>						createPointhelpObject(osg::Group* rootTransform, INode* node, Object* obj, TimeValue t);
 
 		// Methods to handle animations, can be found in Animation.cpp.
 		void								addAnimation(INode* node, TimeValue t, osg::Node* osgNode);

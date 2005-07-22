@@ -39,7 +39,7 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="odbc32.lib odbccp32.lib comctl32.lib core.lib geom.lib gfx.lib mesh.lib maxutil.lib maxscrpt.lib paramblk2.lib bmm.lib osgd.lib osgDBd.lib osgUtild.lib osgParticled.lib Previewerd.lib"
+				AdditionalDependencies="odbc32.lib odbccp32.lib comctl32.lib core.lib geom.lib gfx.lib mesh.lib maxutil.lib maxscrpt.lib paramblk2.lib bmm.lib osgd.lib osgDBd.lib osgUtild.lib osgParticled.lib Previewerd.lib  osgSimd.lib"
 				OutputFile="E:\3dsmax5\plugins\OSGExp.dle"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
@@ -111,7 +111,7 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="odbc32.lib odbccp32.lib comctl32.lib core.lib geom.lib gfx.lib mesh.lib maxutil.lib maxscrpt.lib paramblk2.lib bmm.lib osg.lib osgDB.lib osgUtil.lib osgParticle.lib Previewer.lib"
+				AdditionalDependencies="odbc32.lib odbccp32.lib comctl32.lib core.lib geom.lib gfx.lib mesh.lib maxutil.lib maxscrpt.lib paramblk2.lib bmm.lib osg.lib osgDB.lib osgUtil.lib osgParticle.lib Previewer.lib osgSim.lib"
 				OutputFile="E:\3dsmax5\plugins\OSGExp.dle"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
@@ -183,7 +183,7 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="odbc32.lib odbccp32.lib comctl32.lib core.lib geom.lib gfx.lib mesh.lib maxutil.lib maxscrpt.lib paramblk2.lib bmm.lib osg.lib osgDB.lib osgUtil.lib osgParticle.lib Previewer.lib"
+				AdditionalDependencies="odbc32.lib odbccp32.lib comctl32.lib core.lib geom.lib gfx.lib mesh.lib maxutil.lib maxscrpt.lib paramblk2.lib bmm.lib osg.lib osgDB.lib osgUtil.lib osgParticle.lib Previewer.lib osgSim.lib"
 				OutputFile="E:\3dsmax7\plugins\OSGExp.dle"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"

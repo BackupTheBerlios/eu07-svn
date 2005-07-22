@@ -55,6 +55,10 @@
 #include <osgParticle/MultiSegmentPlacer>
 #include <osgParticle/AccelOperator>
 #include <osgParticle/FluidFrictionOperator>
+#include <osg/Point>
+#include <osgSim/LightPoint>
+#include <osgSim/LightPointNode>
+#include <osgSim/Sector>
 
 #include "OSGExp.h"
 
@@ -322,11 +326,180 @@ osg::ref_ptr<osg::MatrixTransform> OSGExp::createShapeObject(osg::Group* rootTra
 	return nodeTransform;
 }
 
+/**
+ * This method will create a dummy object.
+ */
+osg::ref_ptr<osg::MatrixTransform> OSGExp::createDummyObject(osg::Group* rootTransform, INode* node, Object* obj, TimeValue t)
+{
+	return NULL;
+}
+
+/**
+ * This method will create a pointhelp object.
+ */
+osg::ref_ptr<osg::MatrixTransform> OSGExp::createPointhelpObject(osg::Group* , INode* node, Object* obj, TimeValue t)
+{
+	
+	// The node maintains two transformations:
+	// - The node's transformation matrix which is controlled by the 
+	//   transform controller that places the node in the scene. 
+	// - The object-offset transformation that represents a seperate position,
+	//   rotation and scale orientation of the geometry of the object
+	//   independent of the node. 
+
+	// Create a transform node for the geometry.
+	osg::ref_ptr<osg::MatrixTransform> nodeTransform = new osg::MatrixTransform();
+	// Set node name.
+	nodeTransform->setName(node->GetName());
+
+	// Set static datavariance for better performance
+	nodeTransform->setDataVariance(getNodeDataVariance(node));
+    
+	// Use default node mask
+	if(_options->getUseDefaultNodeMaskValue())
+		nodeTransform->setNodeMask(_options->getDefaultNodeMaskValue());
+
+	// Are we exporting animations.
+	if(_options->getExportAnimations()){
+		addAnimation(node, t, nodeTransform.get());
+	}
+
+	// Get the object-offset transformation matrix. This will be relative
+	// to the node transformation matrix.
+	osg::Matrix objectMat = getObjectTransform(node,t);
+
+	// Get the node transformation matrix, this will be relative to the
+	// parent node's transformation matrix.
+	osg::Matrix nodeMat = getNodeTransform(node,t);
+
+	// Create mesh from information in the node.
+//	osg::ref_ptr<osg::Geode> geode = createMultiMeshGeometry(rootTransform, node, obj, t);
+//	osg::Geode *geode= new osg::Geode;
+//	geode->setName(node->GetName());
+
+	osg::Node *gnode= NULL;
+
+	TSTR type;
+	if (node->GetUserPropString("Type",type))
+	{
+		if (strcmp(type.data(),"LightPoint")==0)
+		{
+			float r= 1;
+			float g= 1;
+			float b= 1;
+			float a= 1;
+			float minSize= 1;
+			float maxSize= 2;
+			float maxDist= 6000;
+			float minElevation= 0;
+			float maxElevation= 10;
+			float minAzimuth= osg::DegreesToRadians(90.0f-45.0f);
+			float maxAzimuth= osg::DegreesToRadians(90.0f+45.0f);
+			float fadeAngle= osg::DegreesToRadians(20.0f);
+
+			node->GetUserPropFloat("Red",r);
+			node->GetUserPropFloat("Green",g);
+			node->GetUserPropFloat("Blue",b);
+			node->GetUserPropFloat("Alpha",a);
+			node->GetUserPropFloat("MinSize",minSize);
+			node->GetUserPropFloat("MaxSize",maxSize);
+			node->GetUserPropFloat("MaxDist",maxDist);
+			node->GetUserPropFloat("MinElevation",minElevation);
+			node->GetUserPropFloat("MaxElevation",maxElevation);
+			node->GetUserPropFloat("MinAzimuth",minAzimuth);
+			node->GetUserPropFloat("MaxAzimuth",maxAzimuth);
+			node->GetUserPropFloat("FadeAngle",fadeAngle);
+
+			osgSim::LightPointNode *lpn= new osgSim::LightPointNode;
+			lpn->setMinPixelSize(minSize);
+			lpn->setMaxPixelSize(maxSize);
+			lpn->setMaxVisibleDistance2(maxDist*maxDist);
+			osgSim::LightPoint *lp= new osgSim::LightPoint(true,osg::Vec3(0,0,0),osg::Vec4(r,g,b,a),1,1,
+				new osgSim::AzimElevationSector(osg::DegreesToRadians(minAzimuth),osg::DegreesToRadians(maxAzimuth),minElevation,maxElevation,osg::DegreesToRadians(fadeAngle)));
+			lpn->addLightPoint(*lp);
+			gnode= lpn;
+			lpn->setDataVariance(osg::Object::STATIC);
+		}
+		else if (strcmp(type.data(),"SimpleLightPoint")==0)
+		{
+			float r= 1;
+			float g= 1;
+			float b= 1;
+			float a= 1;
+			float size= 1;
+
+			node->GetUserPropFloat("Red",r);
+			node->GetUserPropFloat("Green",g);
+			node->GetUserPropFloat("Blue",b);
+			node->GetUserPropFloat("Alpha",a);
+			node->GetUserPropFloat("Size",size);
+			osg::Geode *geode= new osg::Geode;
+			osg::Geometry *geometry= new osg::Geometry;
+			osg::StateSet *dstate= new osg::StateSet;
+			osg::Point *point= new osg::Point;
+			osg::Material *material= new osg::Material;
+			osg::Vec3Array	*vertices = new osg::Vec3Array(1);
+			(*vertices)[0].set(0,0,0);
+//			osg::Vec4Array	*colors = new osg::Vec4Array(1);
+//			(*colors)[0].set(1,1,1,1);
+			geometry->setVertexArray(vertices);
+//			geometry->setColorArray(colors);
+//			geometry->setColorBinding(osg::Geometry::BIND_OVERALL);
+			geometry->addPrimitiveSet(new osg::DrawArrays(osg::DrawArrays::POINTS,0,1));
+			point->setSize(size);
+			dstate->setAttributeAndModes(point);
+			dstate->setMode(GL_LIGHTING,osg::StateAttribute::OFF);
+			material->setColorMode(osg::Material::ColorMode::EMISSION);
+			material->setEmission(osg::Material::FRONT_AND_BACK,osg::Vec4(r,g,b,a));
+			dstate->setAttributeAndModes(material);
+			geometry->setStateSet(dstate);
+			geode->addDrawable(geometry);
+			geode->setCullingActive(false);
+			gnode= geode;
+			geode->setDataVariance(osg::Object::STATIC);
+//			rootTransform->addChild(geode);
+	//osg::ve
+		}
+	}
+
+
+	// Set the node transformation
+	nodeTransform->setMatrix(nodeMat);
+
+	// If object-offset is identity matrix then only use nodeMat in OSG.
+	if(Util::isIdentity(objectMat)){
+		// Add geode to node transform.
+		nodeTransform->addChild(gnode);
+	}
+	// Otherwise make two OSG transformation nodes and use nodeMat and 
+	// objectMat.
+	else{
+		// Make a new OSG transform and set object-offset transform on this.
+		osg::ref_ptr<osg::MatrixTransform> objectTransform = new osg::MatrixTransform(); 
+	    objectTransform->setMatrix(objectMat);
+		// Set static datavariance for better performance
+		objectTransform->setDataVariance(osg::Object::STATIC);
+
+		// Use default node mask
+		if(_options->getUseDefaultNodeMaskValue())
+			objectTransform->setNodeMask(_options->getDefaultNodeMaskValue());
+
+		// Add this to nodeTransform
+		nodeTransform->addChild(objectTransform.get());
+		// and add geomtry to object-offset transform
+		objectTransform->addChild(gnode);
+	}
+
+	return nodeTransform.get();
+	//return NULL;
+
+}
+
 
 /** 
  * This node will export helper objects. 
  */
-void OSGExp::createHelperObject(osg::Group* rootTransform, INode* node, Object* obj, TimeValue t){
+osg::ref_ptr<osg::MatrixTransform> OSGExp::createHelperObject(osg::Group* rootTransform, INode* node, Object* obj, TimeValue t){
 	Class_ID id = obj->ClassID();
 
     if (id == BILLBOARD_CLASS_ID){
@@ -347,6 +520,13 @@ void OSGExp::createHelperObject(osg::Group* rootTransform, INode* node, Object* 
 	else if (id == OCCLUDER_CLASS_ID){
 		createOccluderFromHelperObject(rootTransform, node, obj, t); 
 	}
+	else if (id == Class_ID(DUMMY_CLASS_ID,0)) {
+		createDummyObject(rootTransform, node, obj, t); 
+	}
+	else if (id == Class_ID(POINTHELP_CLASS_ID,0)) {
+		return createPointhelpObject(rootTransform, node, obj, t); 
+	}
+	return NULL;
 
 }
 
