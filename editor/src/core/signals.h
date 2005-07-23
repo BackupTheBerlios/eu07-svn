@@ -17,7 +17,7 @@ public:
 		edDynamicGeom::setupProps(pr);
 		registerProp(pr,"name",setName,getName,"");
 		registerProp(pr,"station",setStation,getStation,"none");
-		registerProp(pr,"signal",setSignalName,getSignalName,"SSzpcpI.ive","/models/signals","*.ive");
+		registerProp(pr,"signal",setSignalName,getSignalName,"SSzpcpI.ive","/models/PKP.infrastruktura/","*.ive");
 //		registerProp(pr,"signal2",setSignalName,getSignalName,"PKP/SSzpcpI");
 //		registerProp(pr,"",setCurveI,getCurveI,0,1);
 

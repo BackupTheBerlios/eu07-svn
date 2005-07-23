@@ -148,11 +148,12 @@ osg::Geode *makeTree(const char *tex_name, double h, osg::Vec2 upper_left, osg::
 
 void Culture::load(const char *filename)
 {
-	std::cout << "loading: " << filename << std::endl;
 	char buf[256];
+	sprintf(buf,"cultures/%s",filename);
+	std::cout << "loading: " << buf << std::endl;
 	FILE *f;
 	density= -1.0;
-	f= fopen(filename,"r");
+	f= fopen(buf,"r");
 	if (!f)
 		return;
 	fscanf(f,"%s",buf);

@@ -13,8 +13,8 @@ extern "C" {
 	void edRailLine::setupProps(Properties &pr)
 	{
 		edSplineFeature::setupProps(pr);
-		registerProp(pr,"ballast tex",setBallastTex,getBallastTex,"","\\texture","*.dds");
-		registerProp(pr,"rails tex",setRailsTex,getRailsTex,"","\\texture","*.dds");
+		registerProp(pr,"ballast tex",setBallastTex,getBallastTex,"","\\textures","*.dds");
+		registerProp(pr,"rails tex",setRailsTex,getRailsTex,"","\\textures","*.dds");
 		registerProp(pr,"ballast shape",setBallastShape,getBallastShape,"StdBallast.shp","\\shapes","*.shp");
 		registerProp(pr,"rails shape",setRailsShape,getRailsShape,"Std1435Rails.shp","\\shapes","*.shp");
 //		registerProp(pr,"distance",setDistance,getDistance);
