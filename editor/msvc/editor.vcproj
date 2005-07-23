@@ -181,6 +181,9 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="config.h">
+			</File>
+			<File
 				RelativePath="..\src\interface.c">
 				<FileConfiguration
 					Name="Release|Win32">
@@ -258,9 +261,6 @@
 			Filter="h;hpp;hxx;hm;inl">
 			<File
 				RelativePath="..\src\callbacks.h">
-			</File>
-			<File
-				RelativePath="config.h">
 			</File>
 			<File
 				RelativePath="..\src\interface.h">

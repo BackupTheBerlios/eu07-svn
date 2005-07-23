@@ -51,7 +51,7 @@ public:
 	static void setupProps(Properties &pr)
 	{
 		edLineFeature::setupProps(pr);
-		registerProp(pr,"fence file",setFileName,getFileName,"wood01.fen","fences","*.fen");
+		registerProp(pr,"fence file",setFileName,getFileName,"wood01.fen","\\fences","*.fen");
 
 	}
 

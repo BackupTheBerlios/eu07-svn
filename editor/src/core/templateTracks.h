@@ -13,7 +13,7 @@ public:
 	{
 		edTrack::setupProps(pr);
 
-		registerProp(pr,"track",setTemplate,getTemplate,"switchL34R300.ive","/models/tracks","*.ive");
+		registerProp(pr,"track",setTemplate,getTemplate,"switchL34R300.ive","\\models\\tracks","*.ive");
 //		registerProp(pr,"template",setTemplate,getTemplate,"PKP/switchL34R300");
 //		registerProp(pr,"ballast tex",setBallastTex,getBallastTex,"TpD1.dds");
 //		registerProp(pr,"rails tex",setRailsTex,getRailsTex,"Rail_screw_used1.dds");
