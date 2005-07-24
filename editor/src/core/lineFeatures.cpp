@@ -62,7 +62,7 @@ bool edFenceFeature::loadParams()
 		return false;
 	try
 	{
-		std::ifstream file(paramsFile.c_str(), std::ios::in);
+		std::ifstream file(("fences/"+paramsFile).c_str(), std::ios::in);
 		file >> texture >> length >> height >> segments >> tv_top >> tv_bottom >> sides;
 		//le.close();
 	}

@@ -74,9 +74,16 @@ class OSG_EXPORT Viewport : public StateAttribute
             height = _height;
         }
 
+        inline int& x() { return _x; }
         inline int x() const { return _x; }
+
+        inline int& y() { return _y; }
         inline int y() const { return _y; }
+
+        inline int& width() { return _width; }
         inline int width() const { return _width; }
+
+        inline int& height() { return _height; }
         inline int height() const { return _height; }
 
         inline bool valid() const { return _width!=0 && _height!=0; }

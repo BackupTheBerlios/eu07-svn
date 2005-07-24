@@ -1487,13 +1487,14 @@ bool Editor::onPush(unsigned int button, unsigned int state)
 				if (pt)
 				{
 					setKitOwnerWithWrite(pt);
-					selectNode(pt);
+					//selectNode(pt);
 					if (pt==pf)
 					{
 						pf->setTerrain((what==2?0:1));	//terrain or srtm, HACK :(
 						setKitOwnerWithRead(pf);
 					}
 				}
+				deselectNode();
 				redrawAll();
 				return true;
 			}

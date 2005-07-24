@@ -11,8 +11,8 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 */
 
-/* file:        include/osg/Shader
- * author:        Mike Weiblen 2005-05-12
+/* file:   include/osg/Shader
+ * author: Mike Weiblen 2005-06-15
 */
 
 #ifndef OSG_SHADER
@@ -26,6 +26,8 @@
 #include <set>
 
 namespace osg {
+
+class Program;
 
 ///////////////////////////////////////////////////////////////////////////
 /** osg::Shader is an application-level abstraction of an OpenGL glShader.
@@ -92,11 +94,6 @@ class OSG_EXPORT Shader : public osg::Object
         /** Query InfoLog from a glShader */
         bool getGlShaderInfoLog(unsigned int contextID, std::string& log) const;
 
-        /** A name for use by the application */
-        void setName( const std::string& name ) { _name = name; }
-        void setName( const char* name ) { _name = name; }
-        const std::string& getName() const { return _name; };
-
         /** Mark internal glShader for deletion.
           * Deletion requests are queued tuntil they can be executed
           * in the proper GL context. */
@@ -156,16 +153,15 @@ class OSG_EXPORT Shader : public osg::Object
 
         PerContextShader* getPCS(unsigned int contextID) const;
 
-        friend class Program;
-        bool addProgramRef( Program* program );
-        bool removeProgramRef( Program* program );
+        friend class osg::Program;
+        bool addProgramRef( osg::Program* program );
+        bool removeProgramRef( osg::Program* program );
 
     protected:        /*data*/
         Type _type;
-        std::string _name;
         std::string _shaderSource;
         /** osg::Programs that this osg::Shader is attached to */
-        typedef std::set< Program* > ProgramSet;
+        typedef std::set< osg::Program* > ProgramSet;
         ProgramSet _programSet;
         mutable osg::buffered_value< osg::ref_ptr<PerContextShader> > _pcsList;
 

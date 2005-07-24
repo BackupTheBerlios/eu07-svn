@@ -14,7 +14,7 @@ public:
 		registerProp(pr,"thickness",setThickness,getThickness,3,1,100,1);
 		registerProp(pr,"dh[cm]",setDH,getDH,100,0,1000,1);
 		registerProp(pr,"override wire params",setOverride,getOverride,1);
-//		registerProp(pr,"type",setWireType,getWireType,1,0,1,1);
+		registerProp(pr,"type",setWireType,getWireType,1,0,1,1);
 		registerProp(pr,"wires",setNumWires,getNumWires,3,0,3,1);
 		registerProp(pr,"models",setModels,getModels,"tr/B-STB1-3K.ive;tr/B-STB1-3D.ive");
 
@@ -67,6 +67,7 @@ protected:
 	double thickness,dh;
 	int type;
 	int numWires;
+	unsigned int color;
 	std::string paramsFile;
 };
 
