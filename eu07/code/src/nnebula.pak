@@ -71,39 +71,11 @@ beginmodule nnpkfileserver
     }
 endmodule
 #--------------------------------------------------------------------
-beginmodule ncharacterserver
-    setdir character
-    setfiles { ncharacterserver ncharacter ncharstatearray ncharskinrenderer }
-    setheaders {
-        ncharacter
-        ncharacterserver
-        ncharanim
-        ncharjoint
-        ncharskeleton
-        ncharstate
-        ncharstatearray
-        ncharskinrenderer
-    }
-endmodule
-#--------------------------------------------------------------------
-beginmodule nanimserver
-    setdir anim
-    setfiles nanimserver_main
-    setheaders nanimserver
-endmodule
-#--------------------------------------------------------------------
-beginmodule nanimcurvearray
-    setdir anim
-    setfiles nanimcurvearray_main
-    setheaders nanimcurvearray
-endmodule
-#--------------------------------------------------------------------
 beginmodule ngfxserver
     setdir gfx
     setfiles {
         ngfx_main ngfx_mode ngfx_cursor ngfx_cmds npixelformat
-        nimagefile nbmpfile nntxfile nvertexpool nvertexpoolmanager
-        nmeshloader nn3dmeshloader nnvxmeshloader nvertexsorter
+        nimagefile nbmpfile nntxfile 
     }
     setheaders {
         ngfxserver nimagefile nbmpfile nntxfile nmeshloader nn3dmeshloader 
@@ -111,43 +83,10 @@ beginmodule ngfxserver
     }
 endmodule
 #--------------------------------------------------------------------
-beginmodule nscenegraph2
-    setdir gfx
-    setfiles { 
-        nscenegraph2_main nscenegraph2_render nscenegraph2_miplod
-        nscenegraph2_cmds       
-    }
-    setheaders { nscenegraph2 }
-endmodule
-#--------------------------------------------------------------------
 beginmodule nchannelserver
     setdir gfx
     setfiles { nchannelserver_main nchannelserver_cmds }
     setheaders { nchannelserver nchannelcontext nchannelset nchannel }
-endmodule
-#--------------------------------------------------------------------
-beginmodule ntexture
-    setdir gfx
-    setfiles { ntex_main }
-    setheaders { ntexture }
-endmodule
-#--------------------------------------------------------------------
-beginmodule npixelshader
-    setdir gfx
-    setfiles { npshader_main }
-    setheaders { npixelshader }
-endmodule
-#--------------------------------------------------------------------
-beginmodule nvertexbuffer
-    setdir gfx
-    setfiles { nvertexbuffer_main }
-    setheaders { nvertexbuffer }
-endmodule
-#--------------------------------------------------------------------
-beginmodule nindexbuffer
-    setdir gfx
-    setfiles { nindexbuffer_main }
-    setheaders { nindexbuffer }
 endmodule
 #--------------------------------------------------------------------
 beginmodule ninputserver
@@ -205,207 +144,6 @@ beginmodule nmathserver
     setversion nmath_ver
 endmodule
 #--------------------------------------------------------------------
-beginmodule nblob
-    setdir misc
-    setfiles { nblob }
-    setheaders { nblob }
-    setversion nblob_ver
-endmodule
-#--------------------------------------------------------------------
-beginmodule noctree
-    setdir misc
-    setfiles { noctree_init noctree_main noctree_collect noctree_cmds }
-    setheaders { noctree }
-    setversion noctree_ver
-endmodule
-#--------------------------------------------------------------------
-beginmodule nobserver
-    setdir misc
-    setfiles { nobs_init nobs_main nobs_input nobs_cmds }
-    setheaders { nobserver }
-    setversion nobserver_ver
-endmodule
-#--------------------------------------------------------------------
-beginmodule nvisnode
-    setdir node
-    setfiles { nvisnode_main nvisnode_cmds }
-    setheaders { nvisnode }
-endmodule
-#--------------------------------------------------------------------
-beginmodule n3dnode
-    setdir node
-    setfiles { n3dn_main n3dn_cmds }
-    setheaders { n3dnode }
-endmodule
-#--------------------------------------------------------------------
-beginmodule njoint2
-    setdir node
-    setfiles { njoint2_main njoint2_cmds }
-    setheaders { njoint2 }
-endmodule
-#--------------------------------------------------------------------
-beginmodule nanimnode
-    setdir node
-    setfiles { nanim_init nanim_cmds }
-    setheaders { nanimnode }
-    setversion nanim_ver
-endmodule
-#--------------------------------------------------------------------
-beginmodule ncharacternode
-    setdir node
-    setfiles { ncharacternode_main ncharacternode_cmds }
-    setheaders { ncharacternode }
-endmodule
-#--------------------------------------------------------------------
-beginmodule nflipflop
-    setdir node
-    setfiles { nflip_init nflip_main nflip_cmds }
-    setheaders { nflipflop }
-    setversion nflip_ver
-endmodule
-#--------------------------------------------------------------------
-beginmodule nthreshnode
-    setdir node
-    setfiles { nthreshnode_main nthreshnode_cmds }
-    setheaders { nthreshnode }
-endmodule
-#--------------------------------------------------------------------
-beginmodule nipol
-    setdir node
-    setfiles { nipol_main nipol_cmds }
-    setheaders { nipol }
-endmodule
-#--------------------------------------------------------------------
-beginmodule nchnsplitter
-    setdir node
-    setfiles { nchnsplitter_init nchnsplitter_main nchnsplitter_cmds }
-    setheaders { nchnsplitter }
-    setversion nchnsplitter_ver
-endmodule
-#--------------------------------------------------------------------
-beginmodule nchnmodulator
-    setdir node
-    setfiles { nchnmod_init nchnmod_main nchnmod_cmds }
-    setheaders { nchnmodulator }
-    setversion nchnmod_ver
-endmodule
-#--------------------------------------------------------------------
-beginmodule nchnreader
-    setdir node
-    setfiles { nchnreader_init nchnreader_main nchnreader_cmds }
-    setheaders { nchnreader }
-    setversion nchnreader_ver
-endmodule
-#--------------------------------------------------------------------
-beginmodule nlightnode
-    setdir node
-    setfiles { nlight_main nlight_cmds }
-    setheaders nlightnode
-endmodule
-#--------------------------------------------------------------------
-beginmodule nmixer
-    setdir node
-    setfiles { nmix_main nmix_cmds }
-    setheaders nmixer
-endmodule
-#--------------------------------------------------------------------
-beginmodule ntexarraynode
-    setdir node
-    setfiles { ntexarraynode_main ntexarraynode_cmds }
-    setheaders ntexarraynode
-endmodule
-#--------------------------------------------------------------------
-beginmodule nmeshnode
-    setdir node
-    setfiles { nmeshnode_main nmeshnode_cmds }
-    setheaders nmeshnode
-endmodule
-#--------------------------------------------------------------------
-beginmodule nmeshcluster2
-    setdir node
-    setfiles { nmeshcluster2_main nmeshcluster2_cmds }
-    setheaders { nmeshcluster2 }
-endmodule
-#--------------------------------------------------------------------
-beginmodule nmeshipol
-    setdir node
-    setfiles { nmeshipol_init nmeshipol_main nmeshipol_cmds }
-    setheaders nmeshipol
-    setversion nmeshipol_ver
-endmodule
-#--------------------------------------------------------------------
-beginmodule nmesheffect
-    setdir node
-    setfiles { nmesheffect_main nmesheffect_cmds }
-    setheaders nmesheffect
-endmodule
-#--------------------------------------------------------------------
-beginmodule nmeshmixer
-    setdir node
-    setfiles { nmeshmixer_main nmeshmixer_cmds }
-    setheaders nmeshmixer
-endmodule
-#--------------------------------------------------------------------
-beginmodule nweighttree
-    setdir node
-    setfiles { nwtree_init nwtree_main nwtree_cmds }
-    setheaders nweighttree
-    setversion nweighttree_ver
-endmodule
-#--------------------------------------------------------------------
-beginmodule nlinknode
-    setdir node
-    setfiles { nlink_init nlink_main nlink_cmds }
-    setheaders nlinknode
-    setversion nlink_ver
-endmodule
-#--------------------------------------------------------------------
-beginmodule nfognode
-    setdir node
-    setfiles { nfog_init nfog_main nfog_cmds }
-    setheaders nfognode
-    setversion nfog_ver
-endmodule
-#--------------------------------------------------------------------
-beginmodule nlenseflare
-    setdir node
-    setfiles { nlenseflare_init nlenseflare_main nlenseflare_cmds }
-    setheaders nlenseflare
-    setversion nlenseflare_ver
-endmodule
-#--------------------------------------------------------------------
-beginmodule noverlayplane
-    setdir node
-    setfiles { novrlay_main novrlay_cmds }
-    setheaders noverlayplane 
-endmodule
-#--------------------------------------------------------------------
-beginmodule nhypermixer2
-    setdir node
-    setfiles { nhypermixer2_init nhypermixer2_main nhypermixer2_cmds }
-    setheaders nhypermixer2 
-    setversion nhypermixer2_ver
-endmodule
-#--------------------------------------------------------------------
-beginmodule nshadernode
-    setdir node
-    setfiles { nshadernode_main nshadernode_cmds }
-    setheaders nshadernode
-endmodule
-#--------------------------------------------------------------------
-beginmodule ncurvearraynode
-    setdir node
-    setfiles { ncurvearraynode_main ncurvearraynode_cmds }
-    setheaders ncurvearraynode
-endmodule
-#--------------------------------------------------------------------
-beginmodule nspecialfxserver
-    setdir misc
-    setfiles { nsfx_init nsfx_main nsfx_cmds }
-    setheaders nspecialfxserver
-    setversion nsfx_ver
-endmodule
-#--------------------------------------------------------------------
 beginmodule naudioserver2
     setdir audio
     setfiles {
@@ -414,20 +152,6 @@ beginmodule naudioserver2
     setheaders {
         naudioserver2 nsound2 nlistener2 nsoundcluster
     }
-endmodule
-#--------------------------------------------------------------------
-beginmodule nsoundnode
-    setdir audio
-    setfiles {
-        nsoundnode_main nsoundnode_cmds
-    }
-    setheaders nsoundnode
-endmodule
-#--------------------------------------------------------------------
-beginmodule nlistenernode
-   setdir audio
-   setfiles { nlistenernode_main nlistenernode_cmds }
-   setheaders nlistenernode
 endmodule
 #--------------------------------------------------------------------
 beginmodule nstream
@@ -442,42 +166,11 @@ beginmodule nwavstream
     setheaders nwavstream
 endmodule
 #--------------------------------------------------------------------
-beginmodule nshadowserver
-    setdir shadow
-    setfiles { nshadowserver_main nshadowserver_cmds }
-    setheaders { nshadowserver }
-endmodule
-#--------------------------------------------------------------------
-beginmodule nsbufshadowserver
-    setdir shadow
-    setfiles { nsbufshadowserver_main }
-    setheaders { nsbufshadowserver }
-endmodule
-#--------------------------------------------------------------------
-beginmodule nshadowcaster
-    setdir shadow
-    setfiles { nshadowcaster_main }
-    setheaders { nshadowcaster }
-endmodule
-#--------------------------------------------------------------------
-beginmodule nshadowcontrol
-    setdir shadow
-    setfiles { nshadowcontrol_main nshadowcontrol_cmds }
-    setheaders { nshadowcontrol }
-endmodule
-#--------------------------------------------------------------------
 beginmodule nprofileserver
     setdir misc
     setfiles { nprofileserver_init nprofileserver_main nprofileserver_cmds }
     setheaders { nprofileserver }
     setversion nprofileserver_ver
-endmodule
-
-#----------------------------------------------------------------------
-beginmodule nbumpmeshnode
-    setdir node
-    setfiles { nbumpmeshnode_main nbumpmeshnode_cmds }
-    setheaders { nbumpmeshnode }
 endmodule
 #--------------------------------------------------------------------
 beginmodule nvariableserver
@@ -486,29 +179,16 @@ beginmodule nvariableserver
     setheaders { nvariableserver nvariablecontext nvariable }
 endmodule
 #--------------------------------------------------------------------
-beginmodule nprimitiveserver
-    setdir gfx
-    setfiles { nprimitiveserver_main nprimitiveserver_cmds }
-    setheaders { nprimitiveserver }
-endmodule
-#--------------------------------------------------------------------
 begintarget nnebula
     settype package
     setmods {
-        nanimserver nanimcurvearray ncharacterserver nnpkfileserver
-        ngfxserver nscenegraph2 nchannelserver ntexture npixelshader 
-        nvertexbuffer nindexbuffer ninputserver ntclserver nconserver 
-        nmathserver nblob noctree nvisnode nmeshnode ntexarraynode
-        nshadernode n3dnode njoint2 nlightnode nanimnode ncharacternode nipol nmeshipol
-        nmeshmixer noverlayplane nlinknode nfognode
-        nmeshcluster2 ncurvearraynode nmesheffect
-        nmixer nweighttree nchnsplitter nchnmodulator nchnreader nlenseflare nflipflop
-        nhypermixer2 nsoundnode nlistenernode nthreshnode nobserver
-        nspecialfxserver naudioserver2 nscriptlet ntclscriptlet
+        nnpkfileserver
+        ngfxserver nchannelserver 
+        ninputserver ntclserver nconserver 
+        nmathserver 
+        naudioserver2 nscriptlet ntclscriptlet
         nstream nwavstream 
-        nshadowserver nsbufshadowserver nshadowcaster nshadowcontrol
-        nprofileserver nbumpmeshnode nbinscriptserver nvariableserver
-        nprimitiveserver
+        nprofileserver nbinscriptserver nvariableserver
     }
     setdoxycfg {
         nebulacore.cfg

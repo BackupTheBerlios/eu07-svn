@@ -516,7 +516,7 @@ void
 n_begincursors(void* slf, nCmd* cmd)
 {
     nGfxServer* self = (nGfxServer*) slf;
-    self->BeginCursors(cmd->In()->GetI());
+//    self->BeginCursors(cmd->In()->GetI());
 }
 
 //------------------------------------------------------------------------------
@@ -540,7 +540,7 @@ n_setcursor(void* slf, nCmd* cmd)
     const char* s0 = cmd->In()->GetS();
     int i1         = cmd->In()->GetI();
     int i2         = cmd->In()->GetI();
-    self->SetCursor(i0, s0, i1, i2);
+//    self->SetCursor(i0, s0, i1, i2);
 }
 
 //------------------------------------------------------------------------------
@@ -559,7 +559,7 @@ void
 n_endcursors(void* slf, nCmd* /*cmd*/)
 {
     nGfxServer* self = (nGfxServer*) slf;
-    self->EndCursors();
+//    self->EndCursors();
 }
 
 //------------------------------------------------------------------------------
@@ -618,7 +618,7 @@ n_setcurrentcursor(void* slf, nCmd* cmd)
     nGfxServer* self = (nGfxServer*) slf;
     int index = cmd->In()->GetI();
     bool show = cmd->In()->GetB();
-    self->SetCurrentCursor(index, show);
+//    self->SetCurrentCursor(index, show);
 
 }
 
@@ -638,7 +638,7 @@ void
 n_getcurrentcursor(void* slf, nCmd* cmd)
 {
     nGfxServer* self = (nGfxServer*) slf;
-    cmd->Out()->SetI(self->GetCurrentCursor());
+//    cmd->Out()->SetI(self->GetCurrentCursor());
 }
 
 //-------------------------------------------------------------------

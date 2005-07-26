@@ -14,9 +14,6 @@
 #include "kernel/ntimeserver.h"
 #include "gfx/ngfxserver.h"
 #include "gfx/nbmpfile.h"
-#include "gfx/nvertexpool.h"
-#include "gfx/nvertexbuffer.h"
-#include "gfx/nindexbuffer.h"
 
 nNebulaScriptClass(nGfxServer, "nroot");
 
@@ -80,13 +77,8 @@ nGfxServer::nGfxServer()
     this->ref_ixbufdir   = kernelServer->New("nroot",N_GFX_IXBUFDIR);
     this->unique_id = 0;
     this->timeStamp = 0;
-    this->current_vertexbubble = NULL;
-    this->current_pixelshader  = NULL;
     this->cursorShown   = true;
-    this->numCursors    = 0;
-    this->currentCursor = 0;
 
-    memset(this->current_texture,0,sizeof(this->current_texture));
     this->fov = -1.0f;  // force recomputation
     this->SetViewVolume(-0.1f,+0.1f,-0.1f,+0.1f,+0.1f,+25000.0f);
 }
@@ -388,120 +380,6 @@ nColorFormat nGfxServer::GetColorFormat(void)
 }
 
 //-------------------------------------------------------------------
-//  FindTexture()
-//  17-Feb-99   floh    created
-//  16-Jul-99   floh    + ref_texdir
-//  28-Sep-00   floh    + PushCwd()/PopCwd()
-//-------------------------------------------------------------------
-nTexture *nGfxServer::FindTexture(const char *id)
-{
-    nRoot *t;
-    char resid[N_MAXNAMELEN];
-    this->getResourceID(id,resid,sizeof(resid));
-    kernelServer->PushCwd(this->ref_texdir.get());
-    t = kernelServer->Lookup(resid);
-    if (t) t->AddRef();
-    kernelServer->PopCwd();
-    return (nTexture *) t;
-}
-
-//-------------------------------------------------------------------
-//  FindPixelShader()
-//  21-Aug-00   floh    created
-//  28-Sep-00   floh    + PushCwd()/PopCwd()
-//-------------------------------------------------------------------
-nPixelShader *nGfxServer::FindPixelShader(const char *id)
-{
-    nRoot *ps;
-    char resid[N_MAXNAMELEN];
-    this->getResourceID(id,resid,sizeof(resid));
-    kernelServer->PushCwd(this->ref_pshaderdir.get());
-    ps = kernelServer->Lookup(resid);
-    if (ps) ps->AddRef();
-    kernelServer->PopCwd();
-    return (nPixelShader *) ps;
-}
-
-//-------------------------------------------------------------------
-//  FindVertexBuffer()
-//  01-Sep-00   floh    created
-//  28-Sep-00   floh    + PushCwd()/PopCwd()
-//-------------------------------------------------------------------
-nVertexBuffer *nGfxServer::FindVertexBuffer(const char *id)
-{
-    nRoot *vb;
-    char resid[N_MAXNAMELEN];
-    this->getResourceID(id,resid,sizeof(resid));
-    kernelServer->PushCwd(this->ref_vxbufdir.get());
-    vb = kernelServer->Lookup(resid);
-    if (vb) vb->AddRef();
-    kernelServer->PopCwd();
-    return (nVertexBuffer *) vb;
-}
-
-//-------------------------------------------------------------------
-//  FindIndexBuffer()
-//  01-Sep-00   floh    created
-//  28-Sep-00   floh    + PushCwd()/PopCwd()
-//-------------------------------------------------------------------
-nIndexBuffer *nGfxServer::FindIndexBuffer(const char *id)
-{
-    nRoot *ib;
-    char resid[N_MAXNAMELEN];
-    this->getResourceID(id,resid,sizeof(resid));
-    kernelServer->PushCwd(this->ref_ixbufdir.get());
-    ib = kernelServer->Lookup(resid);
-    if (ib) ib->AddRef();
-    kernelServer->PopCwd();
-    return (nIndexBuffer *) ib;
-}
-
-//-------------------------------------------------------------------
-//  NewVertexPool()
-//  Create a new generic vertex pool object. Subclasses should
-//  return API-specific vertex pool objects. Delete the vertex
-//  pool through the delete operator when done with it.
-//  This method is only called back by the vertex pool manager
-//  classes if they need to create new vertex pools.
-//  01-Sep-00   floh    created
-//-------------------------------------------------------------------
-nVertexPool *nGfxServer::NewVertexPool(nVertexPoolManager *, nVBufType, int, int)
-{
-    n_error("Pure virtual function called!\n");
-    return NULL;
-}
-
-//-------------------------------------------------------------------
-//  NewVertexBuffer()
-//  Create a new vertex buffer object (vertex buffer objects are
-//  shared resources).
-//  01-Sep-00   floh    created
-//-------------------------------------------------------------------
-nVertexBuffer *nGfxServer::NewVertexBuffer(const char *, nVBufType, int, int)
-{
-    n_error("Pure virtual function called!\n");
-    return NULL;
-}
-
-//-------------------------------------------------------------------
-//  NewIndexBuffer()
-//  Create a new empty index buffer object.
-//  01-Sep-00   floh    created
-//  28-Sep-00   floh    + PushCwd()/PopCwd()
-//-------------------------------------------------------------------
-nIndexBuffer *nGfxServer::NewIndexBuffer(const char *id)
-{
-    nIndexBuffer *ib;
-    char resid[N_MAXNAMELEN];
-    this->getResourceID(id,resid,sizeof(resid));
-    kernelServer->PushCwd(this->ref_ixbufdir.get());
-    ib = (nIndexBuffer *) kernelServer->New("nindexbuffer",resid);
-    n_assert(ib);
-    kernelServer->PopCwd();
-    return ib;
-}
-
-//-------------------------------------------------------------------
 /**
     @brief Take a screenshot.
 
@@ -565,39 +443,6 @@ bool nGfxServer::ScaledScreenshot(const char *fname, int w, int h)
     return false;
 }
 
-//--------------------------------------------------------------------
-/**
-*/
-bool
-nGfxServer::SetLight(nLight& l)
-{
-    if (this->numLights < N_MAXLIGHTS)
-    {
-        this->lights[this->numLights++] = l;
-        return true;
-    }
-    return false;
-}
-
-//--------------------------------------------------------------------
-/**
-*/
-int
-nGfxServer::GetNumLights()
-{
-    return this->numLights;
-}
-
-//--------------------------------------------------------------------
-/**
-*/
-const nLight&
-nGfxServer::GetLight(int num)
-{
-    n_assert(num < this->numLights);
-    return this->lights[num];
-}
-
 //-------------------------------------------------------------------
 /**
     Set the background clear color which is used to fill the back buffer
@@ -627,26 +472,6 @@ void nGfxServer::SetClearColor(float, float, float, float)
 void nGfxServer::GetClearColor(float&, float&, float&, float&)
 {
     n_error("Pure virtual function called.");
-}
-
-//-------------------------------------------------------------------
-//  NewTexture()
-//  17-Feb-99   floh    created
-//-------------------------------------------------------------------
-nTexture *nGfxServer::NewTexture(const char *)
-{
-    n_error("Pure virtual function called.");
-    return NULL;
-}
-
-//-------------------------------------------------------------------
-//  NewPixelShader()
-//  21-Aug-00   floh    created
-//-------------------------------------------------------------------
-nPixelShader *nGfxServer::NewPixelShader(const char *)
-{
-    n_error("Pure virtual function called.");
-    return NULL;
 }
 
 //-------------------------------------------------------------------
@@ -693,17 +518,6 @@ char *nGfxServer::getResourceID(const char *name, char *buf, ulong buf_size)
 bool nGfxServer::BeginScene(void)
 {
     this->BeginStats();
-
-    // reset lighting
-    this->numLights = 0;
-
-    // flush the current pixel shader and mesh buffer
-    this->SetCurrentPixelShader(NULL);
-    this->SetCurrentVertexBubble(NULL);
-    int i;
-    for (i=0; i<N_MAXNUM_TEXSTAGES; i++) {
-        this->SetCurrentTexture(i,NULL);
-    };
     return true;
 }
 

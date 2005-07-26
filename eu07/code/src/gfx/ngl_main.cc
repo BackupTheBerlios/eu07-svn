@@ -8,10 +8,8 @@
 #include "kernel/npersistserver.h"
 #include "kernel/nenv.h"
 #include "gfx/nglserver.h"
-#include "gfx/ntexture.h"
-#include "gfx/nvertexpool.h"
-#include "gfx/nglvertexpool.h"
-#include "gfx/nvertexbuffer.h"
+#include "gfx/nbmpfile.h"
+
 
 #include <osg/Depth>
 #include <osg/Projection>

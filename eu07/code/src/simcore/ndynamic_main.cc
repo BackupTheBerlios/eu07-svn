@@ -327,7 +327,7 @@ void nDynamic::SetTrack(nTrack *node, double fDist)
 //	Axles[0].Move(+fDist+node->GetLength()*0.5f);
   //  Axles[numAxles-1].Move(+fDist+node->GetLength()*0.5f);
 	for (int i=0; i<numAxles; i++)
-		Axles[i].Init(node,this,1);
+		Axles[i].Init(node,this,1,fDist);
 }
 
 	

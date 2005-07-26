@@ -252,8 +252,8 @@ public:
             B.y =  A.x;
             B.z = -A.w;
             B.w =  A.z;
-            fScale1 = n_sin( PI * (0.5f - l) );
-            fScale2 = n_sin( PI * l );
+            fScale1 = n_sin( N_PI * (0.5f - l) );
+            fScale2 = n_sin( N_PI * l );
         }
 
         x = fScale1 * A.x + fScale2 * B.x;

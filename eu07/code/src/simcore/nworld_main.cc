@@ -13,7 +13,6 @@
 #include "simcore/nsignal.h"
 #include "simcore/ntemplatenode.h"
 #include "simcore/nnewtonnode.h"
-#include <vector>
 #include "audio/naudioserver2.h"
 #include "multimedia/nosgmodelserver.h"
 
@@ -212,8 +211,8 @@ void nWorld::Open(const char *name)
 		if (numTrks==0)
 			throw "0 tracks";
 
-		std::vector<nTrack*> trks;
-		trks.reserve(numTrks);
+		tracksArray.clear();
+		tracksArray.reserve(numTrks);
 
 		kernelServer->PushCwd(tracks);
 		unsigned int type= 0;
@@ -239,8 +238,8 @@ void nWorld::Open(const char *name)
 			}
 			else
 				sprintf(buf+strlen(buf),"%05d",i);
-			trks.push_back((nTrack*)kernelServer->New("ntrack",buf));
-			trks.back()->Load(file,ver,trks,signals);
+			tracksArray.push_back((nTrack*)kernelServer->New("ntrack",buf));
+			tracksArray.back()->Load(file,ver,tracksArray,signals);
 		}
 
 		unsigned int numTemplates= 0;
@@ -421,3 +420,13 @@ void nWorld::createHud()
     return projection;
 */
 }
+
+nGlServer* nWorld::getOSGServer() 
+{
+	return instance()->osgServer; 
+};
+
+HINSTANCE nWorld::hInstance()
+{
+	return instance()->osgServer->hinst; 
+};

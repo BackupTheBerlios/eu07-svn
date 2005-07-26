@@ -55,7 +55,7 @@ public:
     inline nTrack* __fastcall GetTrack() { return pCurrentTrack; };
     inline float __fastcall GetRoll() { return -pCurrentSegment->GetRoll(fCurrentDistance)*fDirection; };
 	inline float GetS() { return fCurrentDistance; };
-    bool __fastcall Init(nTrack *pTrack, nDynamic *NewOwner=NULL, float fDir=1.0f);
+    bool __fastcall Init(nTrack *pTrack, nDynamic *NewOwner=NULL, float fDir=1.0f, float distance=0.0f);
     void InitParameters(double dist, double radius, double aim, double trans, double fractload, int brakes, int speedctrl);
     bool __fastcall Render();
 	bool Update(double dt, double Vlin);

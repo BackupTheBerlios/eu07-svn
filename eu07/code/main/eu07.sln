@@ -35,6 +35,10 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "nnebula", "..\vstudio\nnebu
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "network", "..\vstudio\network.vcproj", "{532FC80D-9F39-4DFA-8F66-C3C6BB9F5948}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfiguration) = preSolution
 		Debug = Debug
@@ -77,6 +81,10 @@ Global
 		{557293FD-CFB6-436D-B8FD-DB847EDC7317}.Debug.Build.0 = Debug|Win32
 		{557293FD-CFB6-436D-B8FD-DB847EDC7317}.Release.ActiveCfg = Release|Win32
 		{557293FD-CFB6-436D-B8FD-DB847EDC7317}.Release.Build.0 = Release|Win32
+		{532FC80D-9F39-4DFA-8F66-C3C6BB9F5948}.Debug.ActiveCfg = Debug|Win32
+		{532FC80D-9F39-4DFA-8F66-C3C6BB9F5948}.Debug.Build.0 = Debug|Win32
+		{532FC80D-9F39-4DFA-8F66-C3C6BB9F5948}.Release.ActiveCfg = Release|Win32
+		{532FC80D-9F39-4DFA-8F66-C3C6BB9F5948}.Release.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionItems) = postSolution
 	EndGlobalSection

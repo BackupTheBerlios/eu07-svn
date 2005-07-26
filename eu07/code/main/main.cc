@@ -31,7 +31,7 @@
 #include "gfx/nchannelserver.h"
 #include "misc/nconserver.h"
 //#include "misc/nparticleserver.h"
-#include "node/n3dnode.h"
+//#include "node/n3dnode.h"
 //#include "misc/nspecialfxserver.h"
 //#include "collide/ncollideserver.h"
 //#include "shadow/nshadowserver.h"
@@ -45,6 +45,7 @@
 //#include "gfx/nd3d8server.h"
 #include "simcore/nworld.h"
 #include "multimedia/nosgmodelserver.h"
+#include "network/ndplayclient.h"
 
 //#include "customnodes/nscenerymanager.h"
 //#include "customnodes/ncatenary.h"
@@ -141,6 +142,8 @@ int main(int argc, char *argv[])
     //nPrimitiveServer *prim  = (nPrimitiveServer *)  ks->New("nprimitiveserver",     "/sys/servers/primitive");
 	//nCollideServer *cs= NULL;
 
+	nDPlayClient *dpc= (nDPlayClient *)        ks->New("ndplayclient",           "/sys/servers/net");
+
     nOSGModelServer *mdl         = (nOSGModelServer *)        ks->New("nosgmodelserver",           "/sys/servers/model");
 
 //	inp->StartLogging();
@@ -188,6 +191,8 @@ int main(int argc, char *argv[])
 			
 			
 			nWorld *world= (nWorld*)ks->New("nworld","/world");;
+
+			
 
 			const char *scr= szStartupScript;
             printf("executing startup script '%s'\n",scr);
@@ -279,6 +284,8 @@ int main(int argc, char *argv[])
                     inp->FlushEvents();
                 }
 
+				dpc->processPendingMessages();
+
                 // rendern
                 if (as2)
                 {
@@ -320,6 +327,8 @@ int main(int argc, char *argv[])
 		usr->Release();
 
 //    if (root)   root->Release();
+
+	if (dpc)    dpc->Release();
     if (mdl)    mdl->Release();
 //	if (scenery) scenery->Release();
 //	if (prim)   prim->Release();

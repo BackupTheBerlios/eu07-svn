@@ -19,6 +19,7 @@
 #include <osg/MatrixTransform>
 #include <osg/Switch>
 #include <osg/Sequence>
+#include <osg/AnimationPath>
 #include <osgUtil/IntersectVisitor>
 
 #ifndef N_ROOT_H

@@ -34,24 +34,8 @@
 #include "gfx/ngfxtypes.h"
 #endif
 
-#ifndef N_LIGHT_H
-#include "gfx/nlight.h"
-#endif
-
 #ifndef N_ENV_H
 #include "kernel/nenv.h"
-#endif
-
-#ifndef N_VERTEXPOOLMANAGER_H
-#include "gfx/nvertexpoolmanager.h"
-#endif
-
-#ifndef N_TEXTURE_H
-#include "gfx/ntexture.h"
-#endif
-
-#ifndef N_MOUSECURSOR_H
-#include "gfx/nmousecursor.h"
 #endif
 
 #undef N_DEFINES
@@ -59,11 +43,7 @@
 #include "kernel/ndefdllclass.h"
 
 //--------------------------------------------------------------------
-class nTexture;
-class nPixelShader;
-class nVertexPool;
-class nVertexBuffer;
-class nIndexBuffer;
+
 class nProfiler;
 
 #define N_GFX_TEXDIR        "/sys/share/tex"
@@ -177,9 +157,6 @@ public:
     float clip_minz,clip_maxz;
     double timeStamp;           // time stamp of last frame
 
-    // lighting
-    int numLights;
-    nLight lights[N_MAXLIGHTS];
 
     // Shared Resource Directories
     nRef<nRoot> ref_texdir;
@@ -197,10 +174,6 @@ public:
     nMatrixStack<matrix44,N_MXSTACKDEPTH> invview_stack;
     nMatrixStack<matrix44,N_MXSTACKDEPTH> proj_stack;
 
-    // minimize render state changes
-    nVertexBubble *current_vertexbubble;
-    nPixelShader *current_pixelshader;
-    nTexture *current_texture[N_MAXNUM_TEXSTAGES];
 
     // statistics
     nGfxStat stats_triangles;
@@ -215,9 +188,6 @@ public:
 
     // mouse cursor stuff
     bool cursorShown;
-    int currentCursor;
-    int numCursors;
-    nMouseCursor cursor[N_MAXCURSORS];
 
 public:    
     static nKernelServer *kernelServer;
@@ -258,9 +228,6 @@ public:
 
     virtual void SetState(nRState&);
     virtual bool SetClipPlane(int, vector4&);
-    virtual bool SetLight(nLight&);
-    const nLight& GetLight(int);
-    int GetNumLights();
 
     virtual void Begin(nPrimType);
     virtual void Coord(float, float, float);
@@ -269,71 +236,6 @@ public:
     virtual void Uv(ulong layer, float, float);
     virtual void End(void);   
     
-    // Object Factory
-    virtual nTexture      *NewTexture(const char *);
-    virtual nPixelShader  *NewPixelShader(const char *);
-    virtual nVertexPool   *NewVertexPool(nVertexPoolManager *, nVBufType, int, int);
-    virtual nVertexBuffer *NewVertexBuffer(const char *, nVBufType vbtype, int vtype, int vnum);
-    virtual nIndexBuffer  *NewIndexBuffer(const char *);
-
-    // Resource Sharing and Management
-    virtual nTexture      *FindTexture(const char *);
-    virtual nPixelShader  *FindPixelShader(const char *);
-    virtual nVertexBuffer *FindVertexBuffer(const char *);
-    virtual nIndexBuffer  *FindIndexBuffer(const char *);
-
-    // redundant render state handling
-    void SetCurrentPixelShader(nPixelShader *ps) 
-    {
-        // ps can be NULL
-        if (ps != this->current_pixelshader) {
-            this->SetStats(N_GFXSTATS_PSHADER_SWITCHES,1);
-        }
-        this->current_pixelshader = ps;
-    };
-    nPixelShader *GetCurrentPixelShader(void) 
-    {
-        return this->current_pixelshader;
-    };
-
-    void SetCurrentVertexBubble(nVertexBubble *vb) 
-    {
-        // mb can be NULL
-        if (vb != this->current_vertexbubble) {
-            this->SetStats(N_GFXSTATS_MESH_SWITCHES,1);
-        }
-        this->current_vertexbubble = vb;
-    };
-    nVertexBubble *GetCurrentVertexBubble(void) 
-    {
-        return this->current_vertexbubble;
-    };
-    
-    void SetCurrentTexture(int stage, nTexture *tex) 
-    {
-        n_assert((stage>=0) && (stage<N_MAXNUM_TEXSTAGES));
-        if (tex)
-        {
-            int useCount = tex->GetUseCount();
-            if (tex != this->current_texture[stage])
-            {
-                this->SetStats(N_GFXSTATS_TEXTURE_SWITCHES, 1);
-                if (0 == useCount)
-                {
-                    this->SetStats(N_GFXSTATS_TEXTURES, 1);
-                    this->SetStats(N_GFXSTATS_TEXTURESIZE, tex->GetByteSize());
-                }
-            }        
-            // bump use count
-            tex->SetUseCount(++useCount);
-        }
-        this->current_texture[stage] = tex;
-    };
-    nTexture *GetCurrentTexture(int stage) 
-    {
-        n_assert((stage>=0) && (stage<N_MAXNUM_TEXSTAGES));
-        return this->current_texture[stage];
-    };
 
     // Text Support
     virtual bool BeginText(void);
@@ -349,16 +251,6 @@ public:
     void SetStats(nGfxStatType t, int n);
     void EndStats(void);
 
-    /// begin defining mouse cursors
-    void BeginCursors(int num);
-    /// set a single mouse cursor
-    void SetCursor(int index, const char* texPath, int xHotspot, int yHotspot);
-    /// finish defining mouse cursors
-    void EndCursors();
-    /// select the current mouse cursor
-    void SetCurrentCursor(int index, bool show);
-    /// get the current mouse cursor
-    int GetCurrentCursor();
     /// show mouse cursor
     virtual void ShowCursor();
     /// hide mouse cursor

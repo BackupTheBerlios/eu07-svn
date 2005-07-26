@@ -1,7 +1,8 @@
 #--------------------------------------------------------------------
-# /bin/win32/ndsound.toc
+# /bin/win32/network.toc
 # MACHINE GENERATED, DON'T EDIT!
-# Mon Jul 25 13:51:20 Środkowoeuropejski czas letni 2005
+# Tue Jul 26 22:01:00 Środkowoeuropejski czas letni 2005
 #--------------------------------------------------------------------
-$ndsound
-%ndsoundserver2
+$network
+%ndplayclient
+%nnettrain

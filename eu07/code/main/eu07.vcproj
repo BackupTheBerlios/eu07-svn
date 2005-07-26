@@ -46,7 +46,7 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="nkernel.lib nnebula.lib User32.lib shlwapi.lib simcore.lib multimedia.lib"
+				AdditionalDependencies="nkernel.lib nnebula.lib User32.lib shlwapi.lib simcore.lib multimedia.lib network.lib"
 				OutputFile="..\..\bin\win32\eu07.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
@@ -110,7 +110,7 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="nkernel.lib nnebula.lib User32.lib shlwapi.lib simcore.lib multimedia.lib"
+				AdditionalDependencies="nkernel.lib nnebula.lib User32.lib shlwapi.lib simcore.lib multimedia.lib network.lib"
 				OutputFile="..\..\bin\win32d\eu07d.exe"
 				LinkIncremental="2"
 				SuppressStartupBanner="TRUE"

@@ -3,7 +3,6 @@
 
 #include "simcore/trkfoll.h"
 
-#include "node/n3dnode.h"
 
 TTrackFollower::TTrackFollower()
 {
@@ -33,7 +32,7 @@ TTrackFollower::~TTrackFollower()
 
 }
 
-bool __fastcall TTrackFollower::Init(nTrack *pTrack, nDynamic *NewOwner, float fDir)
+bool __fastcall TTrackFollower::Init(nTrack *pTrack, nDynamic *NewOwner, float fDir, float distance)
 {
     fDirection= fDir;
     Owner= NewOwner;

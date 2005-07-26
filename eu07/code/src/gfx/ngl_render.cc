@@ -5,8 +5,6 @@
 //  (C) 1998 Andre Weissflog
 //-------------------------------------------------------------------
 #include "gfx/nglserver.h"
-#include "gfx/ntexture.h"
-#include "gfx/nlight.h"
 #include "kernel/ntimeserver.h"
 
 #ifdef __WIN32__

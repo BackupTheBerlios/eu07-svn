@@ -1,7 +1,7 @@
 #--------------------------------------------------------------------
 # /bin/win32/simcore.toc
 # MACHINE GENERATED, DON'T EDIT!
-# Mon May 30 18:23:20 Środkowoeuropejski czas letni 2005
+# Mon Jul 25 15:46:40 Środkowoeuropejski czas letni 2005
 #--------------------------------------------------------------------
 $simcore
 %nsimnode

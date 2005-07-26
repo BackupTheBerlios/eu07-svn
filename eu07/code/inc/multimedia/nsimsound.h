@@ -13,16 +13,16 @@
 
 #include "kernel/nkernelserver.h"
 
+#ifndef N_GFXSERVER_H
+#include "gfx/ngfxserver.h"
+#endif
+
 #ifndef N_ROOT_H
 #include "kernel/nroot.h"
 #endif
 
 #ifndef N_REF_H
 #include "kernel/nref.h"
-#endif
-
-#ifndef N_VISNODE_H
-#include "node/nvisnode.h"
 #endif
 
 #ifndef N_RSRCPATH_H

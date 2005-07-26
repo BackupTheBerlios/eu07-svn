@@ -24,8 +24,13 @@
 #define N_DEFINES nWorld
 #include "kernel/ndefdllclass.h"
 
+#include <windows.h>
 #include "gfx/nchannelserver.h"
-#include "gfx/nglserver.h"
+#include <set>
+#include <map>
+#include <vector>
+#include <osg/LineSegment>
+//#include "gfx/nglserver.h"
 //------------------------------------------------------------------------------
 class nDynamic;
 class nCameraHandle;
@@ -34,6 +39,8 @@ class nAudioServer2;
 class nScriptServer;
 class nSimEvent;
 class nStateHolder;
+class nGlServer;
+class nTrack;
 
 #include "multimedia/nSimListener.h"
 
@@ -70,7 +77,8 @@ public:
 	nAudioServer2 *audioServer;
 	nScriptServer *scriptServer;
 
-	inline static nGlServer* getOSGServer() { return instance()->osgServer; };
+	static nGlServer* getOSGServer();
+	static HINSTANCE hInstance();
 	inline static nChannelServer* getChannelServer() { return instance()->channelServer; };
 	inline static nAudioServer2* getAudioServer() { return instance()->audioServer; };
 	inline static nScriptServer* getScriptServer() { return instance()->scriptServer; };
@@ -90,6 +98,10 @@ public:
 	void ReleaseMomentary();
 
 	bool Pick(osg::LineSegment *ls, int id);
+
+	inline nTrack* getTrack(unsigned int ID) { return ( ID<tracksArray.size() ? tracksArray[ID] : NULL ); };
+
+	inline nRoot* getDynamicsRoot() { return dynamics; };
 
 private:
 	inline void removeDynamic(nDynamic *dyn) { simpleDynamics.erase(dyn); realDynamics.erase(dyn); };
@@ -115,6 +127,9 @@ private:
 	double simTime;
 
 	nStateHolder *momentary;
+
+	typedef std::vector<nTrack*> TracksArray;
+	TracksArray tracksArray;
 
 //	std::vector<osgText::Text> statusBar;
 };

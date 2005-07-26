@@ -2,7 +2,10 @@
 //------------------------------------------------------------------------------
 //  (C) 2004	user
 //------------------------------------------------------------------------------
+//#include "simcore/usefull.h"
+#include <osg/Node>
 #include "simcore/ncamera.h"
+#include "gfx/nglserver.h"
 
 #include <iostream>
 
