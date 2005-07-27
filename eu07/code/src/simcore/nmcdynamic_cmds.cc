@@ -63,7 +63,6 @@ n_initcmds(nClass* clazz)
     clazz->AddCmd("b_ctrlparam_iiii", 'FCTR', n_ctrlparam);
     clazz->AddCmd("b_interface_issfffff", 'FINT', n_interfaceparam);
     clazz->AddCmd("b_wheelparam_fsfffsf", 'FWHL', n_wheelparam);
-    clazz->AddCmd("b_axleparam_ifffffii", 'FAXL', n_axleparam);
 
 //wczytywanie skladu
     clazz->AddCmd("v_addnewvehicle_ssi",'ADNV', n_addnewvehicle);	
@@ -246,33 +245,6 @@ static void n_wheelparam(void* slf, nCmd* cmd)
 	cmd->Out()->SetB(self->SetWheelParam(trackw, adist,bdist,maxradius,bearingt,maxbrakef));
 }
 
-static void n_axleparam(void* slf, nCmd* cmd)
-{
-    nMCDynamic* self = (nMCDynamic*) slf;
-	int naxle=cmd->In()->GetI();
-	double dist=cmd->In()->GetF();
-	double diameter=cmd->In()->GetF();
-	double aim=cmd->In()->GetF();
-	double trans=cmd->In()->GetF();
-	double fractload=cmd->In()->GetF();
-	int brakes=cmd->In()->GetI();
-	int speedctrl=cmd->In()->GetI();
-	if ((naxle>0) && (naxle<=self->numAxles))
-      {
-	  self->Axles[naxle-1].InitParameters(dist,diameter*0.5,aim,trans,fractload,brakes,speedctrl);
-#ifdef _DEBUG
-	  char buf [256];
-	  sprintf(buf,"axle%dtest",naxle);
-	  self->axleMdls.push_back((nOSGModel*)self->kernelServer->New("nosgmodel",buf));
-	  self->axleMdls.back()->SetModel("cone.osg","");
-//	  self->axleMdls.back()->SetModel("sphere10.osg","");
-#endif
-
-	  cmd->Out()->SetB(true);
-	 }
-	else
- 	  cmd->Out()->SetB(false);
-}
 
 //definicja skladu
 static void n_addnewvehicle(void* slf, nCmd* cmd)

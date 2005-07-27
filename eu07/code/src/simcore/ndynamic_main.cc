@@ -252,6 +252,8 @@ void nDynamic::SetVisual3DNode(n3DNode *node)
 void nDynamic::UpdateVisual()
 {
 	vFront= GetDirection();
+	if (vFront.length2()==0)
+		return;
 
 	vUp= osg::Quat((Axles[0].GetRoll()+Axles[numAxles-1].GetRoll())*0.5,vFront)*vWorldUp;
 
@@ -326,8 +328,16 @@ void nDynamic::SetTrack(nTrack *node, double fDist)
 //	Axles[numAxles-1].Init(node,this,1);
 //	Axles[0].Move(+fDist+node->GetLength()*0.5f);
   //  Axles[numAxles-1].Move(+fDist+node->GetLength()*0.5f);
+	double fDir;
+	if (fDist>=0)
+		fDir= 1;
+	else
+	{
+		fDir= -1;
+		fDist= -fDist;
+	}
 	for (int i=0; i<numAxles; i++)
-		Axles[i].Init(node,this,1,fDist);
+		Axles[i].Init(node,this,fDir,fDist);
 }
 
 	
@@ -577,4 +587,19 @@ void nDynamic::On1sTimer()
 	updateSignals();
 	if (signals.size()>0)
 		printf("first signal: %s\n",signals.front()->station.c_str());
+}
+
+void nDynamic::GetMiddleTrackAndDistance(nTrack *&pTrack, double &dist)
+{
+	TTrackFollower *Axle= NULL;
+	for (int i=0; i<numAxles; i++)
+		if (!Axles[i].IsPrimary())
+		{
+			Axle= Axles+i;
+			break;
+		}
+	Axle->Move(-Axle->dDist);
+	pTrack= Axle->GetTrack();
+	dist= Axle->GetS()*Axle->GetDirection();
+	Axle->Move(Axle->dDist);
 }

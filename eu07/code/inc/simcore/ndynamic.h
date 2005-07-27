@@ -152,6 +152,8 @@ public:
 	Math3D::dvector3 GetDirectionDV3() { return Math3D::dvector3(GetDirection().ptr()); };
 	Math3D::dvector3 GetPositionDV3() { return Math3D::dvector3(GetPosition().ptr()); };
 
+	void GetMiddleTrackAndDistance(nTrack *&pTrack, double &dist);
+
 	void setType(Type t);
 
 	double v;		
@@ -172,6 +174,11 @@ public:
 
 	nSimEvent *onGo;
 	nSimEvent *onStop;
+
+
+#ifdef _DEBUG
+	std::vector<nOSGModel*> axleMdls;
+#endif
 
     /// pointer to nKernelServer
     static nKernelServer* kernelServer;

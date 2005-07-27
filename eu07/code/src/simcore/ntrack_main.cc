@@ -16,7 +16,7 @@ nChannelServer* nTrack::channelServer= NULL;
 */
 nTrack::nTrack() : Script1(NULL), Script2(NULL), pNext(NULL), pPrev(NULL), 
 					channelID1(-1), channelID2(-1), VehicleList(), numVehicles(0),
-					flags(0)
+					flags(0), trackID(0xFFFFFFFF)
 {
 	Segment= new TSegment();
 	scriptServer= (nScriptServer*) kernelServer->Lookup("/sys/servers/script");

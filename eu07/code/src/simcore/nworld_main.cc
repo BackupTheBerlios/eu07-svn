@@ -240,6 +240,7 @@ void nWorld::Open(const char *name)
 				sprintf(buf+strlen(buf),"%05d",i);
 			tracksArray.push_back((nTrack*)kernelServer->New("ntrack",buf));
 			tracksArray.back()->Load(file,ver,tracksArray,signals);
+			tracksArray.back()->trackID= i;
 		}
 
 		unsigned int numTemplates= 0;

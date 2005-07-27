@@ -284,7 +284,7 @@ int main(int argc, char *argv[])
                     inp->FlushEvents();
                 }
 
-				dpc->processPendingMessages();
+				dpc->Update(dt);
 
                 // rendern
                 if (as2)

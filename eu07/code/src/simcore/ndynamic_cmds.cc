@@ -25,6 +25,7 @@ static void n_setpantographstate(void* slf, nCmd* cmd);
 static void n_initpantograph(void* slf, nCmd* cmd);
 static void n_ismoving(void* slf, nCmd* cmd);
 static void n_setgostopevents(void* slf, nCmd* cmd);
+static void n_axleparam(void* slf, nCmd* cmd);
 
 class nSimEvent;
 
@@ -62,6 +63,7 @@ n_initcmds(nClass* clazz)
     clazz->AddCmd("v_setpantographstate_is",	'STPS', n_setpantographstate);
     clazz->AddCmd("b_ismoving_v",				'ISMV', n_ismoving);
     clazz->AddCmd("v_setgostopevents_ss",		'STGS', n_setgostopevents);
+	clazz->AddCmd("b_axleparam_ifffffii",		'FAXL', n_axleparam);
     clazz->EndCmds();
 }
 
@@ -354,6 +356,35 @@ static void n_setgostopevents(void* slf, nCmd* cmd)
 	nSimEvent *stop= (nSimEvent*) self->kernelServer->Lookup(cmd->In()->GetS());
 	self->SetGoStopEvents(go,stop);
 }
+
+static void n_axleparam(void* slf, nCmd* cmd)
+{
+    nDynamic* self = (nDynamic*) slf;
+	int naxle=cmd->In()->GetI();
+	double dist=cmd->In()->GetF();
+	double diameter=cmd->In()->GetF();
+	double aim=cmd->In()->GetF();
+	double trans=cmd->In()->GetF();
+	double fractload=cmd->In()->GetF();
+	int brakes=cmd->In()->GetI();
+	int speedctrl=cmd->In()->GetI();
+	if ((naxle>0) && (naxle<=self->numAxles))
+      {
+	  self->Axles[naxle-1].InitParameters(dist,diameter*0.5,aim,trans,fractload,brakes,speedctrl);
+#ifdef _DEBUG
+	  char buf [256];
+	  sprintf(buf,"axle%dtest",naxle);
+	  self->axleMdls.push_back((nOSGModel*)self->kernelServer->New("nosgmodel",buf));
+	  self->axleMdls.back()->SetModel("cone.osg","");
+//	  self->axleMdls.back()->SetModel("sphere10.osg","");
+#endif
+
+	  cmd->Out()->SetB(true);
+	 }
+	else
+ 	  cmd->Out()->SetB(false);
+}
+
 //------------------------------------------------------------------------------
 /**
     @param  persistserver  writes the nCmd object contents out to a file.

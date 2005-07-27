@@ -47,8 +47,8 @@
 //                      Bullshit rauskam, wenn 'd' bzw. 'r' eine
 //                      Expression waren.
 //-------------------------------------------------------------------
-#define n_deg2rad(d)    (((d)*PI)/180.0f)
-#define n_rad2deg(r)    (((r)*180.0f)/PI)
+#define n_deg2rad(d)    (((d)*N_PI)/180.0f)
+#define n_rad2deg(r)    (((r)*180.0f)/N_PI)
 
 //-------------------------------------------------------------------
 //  14-Dec-99   floh    new float wrapper routines

@@ -12,6 +12,7 @@
 */
 
 #include "kernel/nkernelserver.h"
+#include "kernel/nautoref.h"
 
 #define _WIN32_DCOM
 //#define STRICT
@@ -74,7 +75,8 @@ public:
 
 	inline void PlayerLock() { EnterCriticalSection(&csPlayerContext); };
 	inline void PlayerUnlock() { LeaveCriticalSection(&csPlayerContext); };
-	virtual void processPendingMessages();
+	void ProcessPendingMessages();
+	virtual void Update(double dt);
 
 
     /// pointer to nKernelServer
@@ -92,16 +94,24 @@ public:
 	bool connected;
 
 protected:
-	inline void PushMessage(PDPNMSG_RECEIVE msg)
+	struct Message
+	{
+		Message(PBYTE _pReceiveData, DPNHANDLE _hBufferHandle) : pReceiveData(_pReceiveData), hBufferHandle(_hBufferHandle) {};
+		PBYTE      pReceiveData;
+		DPNHANDLE  hBufferHandle; 
+	};
+	inline void PushMessage(Message msg)
 	{
 		PlayerLock();
 		msgQueue.push(msg);
 		PlayerUnlock();
 	}
-	typedef std::queue<PDPNMSG_RECEIVE,std::list<PDPNMSG_RECEIVE> > NetMessagesQueue;
+	typedef std::queue<Message,std::list<Message> > NetMessagesQueue;
 	NetMessagesQueue msgQueue;
 
-	nDynamic *playerTrain;
+	nAutoRef<nDynamic> playerTrain;
+
+	double timer;
 
 	//static nAutoRef<nDPlayClient> self;
 };

@@ -149,6 +149,27 @@
 		</Configuration>
 	</Configurations>
 	<References>
+		<ProjectReference
+			ReferencedProjectIdentifier="{2E2A8B37-EE1D-4817-848D-2ABD546A8B7B}"
+			Name="mover"/>
+		<ProjectReference
+			ReferencedProjectIdentifier="{51BD2FAC-2EF6-44D5-9030-B9C7BE73F5DF}"
+			Name="multimedia"/>
+		<ProjectReference
+			ReferencedProjectIdentifier="{532FC80D-9F39-4DFA-8F66-C3C6BB9F5948}"
+			Name="network"/>
+		<ProjectReference
+			ReferencedProjectIdentifier="{557293FD-CFB6-436D-B8FD-DB847EDC7317}"
+			Name="nnebula"/>
+		<ProjectReference
+			ReferencedProjectIdentifier="{2F901F8A-EC79-401A-B0CB-1EF8C0CBFD62}"
+			Name="nopengl"/>
+		<ProjectReference
+			ReferencedProjectIdentifier="{EDD002A6-9BA8-41DB-B27D-E987C19AF42F}"
+			Name="physic"/>
+		<ProjectReference
+			ReferencedProjectIdentifier="{F519A0B7-A1C0-49BF-9F82-AA02834C6096}"
+			Name="simcore"/>
 	</References>
 	<Files>
 		<Filter

@@ -20,8 +20,11 @@ nNebulaScriptClass(nDPlayClient, "nroot");
 //------------------------------------------------------------------------------
 /**
 */
-nDPlayClient::nDPlayClient() : /*pNetClientWizard(NULL),*/ connected(false), pDPClient(NULL)
+nDPlayClient::nDPlayClient() : /*pNetClientWizard(NULL),*/ connected(false), pDPClient(NULL), timer(0.0),
+	dpnidLocalPlayer(0)
 {
+	playerTrain.initialize(kernelServer,this);
+	playerTrain= "/world/dynamics/eu07-424";
 	//self.initialize(kernelServer,this);
 	HRESULT hr;
 	InitializeCriticalSection(&csPlayerContext);
@@ -398,7 +401,9 @@ HRESULT WINAPI nDPlayClient::DirectPlayMessageHandler( PVOID pvUserContext, DWOR
             }
 			*/	
 
-			self->PushMessage((PDPNMSG_RECEIVE)pMsgBuffer);
+			//printf("Got message\n");
+			self->PushMessage(Message(((PDPNMSG_RECEIVE)pMsgBuffer)->pReceiveData,
+				((PDPNMSG_RECEIVE)pMsgBuffer)->hBufferHandle));
 
 			return DPNSUCCESS_PENDING;
 
@@ -442,9 +447,9 @@ void nDPlayClient::sendLocalTrainState(DPNID dpnid, State *state)
 //------------------------------------------------------------------------------
 /**
 */
-void nDPlayClient::processPendingMessages()
+void nDPlayClient::ProcessPendingMessages()
 {
-	PDPNMSG_RECEIVE msg;
+	;
 	PlayerLock();
 	nNetTrain *netTrain= NULL;
 	nTrack *track;
@@ -452,25 +457,36 @@ void nDPlayClient::processPendingMessages()
 	union
 	{
 		void					*data;
+		GAMEMSG_GENERIC			*genericMsg;
+		GAMEMSG_SET_ID			*setIDMsg;
 		GAMEMSG_CREATE_PLAYER	*createPlayerMsg;
 		GAMEMSG_MOVETO			*moveToMsg;
 	};
 	while ( !msgQueue.empty() )
 	{
-		msg= msgQueue.back();
+		Message msg(msgQueue.front());
 		msgQueue.pop();
-		data= msg->pReceiveData;
-		switch ( ((GAMEMSG_GENERIC*)msg->pReceiveData)->dwType )
+		data= msg.pReceiveData;
+		switch ( genericMsg->dwType )
 		{
+			case GAME_MSGID_SET_ID :
+				dpnidLocalPlayer= setIDMsg->dpnidPlayer;
+				playerTrain->SetTrack(
+					nWorld::instance()->getTrack(setIDMsg->trackID),
+					setIDMsg->dist);
+				playerTrain->UpdateVisual();
+			break;
 			case GAME_MSGID_CREATE_PLAYER :
 				createPlayerMsg->strPlayerName[MAX_PLAYER_NAME-1]= 0;
+				//track= nWorld::instance()->getTrack(2);
 				track= nWorld::instance()->getTrack(createPlayerMsg->trackID);
 				if (nWorld::instance()->getDynamicsRoot()->Find(createPlayerMsg->strPlayerName)==NULL && 
-					track!=NULL && createPlayerMsg->dist>=0 && createPlayerMsg->dist<=track->GetLength()
-					&& netTrains.find(createPlayerMsg->dpnidPlayer)==netTrains.end())
+					track!=NULL && createPlayerMsg->dist>=0 && createPlayerMsg->dist<=track->GetLength() &&
+					netTrains.find(createPlayerMsg->dpnidPlayer)==netTrains.end() && 
+					createPlayerMsg->dpnidPlayer!=dpnidLocalPlayer)
 				{
 					kernelServer->PushCwd(nWorld::instance()->getDynamicsRoot());
-						netTrain= (nNetTrain*)kernelServer->New("nnetdynamic",createPlayerMsg->strPlayerName);
+						netTrain= (nNetTrain*)kernelServer->New("nnettrain",createPlayerMsg->strPlayerName);
 							kernelServer->PushCwd(netTrain);
 								char *res= NULL;
 								ok= nWorld::getScriptServer()->RunScript("dynamic/PKP/eu07/303e_net.tcl",res);
@@ -483,19 +499,62 @@ void nDPlayClient::processPendingMessages()
 							netTrains[createPlayerMsg->dpnidPlayer]= netTrain;
 						}
 					kernelServer->PopCwd();
-					if (ok) kernelServer->Print("Player \"%s\" connected\n",createPlayerMsg->strPlayerName);
+					if (ok) kernelServer->Print("Player \"%s\"(%X) connected\n",createPlayerMsg->strPlayerName,createPlayerMsg->dpnidPlayer);
 				}
 			break;
-			case GAME_MSGID_MOVETO:
-				netTrain= netTrains.find(moveToMsg->dpnidPlayer)->second;
-				netTrain->SetTrack(
-					nWorld::instance()->getTrack(moveToMsg->trackID),
-					moveToMsg->dist);
-				netTrain->UpdateVisual();
+			case GAME_MSGID_MOVETO :
+				if (moveToMsg->dpnidPlayer==dpnidLocalPlayer)
+					break;
+				NetTrainsMap::iterator it= netTrains.find(moveToMsg->dpnidPlayer);
+				if (it!=netTrains.end())
+				{
+					netTrain= it->second;
+					netTrain->SetTrack(
+						nWorld::instance()->getTrack(moveToMsg->trackID),
+						moveToMsg->dist);
+					netTrain->UpdateVisual();
+				}
+				else
+					printf("Cannot find net train %X!\n",moveToMsg->dpnidPlayer);
 			break;
 
 		}
-		pDPClient->ReturnBuffer(msgQueue.back()->hBufferHandle,0);
+		pDPClient->ReturnBuffer(msg.hBufferHandle,0);
 	}
 	PlayerUnlock();
+}
+
+void nDPlayClient::Update(double dt)
+{
+	if (dt>0.1)
+		dt= 0.1;
+	ProcessPendingMessages();
+	if (connected)
+	{
+		if (timer<=0)
+		{
+			timer+= 0.1;
+			if (playerTrain.isvalid())
+			{
+				
+				GAMEMSG_MOVETO moveToMsg;
+				moveToMsg.dwType= GAME_MSGID_MOVETO;
+				moveToMsg.dpnidPlayer= dpnidLocalPlayer;
+				nTrack *trk= NULL;
+				playerTrain->GetMiddleTrackAndDistance(trk,moveToMsg.dist);
+				moveToMsg.trackID= trk->trackID;
+				
+				DPN_BUFFER_DESC dpnBD;
+				dpnBD.dwBufferSize= sizeof(GAMEMSG_MOVETO);
+				dpnBD.pBufferData= (BYTE*)&moveToMsg;
+				DPNHANDLE hAsync;
+				HRESULT hr=pDPClient->Send(&dpnBD,1,0,NULL,&hAsync,DPNSEND_NOCOMPLETE);
+				if (FAILED(hr))
+					DXTRACE_ERR( TEXT("Connect"), hr );
+
+			}
+		}
+		timer-= dt;
+		
+	}
 }

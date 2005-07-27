@@ -38,9 +38,9 @@ bool __fastcall TTrackFollower::Init(nTrack *pTrack, nDynamic *NewOwner, float f
     Owner= NewOwner;
     SetCurrentTrack(pTrack);
 	fCurrentDistance= 0;
-	fDirection= 1;
+	//fDirection= 1;
 	n_assert(pCurrentSegment);
-	Move(dDist);
+	Move(dDist+distance);
 //    iEventFlag=0;
 //    if ((pCurrentSegment))// && (pCurrentSegment->GetLength()<fFirstDistance))
   //      return false;
@@ -172,7 +172,7 @@ bool __fastcall TTrackFollower::Move(float fDistance)
                 fDistance= s;
             }
 //			if ((pCurrentTrack->getFlags()|pPrevTrack->getFlags())&0x00000001)
-			if ((pCurrentTrack->getFlags() & 0x00000002) | (pPrevTrack->getFlags() & 0x00000001))
+			if ((pCurrentTrack->getFlags() & nTrack::SOUND_PREV) | (pPrevTrack->getFlags() & nTrack::SOUND_NEXT))
 				fPlaySound= 1.0f;
 
             continue;
@@ -209,7 +209,7 @@ bool __fastcall TTrackFollower::Move(float fDistance)
                 }
             }
 //			if ((pCurrentTrack->getFlags()|pPrevTrack->getFlags())&0x00000001)
-			if ((pCurrentTrack->getFlags() & 0x00000001) | (pPrevTrack->getFlags() & 0x00000002))
+			if ((pCurrentTrack->getFlags() & nTrack::SOUND_NEXT) | (pPrevTrack->getFlags() & nTrack::SOUND_PREV))
 				fPlaySound= 1.0f;
 
             continue;

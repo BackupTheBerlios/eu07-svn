@@ -139,7 +139,10 @@ public:
 
 	std::vector<nSignal*> signals;
 
+	typedef enum { SOUND_NEXT = 0x00000001, SOUND_PREV = 0x00000002, START_POINT= 0x80000000, DUMMY= 0xFFFFFFFF } TrackFlags;
 	inline const unsigned int getFlags() { return flags; };
+
+	unsigned int trackID;
 
 protected:
 	char *Script1;

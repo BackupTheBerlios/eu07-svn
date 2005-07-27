@@ -124,9 +124,6 @@ protected:
 	int iLogFlag;
 public:
 
-#ifdef _DEBUG
-	std::vector<nOSGModel*> axleMdls;
-#endif
 
     void PhysicLog(int logflag);
 	/// constructor
