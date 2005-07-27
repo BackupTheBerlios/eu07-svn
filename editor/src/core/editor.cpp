@@ -1135,6 +1135,8 @@ bool Editor::exportToDirectory(const char *dirName)
 	fos.fFlags= FOF_NOCONFIRMATION;
 	int r= SHFileOperation(&fos);
 	delete[] deleteDir;*/
+	edTrack::TrackPiecesList list;
+		
 	std::string fileName;
 
 	fileName= dirName;
@@ -1149,6 +1151,8 @@ bool Editor::exportToDirectory(const char *dirName)
 		CollectNodes cn(0xFFFFFFFF);
 		nodesRoot->accept(cn);
 		terrainRoot->accept(cn);
+
+
 
 		edSignal *sig= NULL;
 		std::vector<edSignal*> signals;
@@ -1174,13 +1178,29 @@ bool Editor::exportToDirectory(const char *dirName)
 
 		edNode::write(file,id);
 		for (unsigned int i=0; i<cn.trackNodesList.size(); i++)
-			cn.trackNodesList[i]->export(file);
+			cn.trackNodesList[i]->export(file,list);
 
 		edNode::write(file,cn.ttrackNodesList.size());
 		for (unsigned int i=0; i<cn.ttrackNodesList.size(); i++)
 			cn.ttrackNodesList[i]->exportTemplate(file);
 
 
+	} 
+	catch (...) {
+		printf("exception :(\n");
+		file.close();
+		return false;
+	}
+	file.close();
+
+	fileName= dirName;
+	fileName.append("scenery.cfg");
+	try {
+		file.open(fileName.c_str(), std::ios::out);
+		file << list.size() << std::endl;
+		for (edTrack::TrackPiecesList::iterator it=list.begin(); 
+			it!=list.end(); ++it)
+			file << (*it)->getUID() << " ";
 	} 
 	catch (...) {
 		printf("exception :(\n");

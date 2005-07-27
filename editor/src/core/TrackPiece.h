@@ -15,6 +15,7 @@ class TrackPiece : public osg::Referenced
 {
 	friend class edFlexTrack;
 public:
+	typedef enum { SOUND_NEXT = 0x00000001, SOUND_PREV = 0x00000002, START_POINT= 0x80000000, DUMMY= 0xFFFFFFFF } TrackFlags;
 	/*
 	class TPConnection
 	{
@@ -70,6 +71,8 @@ public:
 	}
 
 	inline void setFlags(unsigned int f) { flags= f; };
+	inline unsigned int getFlags() { return flags; };
+	inline unsigned int getUID() { return UID; };
 protected:
 	TrackPiece();
 

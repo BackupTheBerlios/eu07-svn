@@ -100,9 +100,13 @@ void edFlexTrack::save(std::ostream &stream)
 	trackPieces[0]->saveSignals(stream);
 }
 
-void edFlexTrack::export(std::ostream &stream) 
+void edFlexTrack::export(std::ostream &stream, TrackPiecesList &list) 
 {
-	edTrack::export(stream);
+	edTrack::export(stream,list);
+//	if (flags&TrackPiece::START_POINT)
+//		for (unsigned int i=0; i<trackPieces.size(); i++)
+//			list.push_back(trackPieces[i].get());
+
 	/*
 	write(stream,unsigned int(1));
 	write(stream,segment.GetPt1());
@@ -602,13 +606,16 @@ void edTrack::setupTrackIDs(unsigned int &id)
 		trackPieces[i]->setUID(id++);
 }
 
-void edTrack::export(std::ostream &stream) 
+void edTrack::export(std::ostream &stream, TrackPiecesList &list) 
 {
 	edGeomNode::export(stream);
 	for (unsigned int i=0; i<trackPieces.size(); i++)
 	{
 		edNode::write(stream,trackPieces[i]->getType());
 		trackPieces[i]->export(stream);
+		if (trackPieces[i]->getFlags()&TrackPiece::START_POINT)
+			list.push_back(trackPieces[i].get());
+
 	}
 	/*
 	write(stream, connections.size());

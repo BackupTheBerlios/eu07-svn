@@ -18,6 +18,8 @@ public:
 		edGeomNode::setupProps(pr);
 		registerProp(pr,"name",setName,getName,"");
 	}	
+
+	typedef std::list<TrackPiece*> TrackPiecesList;
 //	virtual unsigned int getType() { return 'TRCK'; };
 	edTrack() : edGeomNode(), railsTex("Rail_screw_used1.dds"), ballastTex("TpD1.dds") {};
 //	virtual float getDist2(osg::Vec2d pt) { return edPoint::getDist2(pt); };
@@ -25,7 +27,7 @@ public:
 	virtual void load(std::istream &stream, int version, CollectNodes *cn);
 	virtual void save(std::ostream &stream);
 	virtual void setupTrackIDs(unsigned int &id);
-	virtual void export(std::ostream &stream);
+	virtual void export(std::ostream &stream, TrackPiecesList &list);
 
 	virtual void onSelect(osg::Geode *geom);
 	virtual void onDeselect();
@@ -176,7 +178,7 @@ public:
 
 	virtual void load(std::istream &stream, int version, CollectNodes *cn);
 	virtual void save(std::ostream &stream);
-	virtual void export(std::ostream &stream);
+	virtual void export(std::ostream &stream, TrackPiecesList &list);
 
 	void splitButton(int s) { if (s==0) split(); };
 	virtual FlexPair split(float maxLen= 10000);
