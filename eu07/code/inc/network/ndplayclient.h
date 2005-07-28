@@ -27,6 +27,9 @@
 #include <list>
 #include <queue>
 
+
+#include "../../../server/common.h"
+
 #ifndef N_ROOT_H
 #include "kernel/nroot.h"
 #endif
@@ -60,18 +63,20 @@ public:
 
 	HRESULT InitDirectPlay();
 
-	void setPlayerTrain(nDynamic *loco);
+	void SetPlayerTrain(const char *loco) { playerTrain= loco; };
+
+	void SetPlayerName(const char *plrName);
 
 	HRESULT connect(const char *address);
 	HRESULT disconnect();
 
 	static HRESULT WINAPI DirectPlayMessageHandler( PVOID pvUserContext, DWORD dwMessageId, PVOID pMsgBuffer );
 
-	void addNetTrain(DPNID dpnid, State *state);
-	void removeNetTrain(DPNID dpnid);
-	void sendLocalTrainState(DPNID dpnid, State *state);
+	void SendEvent(const char *eventName);
+	void SendTrainEvent(const char *eventName);
 
-	const char *getPlayerName() { static char playerName[]="NoName"; return playerName; };
+
+	const char *getPlayerName() { return playerName; };
 
 	inline void PlayerLock() { EnterCriticalSection(&csPlayerContext); };
 	inline void PlayerUnlock() { LeaveCriticalSection(&csPlayerContext); };
@@ -112,6 +117,8 @@ protected:
 	nAutoRef<nDynamic> playerTrain;
 
 	double timer;
+
+	char playerName[MAX_PLAYER_NAME];
 
 	//static nAutoRef<nDPlayClient> self;
 };

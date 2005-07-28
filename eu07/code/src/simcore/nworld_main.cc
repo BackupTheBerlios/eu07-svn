@@ -53,6 +53,7 @@ void nWorld::Initialize()
 		tracks= kernelServer->New("nroot","tracks");
 		dynamics= kernelServer->New("nroot","dynamics");
 		signals= kernelServer->New("nroot","signals");
+		events= kernelServer->New("nroot","events");
 
 		listener= (nSimListener*) kernelServer->New("nsimlistener","listener");
 

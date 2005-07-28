@@ -5,7 +5,11 @@
 #include "network/ndplayclient.h"
 #include "kernel/npersistserver.h"
 
+static void n_setplayername(void* slf, nCmd* cmd);
+static void n_setplayertrain(void* slf, nCmd* cmd);
 static void n_connect(void* slf, nCmd* cmd);
+static void n_sendevent(void* slf, nCmd* cmd);
+static void n_sendtrainevent(void* slf, nCmd* cmd);
 
 //------------------------------------------------------------------------------
 /**
@@ -22,23 +26,38 @@ void
 n_initcmds(nClass* clazz)
 {
     clazz->BeginCmds();
+    clazz->AddCmd("v_setplayername_s", 'STPN', n_setplayername);
+    clazz->AddCmd("v_setplayertrain_s", 'STPT', n_setplayertrain);
     clazz->AddCmd("v_connect_s", 'CNCT', n_connect);
+    clazz->AddCmd("v_sendevent_s", 'SNDE', n_sendevent);
+    clazz->AddCmd("v_sendtrainevent_s", 'SNTE', n_sendtrainevent);
     clazz->EndCmds();
 }
 
 //------------------------------------------------------------------------------
 /**
-    @cmd
-    xxx
+*/
+static
+void
+n_setplayername(void* slf, nCmd* cmd)
+{
+    nDPlayClient* self = (nDPlayClient*) slf;
+	self->SetPlayerName(cmd->In()->GetS());
+}
 
-    @input
-    v
+//------------------------------------------------------------------------------
+/**
+*/
+static
+void
+n_setplayertrain(void* slf, nCmd* cmd)
+{
+    nDPlayClient* self = (nDPlayClient*) slf;
+	self->SetPlayerTrain(cmd->In()->GetS());
+}
 
-    @output
-    v
-
-    @info
-    detailed description (for script programmers! no C++ babble)
+//------------------------------------------------------------------------------
+/**
 */
 static
 void
@@ -46,6 +65,28 @@ n_connect(void* slf, nCmd* cmd)
 {
     nDPlayClient* self = (nDPlayClient*) slf;
 	self->connect(cmd->In()->GetS());
+}
+
+//------------------------------------------------------------------------------
+/**
+*/
+static
+void
+n_sendevent(void* slf, nCmd* cmd)
+{
+    nDPlayClient* self = (nDPlayClient*) slf;
+	self->SendEvent(cmd->In()->GetS());
+}
+
+//------------------------------------------------------------------------------
+/**
+*/
+static
+void
+n_sendtrainevent(void* slf, nCmd* cmd)
+{
+    nDPlayClient* self = (nDPlayClient*) slf;
+	self->SendTrainEvent(cmd->In()->GetS());
 }
 
 //------------------------------------------------------------------------------

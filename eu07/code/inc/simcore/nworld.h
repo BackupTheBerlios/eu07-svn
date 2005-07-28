@@ -102,6 +102,7 @@ public:
 	inline nTrack* getTrack(unsigned int ID) { return ( ID<tracksArray.size() ? tracksArray[ID] : NULL ); };
 
 	inline nRoot* getDynamicsRoot() { return dynamics; };
+	inline nRoot* getEventsRoot() { return events; };
 
 private:
 	inline void removeDynamic(nDynamic *dyn) { simpleDynamics.erase(dyn); realDynamics.erase(dyn); };
@@ -115,6 +116,7 @@ private:
 	nRoot *tracks;
 	nRoot *dynamics;
 	nRoot *signals;
+	nRoot *events;
 
 //	nCameraHandle *cameraHandle;
 	nCamera *camera;

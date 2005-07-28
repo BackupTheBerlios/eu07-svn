@@ -7,7 +7,6 @@
 #include "network/nnettrain.h"
 #include "simcore/nworld.h"
 
-#include "../../../server/common.h"
 
 #include <basetsd.h>
 
@@ -29,6 +28,10 @@ nDPlayClient::nDPlayClient() : /*pNetClientWizard(NULL),*/ connected(false), pDP
 	HRESULT hr;
 	InitializeCriticalSection(&csPlayerContext);
 	CoInitializeEx( NULL, COINIT_MULTITHREADED );
+
+	strcpy(playerName,"NoName");
+	DWORD size= 14;
+	GetUserName(playerName,&size);
 
 //	pNetClientWizard = 
 //			new CNetClientWizard(nWorld::hInstance(),"MaSzyna2",&g_guidApp);
@@ -101,6 +104,14 @@ HRESULT nDPlayClient::InitDirectPlay()
     return S_OK;
 }
 
+//------------------------------------------------------------------------------
+/**
+*/
+void nDPlayClient::SetPlayerName(const char *plrName)
+{
+	if (strlen(plrName)<14)
+		strcpy(playerName,plrName);
+}
 
 //------------------------------------------------------------------------------
 /**
@@ -423,25 +434,44 @@ HRESULT WINAPI nDPlayClient::DirectPlayMessageHandler( PVOID pvUserContext, DWOR
 }
 
 
+
 //------------------------------------------------------------------------------
 /**
 */
-void nDPlayClient::addNetTrain(DPNID dpnid, State *state)
+void nDPlayClient::SendEvent(const char *eventName)
 {
+	if (strlen(eventName)<14)
+	{
+		GAMEMSG_EVENT msg;
+		msg.dwType= GAME_MSGID_EVENT;
+		strcpy(msg.strEventName,eventName);
+
+		DPN_BUFFER_DESC dpnBD;
+		dpnBD.dwBufferSize= sizeof(GAMEMSG_EVENT);
+		dpnBD.pBufferData= (BYTE*)&msg;
+		DPNHANDLE hAsync;
+		HRESULT hr=pDPClient->Send(&dpnBD,1,0,NULL,&hAsync,DPNSEND_GUARANTEED);
+	}
 }
 
 //------------------------------------------------------------------------------
 /**
 */
-void nDPlayClient::removeNetTrain(DPNID dpnid)
+void nDPlayClient::SendTrainEvent(const char *eventName)
 {
-}
+	if (strlen(eventName)<14)
+	{
+		GAMEMSG_TRAIN_EVENT msg;
+		msg.dwType= GAME_MSGID_TRAIN_EVENT;
+		msg.dpnidPlayer= dpnidLocalPlayer;
+		strcpy(msg.strEventName,eventName);
 
-//------------------------------------------------------------------------------
-/**
-*/
-void nDPlayClient::sendLocalTrainState(DPNID dpnid, State *state)
-{
+		DPN_BUFFER_DESC dpnBD;
+		dpnBD.dwBufferSize= sizeof(GAMEMSG_TRAIN_EVENT);
+		dpnBD.pBufferData= (BYTE*)&msg;
+		DPNHANDLE hAsync;
+		HRESULT hr=pDPClient->Send(&dpnBD,1,0,NULL,&hAsync,DPNSEND_GUARANTEED);
+	}
 }
 
 //------------------------------------------------------------------------------
@@ -451,6 +481,8 @@ void nDPlayClient::ProcessPendingMessages()
 {
 	;
 	PlayerLock();
+	NetTrainsMap::iterator it;
+	nSimEvent *event= NULL;
 	nNetTrain *netTrain= NULL;
 	nTrack *track;
 	bool ok= false;
@@ -461,9 +493,12 @@ void nDPlayClient::ProcessPendingMessages()
 		GAMEMSG_SET_ID			*setIDMsg;
 		GAMEMSG_CREATE_PLAYER	*createPlayerMsg;
 		GAMEMSG_MOVETO			*moveToMsg;
+		GAMEMSG_EVENT			*eventMsg;
+		GAMEMSG_TRAIN_EVENT		*trainEventMsg;
 	};
 	while ( !msgQueue.empty() )
 	{
+		
 		Message msg(msgQueue.front());
 		msgQueue.pop();
 		data= msg.pReceiveData;
@@ -505,7 +540,7 @@ void nDPlayClient::ProcessPendingMessages()
 			case GAME_MSGID_MOVETO :
 				if (moveToMsg->dpnidPlayer==dpnidLocalPlayer)
 					break;
-				NetTrainsMap::iterator it= netTrains.find(moveToMsg->dpnidPlayer);
+				it= netTrains.find(moveToMsg->dpnidPlayer);
 				if (it!=netTrains.end())
 				{
 					netTrain= it->second;
@@ -516,6 +551,27 @@ void nDPlayClient::ProcessPendingMessages()
 				}
 				else
 					printf("Cannot find net train %X!\n",moveToMsg->dpnidPlayer);
+			break;
+			case GAME_MSGID_EVENT :
+				eventMsg->strEventName[MAX_EVENT_NAME-1]= 0;
+				event= (nSimEvent*)nWorld::instance()->getEventsRoot()->Find(eventMsg->strEventName);
+				if (event)
+					event->Execute();
+				else
+					printf("Received event \"%s\" not found!",eventMsg->strEventName);
+
+			break;
+			case GAME_MSGID_TRAIN_EVENT :
+				trainEventMsg->strEventName[MAX_EVENT_NAME-1]= 0;
+				if (trainEventMsg->dpnidPlayer==dpnidLocalPlayer)
+					break;
+				it= netTrains.find(trainEventMsg->dpnidPlayer);
+				if (it!=netTrains.end())
+				{
+					event= (nSimEvent*)it->second->Find(eventMsg->strEventName);
+					if (event)
+						event->Execute();
+				}
 			break;
 
 		}
