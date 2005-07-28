@@ -128,7 +128,7 @@ HRESULT  SendCreatePlayerMsg( Train* pPlayerInfo, DPNID dpnidTarget );
 HRESULT  SendWorldStateToNewPlayer( DPNID dpnidPlayer, Train* pPlayerInfo );
 HRESULT  SendDestroyPlayerMsgToAll( Train* pPlayerInfo );
 HRESULT RouteMessageToClients( DPNID dpnidFrom, DWORD dwBufferSize, 
-							  PVOID pBufferData);
+							  PVOID pBufferData, DWORD flags=0);
 HRESULT  SendWaveMessageToAll( DPNID dpnidFrom );
 
 int _tmain(int argc, _TCHAR* argv[])
@@ -343,6 +343,9 @@ HRESULT WINAPI DirectPlayMessageHandler( PVOID pvUserContext,
 				case GAME_MSGID_MOVETO:
 					pPlayerInfo->trackID=	moveToMsg->trackID;
 					pPlayerInfo->dist=		moveToMsg->dist;
+
+				case GAME_MSGID_EVENT:
+				case GAME_MSGID_TRAIN_EVENT:
 
 					RouteMessageToClients(pReceiveMsg->dpnidSender,pReceiveMsg->dwReceiveDataSize,
 						pReceiveMsg->pReceiveData);
@@ -675,7 +678,7 @@ DPNID aPlayers[255];
 // Desc: 
 //-----------------------------------------------------------------------------
 HRESULT RouteMessageToClients( DPNID dpnidFrom, DWORD dwBufferSize, 
-							  PVOID pBufferData)
+							  PVOID pBufferData, DWORD flags)
 {
 	HRESULT hr;
     DWORD dwNumPlayers = 0;
@@ -687,6 +690,7 @@ HRESULT RouteMessageToClients( DPNID dpnidFrom, DWORD dwBufferSize,
     bufferDesc.pBufferData  = (BYTE*) pBufferData;
 
 
+	/*
     // Enumerate all the connected players
 	g_pDPServer->EnumPlayersAndGroups( aPlayers, &dwNumPlayers, DPNENUM_PLAYERS );
 	if (dwNumPlayers<255)
@@ -694,7 +698,6 @@ HRESULT RouteMessageToClients( DPNID dpnidFrom, DWORD dwBufferSize,
 	else
 		dwNumPlayers= 0;
 
-	
 	// For each player, send a "create player" message to the new player
     for( DWORD i = 0; i<dwNumPlayers; i++ )
     {
@@ -718,6 +721,10 @@ HRESULT RouteMessageToClients( DPNID dpnidFrom, DWORD dwBufferSize,
 		g_pDPServer->SendTo( aPlayers[i], &bufferDesc, 1,
 	                         0, NULL, &hAsync, DPNSEND_NOLOOPBACK);
     }
+*/
+	DPNHANDLE hAsync;
+	g_pDPServer->SendTo( DPNID_ALL_PLAYERS_GROUP, &bufferDesc, 1,
+	                     0, NULL, &hAsync, DPNSEND_NOLOOPBACK);
 	return S_OK;
 }
 
