@@ -2,7 +2,7 @@ proc cs { } {
 	/sys/servers/net.connect "127.0.0.1"
 }
 
-proc con { $address } {
+proc connect { address } {
 	/sys/servers/net.connect $address
 }
 
