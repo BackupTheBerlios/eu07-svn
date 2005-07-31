@@ -523,18 +523,18 @@ void nDPlayClient::ProcessPendingMessages()
 					kernelServer->PushCwd(nWorld::instance()->getDynamicsRoot());
 						netTrain= (nNetTrain*)kernelServer->New("nnettrain",createPlayerMsg->strPlayerName);
 						n_assert(netTrain!=NULL);
-						kernelServer->PushCwd(netTrain);
-							char *res= NULL;
-							ok= nWorld::getScriptServer()->RunScript("dynamic/PKP/eu07/303e_net.tcl",res);
-							if (!ok && res) MessageBox(0,res,"Error",MB_OK);
-						kernelServer->PopCwd();
-						if (ok) 
-						{
-							netTrain->SetTrack(track,createPlayerMsg->dist);
-							netTrain->UpdateVisual();
-							netTrains[createPlayerMsg->dpnidPlayer]= netTrain;
-						}
 					kernelServer->PopCwd();
+					kernelServer->PushCwd(netTrain);
+						char *res= NULL;
+						ok= nWorld::getScriptServer()->RunScript("dynamic/PKP/eu07/303e_net.tcl",res);
+						if (!ok && res) MessageBox(0,res,"Error",MB_OK);
+					kernelServer->PopCwd();
+					if (ok) 
+					{
+						netTrain->SetTrack(track,createPlayerMsg->dist);
+						netTrain->UpdateVisual();
+						netTrains[createPlayerMsg->dpnidPlayer]= netTrain;
+					}
 					if (ok) kernelServer->Print("Player \"%s\"(%X) connected\n",createPlayerMsg->strPlayerName,createPlayerMsg->dpnidPlayer);
 				}
 			break;

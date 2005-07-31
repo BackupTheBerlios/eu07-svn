@@ -2,6 +2,10 @@ proc cz { } {
 	/sys/servers/net.connect "62.21.8.66"
 }
 
+proc co { } {
+	/sys/servers/net.connect "81.190.148.197"
+}
+
 proc cs { } {
 	/sys/servers/net.connect "127.0.0.1"
 }
