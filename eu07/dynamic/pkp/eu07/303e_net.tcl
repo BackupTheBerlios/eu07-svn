@@ -1,19 +1,6 @@
 
 	.settype real
 
-	new ncamerahandle cabA
-	cabA.setoffset  0.7  5.8 3
-	new ncamerahandle cabB
-	cabB.setoffset -0.7 -5.8 3
-
-	new ncamerahandle ext1
-	ext1.setoffset 0  0 6
-	ext1.setr 20
-
-	new ncamerahandle ext2
-	ext2.setoffset 5  0 1.8
-	
-
 
 	new nosgmodel visual
 	visual.setmodel dynamic/pkp/eu07/EU07-303E-m.ive "dynamic/pkp/eu07/399"
