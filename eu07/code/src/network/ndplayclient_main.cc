@@ -477,6 +477,8 @@ void nDPlayClient::SendTrainEvent(const char *eventName)
 //------------------------------------------------------------------------------
 /**
 */
+	char buf[256];
+
 void nDPlayClient::ProcessPendingMessages()
 {
 	;
@@ -485,7 +487,9 @@ void nDPlayClient::ProcessPendingMessages()
 	nSimEvent *event= NULL;
 	nNetTrain *netTrain= NULL;
 	nTrack *track;
+	nRoot *cwd= NULL;
 	bool ok= false;
+	char *res= NULL;
 	union
 	{
 		void					*data;
@@ -520,12 +524,21 @@ void nDPlayClient::ProcessPendingMessages()
 					netTrains.find(createPlayerMsg->dpnidPlayer)==netTrains.end() && 
 					createPlayerMsg->dpnidPlayer!=dpnidLocalPlayer)
 				{
+					if (nWorld::instance()==NULL)
+						printf("nWorld::instance()==NULL\n");
 					kernelServer->PushCwd(nWorld::instance()->getDynamicsRoot());
 						netTrain= (nNetTrain*)kernelServer->New("nnettrain",createPlayerMsg->strPlayerName);
-						n_assert(netTrain!=NULL);
+						if (netTrain==NULL)
+							printf("NULL nNetTrain\n");
+						//n_assert(netTrain!=NULL);
+						netTrain->GetFullName(buf,255);
+						printf("nNetTrain cwd: %s\n",buf);
 					kernelServer->PopCwd();
 					kernelServer->PushCwd(netTrain);
-						char *res= NULL;
+						cwd= kernelServer->GetCwd();
+						cwd->GetFullName(buf,255);
+						printf("cwd after kernelServer->PushCwd(netTrain): %s\n",buf);
+						res= NULL;
 						ok= nWorld::getScriptServer()->RunScript("dynamic/PKP/eu07/303e_net.tcl",res);
 						if (!ok && res) MessageBox(0,res,"Error",MB_OK);
 					kernelServer->PopCwd();
