@@ -249,7 +249,7 @@ osg::Vec3 OSGExp::transformBillboardGeometry(osg::Geometry* geometry, osg::Matri
 	// Use the inverse matrix when translating normals.
 	osg::Matrix nMat;
 	nMat.invert(mat);
-	osg::Vec3Array* normals = geometry->getNormalArray();
+	osg::Vec3Array* normals = dynamic_cast<osg::Vec3Array*>(geometry->getNormalArray());
 	if(normals){
 		int numNormals = normals->getNumElements();
 		for(int i=0;i<numNormals;i++){
