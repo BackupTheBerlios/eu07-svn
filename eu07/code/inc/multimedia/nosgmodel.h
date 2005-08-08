@@ -95,6 +95,8 @@ public:
 
 	virtual osg::Sequence *FindSequence(const char *name);
 
+	virtual void ReplaceTexture(const char *oldTex, const char *newTex);
+
     /// pointer to nKernelServer
     static nKernelServer* kernelServer;
 

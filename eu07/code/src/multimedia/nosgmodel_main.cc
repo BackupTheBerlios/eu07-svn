@@ -9,6 +9,7 @@
 #include <osgDB/ReadFile>
 #include <osgDB/FileUtils>
 #include <osg/MatrixTransform>
+#include <osg/StateSet>
 #include <osgParticle/ParticleSystem>
 #include <osgParticle/ParticleProcessor>
 #include <osgUtil/GLObjectsVisitor>
@@ -422,4 +423,72 @@ osg::Sequence *nOSGModel::FindSequence(const char *name)
 	FindSequenceVisitor fs(name);
 	model->accept(fs);
 	return fs.sequence;
+}
+
+//------------------------------------------------------------------------------
+/**
+*/
+class ReplaceTextureVisitor : public osg::NodeVisitor
+{
+public:
+	ReplaceTextureVisitor(const char *_oldTex, const char *_newTex) : NodeVisitor(TRAVERSE_ALL_CHILDREN), oldTex(_oldTex), newTex(_newTex) {};
+
+
+	void apply(osg::Node& node)
+	{
+		osg::StateSet* ss = node.getStateSet();
+		if (ss)
+			apply(*ss);
+
+		traverse(node);
+	}
+	virtual void apply(osg::Geode &geode) 
+	{
+		osg::StateSet* ss = geode.getStateSet();
+		if (ss)
+			apply(*ss);
+		for(unsigned int i=0;i<geode.getNumDrawables();i++)
+		{
+			ss= geode.getDrawable(i)->getStateSet();
+			if (ss)
+				apply(*ss);
+		}
+
+//		traverse(geode);
+	}
+
+	void apply(osg::StateSet &stateset)
+	{
+		for(unsigned int i=0;i<stateset.getTextureAttributeList().size();++i)
+		{
+			osg::StateAttribute* sa = stateset.getTextureAttribute(i,osg::StateAttribute::TEXTURE);
+			osg::Texture* texture = dynamic_cast<osg::Texture*>(sa);
+			if (texture)
+			{
+				osg::Image *img= texture->getImage(0);
+				if (img && img->getFileName().compare(oldTex)==0)
+				{
+					if (stateset.getNumParents()>1)
+					{
+						osg::StateSet *ss= new osg::StateSet(stateset);
+						texture= dynamic_cast<osg::Texture*>(texture->clone(osg::CopyOp::SHALLOW_COPY));
+						
+					}
+					texture->setImage(0,osgDB::readImageFile(newTex));
+				}
+			}
+		}
+	}
+
+	std::string oldTex;
+	std::string newTex;
+};
+
+//------------------------------------------------------------------------------
+/**
+*/
+void nOSGModel::ReplaceTexture(const char *oldTex, const char *newTex)
+{
+	ReplaceTextureVisitor rtv(oldTex,newTex);
+	model->accept(rtv);
 }

@@ -13,6 +13,7 @@ static void n_setsequenceinterval(void* slf, nCmd* cmd);
 static void n_setsequenceduration(void* slf, nCmd* cmd);
 static void n_setsequencemode(void* slf, nCmd* cmd);
 static void n_setlight(void* slf, nCmd* cmd);
+static void n_replacetexture(void* slf, nCmd* cmd);
 
 
 //------------------------------------------------------------------------------
@@ -38,6 +39,7 @@ n_initcmds(nClass* clazz)
     clazz->AddCmd("v_setsequenceduration_sfi", 'SSDR', n_setsequenceduration);
     clazz->AddCmd("v_setsequencemode_ss", 'SSMD', n_setsequencemode);
     clazz->AddCmd("v_setlight_ss", 'STLG', n_setlight);
+    clazz->AddCmd("v_replacetexture_ss", 'RPLT', n_replacetexture);
     clazz->EndCmds();
 }
 
@@ -202,6 +204,13 @@ static void n_setlight(void* slf, nCmd* cmd)
    else printf("Cannot find sequence in model!\n");
 }
 
+static void n_replacetexture(void* slf, nCmd* cmd)
+{
+	nOSGModel* self = (nOSGModel*) slf;
+	const char *oldTex= cmd->In()->GetS();
+	const char *newTex= cmd->In()->GetS();
+	self->ReplaceTexture(oldTex,newTex);
+}
 
 //------------------------------------------------------------------------------
 /**
