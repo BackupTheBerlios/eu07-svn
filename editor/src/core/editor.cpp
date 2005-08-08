@@ -136,6 +136,14 @@ Editor::Editor(TopView *_mainView) : MouseAdapter(), mainView(_mainView), mode(e
 //	nodesRoot->setNodeMask(0x000000FF);
 //	mapsRoot->setNodeMask( 0x0000FF00);
 
+	osg::StateSet *dstate= new osg::StateSet;
+	osg::Depth *depth= new osg::Depth;
+	depth->setWriteMask(false);
+	depth->setFunction(osg::Depth::NEVER);
+	dstate->setAttributeAndModes(depth);
+	dstate->setRenderBinDetails(-1,"RenderBin");
+	mapsRoot->setStateSet(dstate);
+
 	edTerrainNode::terrainRoot= terrainRoot.get();
 
 //	root->addChild(createStatusBar(4));

@@ -76,7 +76,7 @@ bool edTemplateTrack::loadTemplateFile()
 {
 //	typedef std::map< std::string, osg::ref_ptr<TrackPiece> > TracksMap;
 //	TracksMap tracks;
-	std::string fileName("templates/tracks/");
+	std::string fileName("models/tracks/");
 
 	unsigned int i= templateFile.find_last_of('.');
 	if (i<templateFile.size())
