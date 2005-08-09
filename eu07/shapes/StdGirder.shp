@@ -1,8 +1,12 @@
 1
- 5
+ 9
 	-0.3 8.14  4
 	-0.3  8.97  3
 	 0.3  8.97  2
 	 0.3 8.14  1
 	-0.3 8.14  0
-models\tr\images\EST-bramkaszara-pg1m.tga
+	 0.3 8.14  1
+	 0.3  8.97  2
+	-0.3  8.97  3
+	-0.3 8.14  4
+models\tr\images\EST-Girder-gray.dds
