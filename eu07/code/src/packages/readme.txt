@@ -1,1 +1,0 @@
-The package source files should go here, after running updsrc.tcl.
