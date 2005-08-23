@@ -1,0 +1,95 @@
+#--------------------------------------------------------------------
+#   multimedia.pak
+#   ============
+#   Description of your class/package
+#
+#   20-Dec-2004   user	created
+#--------------------------------------------------------------------
+
+#--------------------------------------------------------------------
+beginmodule nosgmodel
+    setdir multimedia
+    setfiles {
+        nosgmodel_main nosgmodel_cmds
+    }
+    setheaders {
+        nosgmodel
+    }
+endmodule
+
+#--------------------------------------------------------------------
+beginmodule nosgmodelserver
+    setdir multimedia
+    setfiles {
+        nosgmodelserver_main nosgmodelserver_cmds
+    }
+    setheaders {
+        nosgmodelserver
+    }
+endmodule
+
+#--------------------------------------------------------------------
+beginmodule nanimctrl
+    setdir multimedia
+    setfiles {
+        nanimctrl_main nanimctrl_cmds
+    }
+    setheaders {
+        nanimctrl
+    }
+endmodule
+
+#--------------------------------------------------------------------
+beginmodule nsimlistener
+    setdir multimedia
+    setfiles {
+        nsimlistener_main nsimlistener_cmds
+    }
+    setheaders {
+        nsimlistener
+    }
+endmodule
+
+#--------------------------------------------------------------------
+beginmodule nsimsound
+    setdir multimedia
+    setfiles {
+        nsimsound_main nsimsound_cmds
+    }
+    setheaders {
+        nsimsound
+    }
+endmodule
+
+#--------------------------------------------------------------------
+beginmodule nsimipol
+    setdir multimedia
+    setfiles {
+        nsimipol_main nsimipol_cmds
+    }
+    setheaders {
+        nsimipol
+    }
+endmodule
+
+
+#--------------------------------------------------------------------
+begintarget multimedia
+    settype package
+    setmods {
+        nosgmodel
+		nosgmodelserver
+		nanimctrl
+		nsimlistener
+		nsimsound
+		nsimipol
+    }
+    setdepends { nkernel nnebula }
+    setlibs_win32 { nkernel.lib nnebula.lib osg.lib osgDB.lib osgUtil.lib osgParticle.lib OpenThreadsWin32.lib }
+    setlibs_unix  { nkernel nnebula }
+endtarget
+
+#--------------------------------------------------------------------
+#   EOF
+#--------------------------------------------------------------------
+

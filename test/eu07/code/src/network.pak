@@ -1,0 +1,46 @@
+#--------------------------------------------------------------------
+#   network.pak
+#   ============
+#   Description of your class/package
+#
+#   25-Jul-2005   user	created
+#--------------------------------------------------------------------
+
+#--------------------------------------------------------------------
+beginmodule ndplayclient
+    setdir network
+    setfiles {
+        ndplayclient_main ndplayclient_cmds dxutil
+    }
+    setheaders {
+        ndplayclient dxutil
+    }
+endmodule
+
+#--------------------------------------------------------------------
+beginmodule nnettrain
+    setdir network
+    setfiles {
+        nnettrain_main nnettrain_cmds
+    }
+    setheaders {
+        nnettrain
+    }
+endmodule
+
+#--------------------------------------------------------------------
+begintarget network
+    settype package
+    setmods {
+		ndplayclient
+        nnettrain
+    }
+    setdepends { nkernel nnebula simcore multimedia }
+    setlibs_win32 { nkernel.lib nnebula.lib simcore.lib multimedia.lib dplayx.lib dxguid.lib Dxerr8.lib osg.lib osgDB.lib osgUtil.lib osgParticle.lib OpenThreadsWin32.lib Winmm.lib }
+    setlibs_unix  { nkernel nnebula simcore multimedia }
+endtarget
+
+#--------------------------------------------------------------------
+#   EOF
+#--------------------------------------------------------------------
+
