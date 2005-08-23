@@ -1,0 +1,7 @@
+#--------------------------------------------------------------------
+# /bin/win32/nnewton.toc
+# MACHINE GENERATED, DON'T EDIT!
+# Wed Apr 13 20:20:13 Środkowoeuropejski czas letni 2005
+#--------------------------------------------------------------------
+$nnewton
+%nnewton
