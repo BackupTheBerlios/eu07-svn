@@ -219,8 +219,8 @@ gboolean OSG_realizer::motion(GdkEventMotion *em)
 void OSG_realizer::setScale(float _scale)
 {
 	scale= _scale;
-	if (scale<10.0f)
-		scale= 10.0f;
+	if (scale<0.5f)
+		scale= 0.5f;
 	if (scale>10000.0f)
 		scale= 10000.0f;
 	updateProjection();
