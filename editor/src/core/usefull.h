@@ -9,6 +9,8 @@
 //#include "customnodes/dumb3d.h"
 //using namespace Math3D;
 #include <math.h>
+#include <stdlib.h>
+#include <stdio.h>
 
 #define	B1(t)     (t*t*t)
 #define	B2(t)     (3*t*t*(1-t))
@@ -22,7 +24,7 @@
 #define SafeDelete(a) if (a!=NULL) { delete (a); a= NULL; }
 #define SafeDeleteArray(a) if (a!=NULL) { delete[] (a); a= NULL; }
 
-#define sign(x) ((x)<0?-1:((x)>0?1:0))
+//#define sign(x) ((x)<0?-1:((x)>0?1:0))
 
 inline float fRand() { return ((float)rand())/((float)RAND_MAX); };
 

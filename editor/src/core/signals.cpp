@@ -2,8 +2,25 @@
 #include "signals.h"
 //#include "tracks.h"
 
-edSignal::edSignal() : edDynamicGeom(), track(NULL), signalName("PKP/SSzpcpI"), name(""), signalID(0xFFFFFFFF)
+void edSignal::setupProps(Properties &pr)
 {
+	edDynamicGeom::setupProps(pr);
+	registerProp(pr,"name",setName,getName,"");
+	registerProp(pr,"station",setStation,getStation,"none");
+	registerProp(pr,"signal",setSignalName,getSignalName,"SSzpcpI.ive","\\models\\signals","*.ive");
+//		registerProp(pr,"signal2",setSignalName,getSignalName,"PKP/SSzpcpI");
+//		registerProp(pr,"",setCurveI,getCurveI,0,1);
+
+}
+
+edSignal::edSignal() : edDynamicGeom(), track(NULL), signalName("SSzpcpI.ive"), name(""), signalID(0xFFFFFFFF)
+{
+}
+
+edSignal::~edSignal()
+{
+	if (track)
+		track->remSignal(this);
 }
 
 void edSignal::load(std::istream &stream, int version, CollectNodes *cn)

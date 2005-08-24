@@ -31,6 +31,8 @@ TrackPiece::TrackPiece(Connection *con1, Connection *con2, edTrack *own, const c
 
 TrackPiece::~TrackPiece()
 {
+	while (!signals.empty())
+		(*signals.begin())->clearTrackPiece(this);
 }
 
 void TrackPiece::loadSignals(std::istream &stream, int version, CollectNodes *cn)

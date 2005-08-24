@@ -12,16 +12,8 @@ class edSignal : public edDynamicGeom
 {
 public:
 	SETUP_PROPS(edSignal,'SGNL');
-	static void setupProps(Properties &pr)
-	{
-		edDynamicGeom::setupProps(pr);
-		registerProp(pr,"name",setName,getName,"");
-		registerProp(pr,"station",setStation,getStation,"none");
-		registerProp(pr,"signal",setSignalName,getSignalName,"SSzpcpI.ive","/models/PKP.infrastruktura/","*.ive");
-//		registerProp(pr,"signal2",setSignalName,getSignalName,"PKP/SSzpcpI");
-//		registerProp(pr,"",setCurveI,getCurveI,0,1);
+	static void setupProps(Properties &pr);
 
-	}
 	edSignal();
 
 	virtual void load(std::istream &stream, int version, CollectNodes *cn);
@@ -43,7 +35,7 @@ public:
 	unsigned int signalID;
 
 protected:
-	virtual ~edSignal() {}
+	virtual ~edSignal();
 
 	TrackPiece *track;
 	

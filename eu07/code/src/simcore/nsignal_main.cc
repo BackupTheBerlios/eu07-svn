@@ -39,7 +39,11 @@ void nSignal::Load(std::istream &s, unsigned int ver, std::vector<nSignal*> &sig
 	char *res= NULL;
 //	this->
 	bool ok= nWorld::getScriptServer()->RunScript(signal.c_str(),res);
-	if (!ok && res) MessageBox(0,res,"Error",MB_OK);
+	if (!ok && res) 
+	{
+		MessageBox(0,res,"Error",MB_OK);
+		res[0]= 0;
+	}
 	kernelServer->PopCwd();
 
 

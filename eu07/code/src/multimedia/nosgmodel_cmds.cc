@@ -122,6 +122,7 @@ static void n_setsequencevalue(void* slf, nCmd* cmd)
    int v= cmd->In()->GetI();
    if (sequence)
    {
+	   sequence->setMode(osg::Sequence::STOP);
 	   sequence->setValue(v);
    }
    else printf("Cannot find sequence in model!\n");

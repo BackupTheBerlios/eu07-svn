@@ -133,6 +133,8 @@ private:
 	virtual ~edTerrainNode() 
 	{
 	};
+
+	static void fixupTexCoords(osg::Vec2Array &coords);
 //	std::vector< osg::ref_ptr<osg::Geode> > visuals;
 //	std::vector< osg::ref_ptr<osg::Geode> > selectedVisuals;
 

@@ -33,7 +33,14 @@ private:
     double __fastcall RombergIntegral(double fA, double fB);
 public:
 	typedef std::vector<osg::Vec3f> Shape;
-	typedef std::vector<Shape> ShapesList;
+	class ShapeParams
+	{
+	public:
+		ShapeParams() : texLen(5.0f) {};
+		Shape shape;
+		float texLen;
+	};
+	typedef std::vector<ShapeParams> ShapesList;
 
 	static bool LoadShapes(ShapesList &sl, std::string &texture, std::string &fileName);
 
@@ -79,8 +86,8 @@ public:
     
     inline float __fastcall GetLength() { return fLength; };
 
-	osg::Geometry *CreateLoft(const osg::Vec3d *ShapePoints, const int *Shapes, int iNumShapes, double fTextureLength, double step, osg::Vec3d origin, bool blend);
-	osg::Geometry *CreateLoft(const ShapesList &Shapes, double fTextureLength, double step, osg::Vec3d origin, bool blend);
+	osg::Geometry *CreateLoft(const osg::Vec3d *ShapePoints, const int *Shapes, const float *texLen, int iNumShapes, double step, osg::Vec3d origin, bool blend);
+	osg::Geometry *CreateLoft(const ShapesList &Shapes, double step, osg::Vec3d origin, bool blend);
 	//bool __fastcall RenderLoft(const dvector3 *ShapePoints, int iNumShapePoints,
       //  float fTextureLength, int iSkip=0, int iQualityFactor=1);
     //bool __fastcall RenderSwitchRail(const dvector3 *ShapePoints1, const dvector3 *ShapePoints2,

@@ -280,7 +280,9 @@ void edTerrainNode::updateVisual()
 							geom->setVertexArray( v );
 							geom->setNormalArray( norm );
 							geom->setNormalBinding( osg::Geometry::BIND_PER_VERTEX );
+							fixupTexCoords(*t1);
 							geom->setTexCoordArray( 0, t1 );
+							fixupTexCoords(*t2);
 							geom->setTexCoordArray( 1, t2 );
 							geom->setColorArray( col );
 							geom->setColorBinding( osg::Geometry::BIND_PER_VERTEX );
@@ -406,6 +408,7 @@ void edTerrainNode::updateVisual()
 					geom->setVertexArray( v );
 					geom->setNormalArray( norm );
 					geom->setNormalBinding( osg::Geometry::BIND_PER_VERTEX );
+					fixupTexCoords(*t);
 					geom->setTexCoordArray( 0, t );
 					geom->setColorArray( col );
 					geom->setColorBinding( osg::Geometry::BIND_OVERALL );
@@ -507,3 +510,28 @@ unsigned int edTerrainNode::getNodeMask()
 //	return ( material.valid() && material->type==3 ? Editor::nm_DynamicFlatReflection : Editor::nm_SolidTerrain ) ;
 }
 
+void edTerrainNode::fixupTexCoords(osg::Vec2Array &coords)
+{
+	if (coords.size()<1)
+		return;
+
+	osg::Vec2 min(coords[0]);
+	osg::Vec2 max(coords[0]);
+
+	for (unsigned int i=1; i<coords.size(); i++)
+	{
+		if (coords[i].x()>max.x())
+			max.x()= coords[i].x();
+		if (coords[i].x()<min.x())
+			min.x()= coords[i].x();
+		if (coords[i].y()>max.y())
+			max.y()= coords[i].y();
+		if (coords[i].y()<min.y())
+			min.y()= coords[i].y();
+	}
+
+	osg::Vec2 delta( floor((min.x()+max.x())*0.5+0.5),floor((min.y()+max.y())*0.5+0.5) ) ;
+	
+	for (unsigned int i=0; i<coords.size(); i++)
+		coords[i]-= delta;
+}

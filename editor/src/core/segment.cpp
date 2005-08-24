@@ -267,7 +267,7 @@ void Segment::ComputeTsBuffer()
     }
 }
 
-osg::Geometry *Segment::CreateLoft(const osg::Vec3d *ShapePoints, const int *Shapes, int iNumShapes, double fTextureLength, double step, osg::Vec3d origin, bool blend)
+osg::Geometry *Segment::CreateLoft(const osg::Vec3d *ShapePoints, const int *Shapes, const float *texLen, int iNumShapes, double step, osg::Vec3d origin, bool blend)
 {
 	osg::Vec3Array *v;
 	osg::Vec3Array *norm;
@@ -340,12 +340,12 @@ osg::Geometry *Segment::CreateLoft(const osg::Vec3d *ShapePoints, const int *Sha
 					sp= ShapePoints[FirstShapePoint+j];
 					v->push_back(pt+parallel*sp.x()+osg::Vec3d(0,0,sp.y()));
 					norm->push_back(osg::Vec3(0,0,1));
-					tex->push_back(osg::Vec2(sp.z(),ds/fTextureLength));
+					tex->push_back(osg::Vec2(sp.z(),ds/texLen[i]));
 
 					sp= ShapePoints[FirstShapePoint+j+1];
 					v->push_back(pt+parallel*sp.x()+osg::Vec3d(0,0,sp.y()));
 					norm->push_back(osg::Vec3(0,0,1));
-					tex->push_back(osg::Vec2(sp.z(),ds/fTextureLength));
+					tex->push_back(osg::Vec2(sp.z(),ds/texLen[i]));
 					
 					if (blend)
 					{
@@ -369,18 +369,20 @@ osg::Geometry *Segment::CreateLoft(const osg::Vec3d *ShapePoints, const int *Sha
 	return geom;
 }
 
-osg::Geometry *Segment::CreateLoft(const ShapesList &Shapes, double fTextureLength, double step, osg::Vec3d origin, bool blend)
+osg::Geometry *Segment::CreateLoft(const ShapesList &Shapes, double step, osg::Vec3d origin, bool blend)
 {
 	osg::Vec3d sp[100];
 	int sh[20];
+	float texLen[20];
 	unsigned int n= 0;
 	for (unsigned int i=0; i<Shapes.size(); i++)
 	{
-		sh[i]= Shapes[i].size();
-		for (unsigned int j=0; j<Shapes[i].size(); j++)
-			sp[n++]= Shapes[i][j];
+		sh[i]= Shapes[i].shape.size();
+		texLen[i]= Shapes[i].texLen;
+		for (unsigned int j=0; j<Shapes[i].shape.size(); j++)
+			sp[n++]= Shapes[i].shape[j];
 	}
-	return CreateLoft(sp,sh,Shapes.size(),fTextureLength,step,origin,blend);
+	return CreateLoft(sp,sh,texLen,Shapes.size(),step,origin,blend);
 
 //		n+= 
 }
@@ -1004,9 +1006,10 @@ bool Segment::LoadShapes(ShapesList &sl, std::string &texture, std::string &file
 			file >> np;
 			if (np>20)
 				return false;
-			sl[i].resize(np);
+			sl[i].shape.resize(np);
 			for (unsigned int j=0; j<np; j++)
-				file >> sl[i][j].x() >> sl[i][j].y() >> sl[i][j].z();
+				file >> sl[i].shape[j].x() >> sl[i].shape[j].y() >> sl[i].shape[j].z();
+			file >> sl[i].texLen;
 		}
 		file >> texture;
 	}

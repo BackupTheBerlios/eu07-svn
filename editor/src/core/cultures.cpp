@@ -224,6 +224,7 @@ void Culture::apply(osg::MatrixTransform *gmt, osg::Geode *geode)
 			j= rand()%nodes.size();
 
 			edPointFeature *pf= new edPointFeature();
+			pf->setTerrain(0);
 			if (nodes[j].model.empty())
 				pf->setAddon(nodes[j].node);
 			else

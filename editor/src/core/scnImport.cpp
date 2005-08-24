@@ -120,24 +120,24 @@ bool edSCNImport::import(osg::Vec3d pos, double r)
 							ft->setBezier(pt1,cpt1,cpt2,pt2,0,0);
 
 							Segment::ShapesList bs(1);
-							bs[0].reserve(4);
-							bs[0].push_back(osg::Vec3f(-2.3,-0.0,0));
-							bs[0].push_back(osg::Vec3f(-1.2,0.2,0.33));
-							bs[0].push_back(osg::Vec3f(1.2,0.2,0.67));
-							bs[0].push_back(osg::Vec3f(2.3,-0.0,1));
+							bs[0].shape.reserve(4);
+							bs[0].shape.push_back(osg::Vec3f(-2.3,-0.0,0));
+							bs[0].shape.push_back(osg::Vec3f(-1.2,0.2,0.33));
+							bs[0].shape.push_back(osg::Vec3f(1.2,0.2,0.67));
+							bs[0].shape.push_back(osg::Vec3f(2.3,-0.0,1));
 							ft->setBallastShape(bs);
 
 							Segment::ShapesList rs(2);
-							rs[0].reserve(4);
-							rs[0].push_back(osg::Vec3d(-0.79,0.2,0));
-							rs[0].push_back(osg::Vec3d(-0.79,0.38,0.44));
-							rs[0].push_back(osg::Vec3d(-0.718,0.38,0.56));
-							rs[0].push_back(osg::Vec3d(-0.718,0.2,1));
-							rs[1].reserve(4);
-							rs[1].push_back(osg::Vec3d( 0.718,0.2,1));
-							rs[1].push_back(osg::Vec3d( 0.718,0.38,0.56));
-							rs[1].push_back(osg::Vec3d( 0.79,0.38,0.44));
-							rs[1].push_back(osg::Vec3d( 0.79,0.2,0));
+							rs[0].shape.reserve(4);
+							rs[0].shape.push_back(osg::Vec3d(-0.79,0.2,0));
+							rs[0].shape.push_back(osg::Vec3d(-0.79,0.38,0.44));
+							rs[0].shape.push_back(osg::Vec3d(-0.718,0.38,0.56));
+							rs[0].shape.push_back(osg::Vec3d(-0.718,0.2,1));
+							rs[1].shape.reserve(4);
+							rs[1].shape.push_back(osg::Vec3d( 0.718,0.2,1));
+							rs[1].shape.push_back(osg::Vec3d( 0.718,0.38,0.56));
+							rs[1].shape.push_back(osg::Vec3d( 0.79,0.38,0.44));
+							rs[1].shape.push_back(osg::Vec3d( 0.79,0.2,0));
 							ft->setRailsShape(rs);
 
 							ft->moveTo(osg::Quat(osg::DegreesToRadians(angle),osg::Vec3d(0,0,1))*center+pos);

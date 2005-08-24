@@ -248,7 +248,7 @@ int main(int argc, char *argv[])
 //					timer= 0;
 //					printf("delta: %f",delta);
 //				}
-				if (delta>0)
+				if (delta>0.001)
 				{
 //					n_sleep(0.01);
 					n_sleep(delta);
@@ -257,7 +257,7 @@ int main(int argc, char *argv[])
 //						n_sleep(delta);
 				}
 				else
-					n_sleep(0.01);
+					n_sleep(0.001);
 
                 ks->ts->Trigger();
 				time= ks->ts->GetTime();

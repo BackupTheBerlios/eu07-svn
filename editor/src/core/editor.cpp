@@ -71,7 +71,7 @@ Editor::ObjectsCache Editor::objectsCache;
 //bool Editor::releaseGeometry= true;
 
 const unsigned int	dwMagic= 'BSCN';
-const int			version= 4;
+const int			version= 5;
 
 Editor *Editor::lastInstance()
 {
@@ -137,11 +137,12 @@ Editor::Editor(TopView *_mainView) : MouseAdapter(), mainView(_mainView), mode(e
 //	mapsRoot->setNodeMask( 0x0000FF00);
 
 	osg::StateSet *dstate= new osg::StateSet;
-	osg::Depth *depth= new osg::Depth;
-	depth->setWriteMask(false);
-	depth->setFunction(osg::Depth::NEVER);
-	dstate->setAttributeAndModes(depth);
-	dstate->setRenderBinDetails(-1,"RenderBin");
+//	osg::Depth *depth= new osg::Depth;
+//	depth->setWriteMask(false);
+//	depth->setFunction(osg::Depth::ALWAYS);
+//	dstate->setAttributeAndModes(depth,osg::StateAttribute::OVERRIDE);
+	dstate->setRenderBinDetails(20,"RenderBin");
+	dstate->setMode(osg::StateAttribute::DEPTH,osg::StateAttribute::OFF);
 	mapsRoot->setStateSet(dstate);
 
 	edTerrainNode::terrainRoot= terrainRoot.get();
@@ -153,8 +154,10 @@ Editor::Editor(TopView *_mainView) : MouseAdapter(), mainView(_mainView), mode(e
 //	pm->setMode(osg::PolygonMode::Face::FRONT_AND_BACK,osg::PolygonMode::Mode::LINE);
 //	stateset->setAttributeAndModes(pm);
 	stateset->setAttributeAndModes(new osg::Depth(osg::Depth::ALWAYS));
-//	stateset->setMode(osg::StateAttribute::DEPTH,osg::StateAttribute::OFF);
+	stateset->setMode(osg::StateAttribute::DEPTH,osg::StateAttribute::OFF);
+	stateset->setMode( GL_DEPTH_TEST, osg::StateAttribute::OFF );
 	nodesRoot->setStateSet(stateset);
+	
 
 /*	
 	stateset= new osg::StateSet();
@@ -794,7 +797,8 @@ edRailLine *Editor::createRailLine()
 edRailLine *Editor::createRailLine(edPoint *pt1, edPoint *pt2)
 {
 	edRailLine *ln= NULL;
-	if (pt1 && pt2 && pt2!=pt1 && !pt2->connected(pt1))
+	if (pt1 && pt2 && pt2!=pt1 && !pt2->connected(pt1) && !pt1->getFlag(nf_NoSave) && !pt2->getFlag(nf_NoSave) && 
+		pt1->getType()==edPoint::getClassID() && pt2->getType()==edPoint::getClassID())
 	{
 		ln= createRailLine();
 		ln->setPoints(pt1,pt2);
@@ -1338,6 +1342,15 @@ osg::Vec3d Editor::getPointOnTerrain(double x, double y, bool useSRTM, bool useT
 {
 	osg::Vec3d retPt(x,y,edOptions::instance()->defaultHeight);
 	osgUtil::IntersectVisitor::HitList hits;
+
+	edPointFeature *ptft= dynamic_cast<edPointFeature*>(selectedNode.get());
+	unsigned int oldMask= 0;
+	if (ptft)
+	{
+		oldMask= ptft->getModelVisual()->getNodeMask();
+		ptft->getModelVisual()->setNodeMask(0);
+	}
+
 //	if (useTerrain && mainView->computeIntersections(getWorldX(),getWorldY(),terrainRoot.get(), hits))
 	if (whatHeight)
 		*whatHeight= 0;
@@ -1357,6 +1370,10 @@ osg::Vec3d Editor::getPointOnTerrain(double x, double y, bool useSRTM, bool useT
 			if (whatHeight)
 				*whatHeight= 1;
 		}
+
+	if (ptft)
+		ptft->getModelVisual()->setNodeMask(oldMask);
+
 	return retPt;
 }
 
@@ -1693,7 +1710,7 @@ bool Editor::onRelease(unsigned int button, unsigned int state)
 
 					c1= dynamic_cast<edTrackConnection*>(pickVisitor->pickedNode.get());
 					c2= dynamic_cast<edTrackConnection*>(selectedNode.get());
-					if (c1 && c2)
+					if (c1 && c2 && c1!=c2)
 					{
 						double dist= (c1->getPosition()-c2->getPosition()).length();
 						if (dist>0.2)
@@ -1724,24 +1741,24 @@ bool Editor::onRelease(unsigned int button, unsigned int state)
 							else
 							{
 								Segment::ShapesList bs(1);
-								bs[0].reserve(4);
-								bs[0].push_back(osg::Vec3f(-2.3,-0.0,0));
-								bs[0].push_back(osg::Vec3f(-1.2,0.2,0.33));
-								bs[0].push_back(osg::Vec3f(1.2,0.2,0.67));
-								bs[0].push_back(osg::Vec3f(2.3,-0.0,1));
+								bs[0].shape.reserve(4);
+								bs[0].shape.push_back(osg::Vec3f(-2.3,-0.0,0));
+								bs[0].shape.push_back(osg::Vec3f(-1.2,0.2,0.33));
+								bs[0].shape.push_back(osg::Vec3f(1.2,0.2,0.67));
+								bs[0].shape.push_back(osg::Vec3f(2.3,-0.0,1));
 								ft->setBallastShape(bs);
 
 								Segment::ShapesList rs(2);
-								rs[0].reserve(4);
-								rs[0].push_back(osg::Vec3d(-0.79,0.2,0));
-								rs[0].push_back(osg::Vec3d(-0.79,0.38,0.44));
-								rs[0].push_back(osg::Vec3d(-0.718,0.38,0.56));
-								rs[0].push_back(osg::Vec3d(-0.718,0.2,1));
-								rs[1].reserve(4);
-								rs[1].push_back(osg::Vec3d( 0.718,0.2,1));
-								rs[1].push_back(osg::Vec3d( 0.718,0.38,0.56));
-								rs[1].push_back(osg::Vec3d( 0.79,0.38,0.44));
-								rs[1].push_back(osg::Vec3d( 0.79,0.2,0));
+								rs[0].shape.reserve(4);
+								rs[0].shape.push_back(osg::Vec3d(-0.79,0.2,0));
+								rs[0].shape.push_back(osg::Vec3d(-0.79,0.38,0.44));
+								rs[0].shape.push_back(osg::Vec3d(-0.718,0.38,0.56));
+								rs[0].shape.push_back(osg::Vec3d(-0.718,0.2,1));
+								rs[1].shape.reserve(4);
+								rs[1].shape.push_back(osg::Vec3d( 0.718,0.2,1));
+								rs[1].shape.push_back(osg::Vec3d( 0.718,0.38,0.56));
+								rs[1].shape.push_back(osg::Vec3d( 0.79,0.38,0.44));
+								rs[1].shape.push_back(osg::Vec3d( 0.79,0.2,0));
 								ft->setRailsShape(rs);
 							}
 

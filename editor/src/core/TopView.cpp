@@ -17,6 +17,8 @@ TopView::TopView(GtkWidget* dr_area) : OSG_realizer(dr_area), eye(0.0,0.0,0.0), 
 	eye.y()= atof(buf);
 	GetPrivateProfileString("Settings","Scale","10",buf,255,"editor.ini");
 	scale= atof(buf);
+
+	sceneView->setCullingMode(osg::CullSettings::DEFAULT_CULLING);
 }
 
 TopView::~TopView()

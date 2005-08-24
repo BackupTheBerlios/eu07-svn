@@ -104,6 +104,7 @@ bool loadSubModel(cParser &p, osg::Group *root)
 	if (fg.found)
 	{
 		osg::MatrixTransform *mt= new osg::MatrixTransform();
+		mt->setNodeMask(0x000000FF);
 		mt->setDataVariance(osg::Object::STATIC);
 		fg.found->addChild(mt);
 		MY_ASSERT(getToken(p).compare("type:")==0);
@@ -337,6 +338,7 @@ bool loadSubModel(cParser &p, osg::Group *root)
 		delete[] Vertices;
 
 		osg::Geode *geode= new osg::Geode;
+		geode->setNodeMask(0x000000FF);
 		geode->setDataVariance(osg::Object::STATIC);
 		mt->addChild(geode);
 

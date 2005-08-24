@@ -262,7 +262,7 @@ public:
 		
 	}
 //	virtual unsigned int getType() { return 'PTFT'; };
-	edPointFeature() : edPoint(), numWires(3), dh(1)  { setFlag(nf_ExportToDelanuay); };
+	edPointFeature() : edPoint(), numWires(3), dh(1)  { clearFlag(nf_ExportToDelanuay); };
 
 	void setModelFile(const char *m) { setModel(m); };
 	const char * getModelFile() { return modelName.c_str(); };

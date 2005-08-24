@@ -49,16 +49,21 @@ void edFlexTrack::load(std::istream &stream, int version, CollectNodes *cn)
 	rails.resize(readUI(stream));
 	for (unsigned int i=0; i<rails.size(); i++)
 	{
-		rails[i].resize(readUI(stream));
-		for (unsigned int j=0; j<rails[i].size(); j++)
-			rails[i][j]= readV3f(stream);
+		rails[i].shape.resize(readUI(stream));
+		for (unsigned int j=0; j<rails[i].shape.size(); j++)
+			rails[i].shape[j]= readV3f(stream);
+		if (version>4)
+			rails[i].texLen= readF(stream);
+
 	}
 	ballast.resize(readUI(stream));
 	for (unsigned int i=0; i<ballast.size(); i++)
 	{
-		ballast[i].resize(readUI(stream));
-		for (unsigned int j=0; j<ballast[i].size(); j++)
-			ballast[i][j]= readV3f(stream);
+		ballast[i].shape.resize(readUI(stream));
+		for (unsigned int j=0; j<ballast[i].shape.size(); j++)
+			ballast[i].shape[j]= readV3f(stream);
+		if (version>4)
+			ballast[i].texLen= readF(stream);
 	}
 	read(stream,flags);
 	osg::Vec3d pt1(readV3d(stream));
@@ -79,16 +84,18 @@ void edFlexTrack::save(std::ostream &stream)
 	write(stream, rails.size());
 	for (unsigned int i=0; i<rails.size(); i++)
 	{
-		write(stream, rails[i].size());
-		for (unsigned int j=0; j<rails[i].size(); j++)
-			write(stream, rails[i][j]);
+		write(stream, rails[i].shape.size());
+		for (unsigned int j=0; j<rails[i].shape.size(); j++)
+			write(stream, rails[i].shape[j]);
+		write(stream, rails[i].texLen);
 	}
 	write(stream, ballast.size());
 	for (unsigned int i=0; i<ballast.size(); i++)
 	{
-		write(stream, ballast[i].size());
-		for (unsigned int j=0; j<ballast[i].size(); j++)
-			write(stream, ballast[i][j]);
+		write(stream, ballast[i].shape.size());
+		for (unsigned int j=0; j<ballast[i].shape.size(); j++)
+			write(stream, ballast[i].shape[j]);
+		write(stream, ballast[i].texLen);
 	}
 	write(stream,flags);
 	write(stream,trackPieces[0]->segment.GetPt1());
@@ -326,9 +333,9 @@ void edFlexTrack::updateVisual()
 
 //		return;
 		int nv= 0;
-		if (ballast.size()>0 && ballast[0].size()>1)
+		if (ballast.size()>0 && ballast[0].shape.size()>1)
 			nv++;
-		if (rails.size()>0 && rails[0].size()>1)
+		if (rails.size()>0 && rails[0].shape.size()>1)
 			nv++;
 
 		setNumVisuals(nv);
@@ -361,11 +368,11 @@ void edFlexTrack::updateVisual()
 		}
 		else
 		{
-			ballast_dstate= dynamic_cast<osg::StateSet*>(Editor::getObjectFromCache(ballastTex));
+			ballast_dstate= NULL;//dynamic_cast<osg::StateSet*>(Editor::getObjectFromCache(ballastTex));
 			if (ballast_dstate==NULL)
 			{
 				ballast_dstate= new osg::StateSet();
-				Editor::insertObjectToCache(ballastTex,ballast_dstate);
+				//Editor::insertObjectToCache(ballastTex,ballast_dstate);
 			}
 			tex2d= new osg::Texture2D();
 			tex2d->setDataVariance(osg::Node::STATIC);
@@ -409,11 +416,11 @@ void edFlexTrack::updateVisual()
 		}
 		else
 		{
-			rails_dstate= dynamic_cast<osg::StateSet*>(Editor::getObjectFromCache(railsTex));
+			rails_dstate= NULL;//dynamic_cast<osg::StateSet*>(Editor::getObjectFromCache(railsTex));
 			if (rails_dstate==NULL)
 			{
 				rails_dstate= new osg::StateSet();
-				Editor::insertObjectToCache(railsTex,rails_dstate);
+				//Editor::insertObjectToCache(railsTex,rails_dstate);
 			}
 			tex2d= new osg::Texture2D();
 			tex2d->setDataVariance(osg::Node::STATIC);
@@ -435,9 +442,9 @@ void edFlexTrack::updateVisual()
 			if (step>trackPieces[0]->segment.GetLength()*0.9)
 				lastLod= true;
 
-		if (ballast.size()>0 && ballast[0].size()>1)
+		if (ballast.size()>0 && ballast[0].shape.size()>1)
 		{
-		geom= trackPieces[0]->segment.CreateLoft(ballast, 5, step, osg::Vec3d(0,0,0), ballastBlend);
+		geom= trackPieces[0]->segment.CreateLoft(ballast, step, osg::Vec3d(0,0,0), ballastBlend);
 		geom->setUserData(this);
 		geom->setDataVariance(osg::Node::STATIC);
 
@@ -487,9 +494,9 @@ void edFlexTrack::updateVisual()
 		}
 //*/
 		
-		if ((minDist==0 || maxDist<500) && rails.size()>0 && rails[0].size()>1)
+		if ((minDist==0 || maxDist<500) && rails.size()>0 && rails[0].shape.size()>1)
 		{
-		geom= trackPieces[0]->segment.CreateLoft(rails, 5, step, osg::Vec3d(0,0,0), railsBlend);
+		geom= trackPieces[0]->segment.CreateLoft(rails, step, osg::Vec3d(0,0,0), railsBlend);
 		geom->setDataVariance(osg::Node::STATIC);
 		geom->setUserData(this);
 

@@ -54,6 +54,7 @@
 				GenerateDebugInformation="FALSE"
 				ProgramDatabaseFile=".\Release/editor.pdb"
 				SubSystem="1"
+				StackCommitSize="0"
 				TargetMachine="1"/>
 			<Tool
 				Name="VCMIDLTool"
@@ -121,6 +122,7 @@
 				GenerateDebugInformation="TRUE"
 				ProgramDatabaseFile=".\Debug/editor.pdb"
 				SubSystem="1"
+				StackCommitSize="0"
 				TargetMachine="1"/>
 			<Tool
 				Name="VCMIDLTool"
@@ -329,6 +331,12 @@
 					<Tool
 						Name="VCCustomBuildTool"/>
 				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\src\core\loft.cpp">
+			</File>
+			<File
+				RelativePath="..\src\core\loft.h">
 			</File>
 			<File
 				RelativePath="..\src\core\MilePost.cpp">
