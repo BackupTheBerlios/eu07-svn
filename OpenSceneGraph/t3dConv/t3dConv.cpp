@@ -199,13 +199,13 @@ bool loadSubModel(cParser &p, osg::Group *root)
 				str= str.substr(1);
 
 
-			int ret= spawnlp(_P_WAIT,"nvdxt.exe","nvdxt.exe","-file",str.c_str(),"-dxt1a","-alpha_threshold","254",NULL);
+			int ret= 0;//spawnlp(_P_WAIT,"nvdxt.exe","nvdxt.exe","-file",str.c_str(),"-dxt3","-alpha_threshold","254",NULL);
 			unsigned int n= str.find_last_of('.');
 			if (n<str.length() && ret==0)
 			{
 				osg::Texture2D *tex= new osg::Texture2D;
 				tex->setDataVariance(osg::Object::STATIC);
-				tex->setImage(osgDB::readImageFile(str.substr(0,n)+".dds"));
+				tex->setImage(osgDB::readImageFile("images/"+str.substr(0,n)+".dds"));
 				tex->setWrap(osg::Texture::WRAP_S, osg::Texture::REPEAT);
 				tex->setWrap(osg::Texture::WRAP_T, osg::Texture::REPEAT);
 				tex->setUnRefImageDataAfterApply(true);
@@ -378,6 +378,9 @@ int _tmain(int argc, _TCHAR* argv[])
 //	defaultOptions->setObjectCacheHint(osgDB::ReaderWriter::Options::CACHE_ALL);
 	osgDB::Registry::instance()->setOptions(defaultOptions.get());
 //	osgDB::Registry::instance()->getOptions()->setObjectCacheHint(osgDB::ReaderWriter::Options::CACHE_ALL);
+
+	spawnlp(_P_WAIT,"nvdxt.exe","nvdxt.exe","-file","*.*","-dxt3","-alpha_threshold","254",NULL);
+//spawnlp(_P_WAIT,"nvdxt.exe","nvdxt.exe","-file",str.c_str(),"-dxt3","-alpha_threshold","254",NULL);
 
 	osg::ArgumentParser ap(&argc,argv);
 
