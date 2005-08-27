@@ -199,6 +199,7 @@ bool loadSubModel(cParser &p, osg::Group *root)
 				str= str.substr(1);
 
 
+
 			int ret= 0;//spawnlp(_P_WAIT,"nvdxt.exe","nvdxt.exe","-file",str.c_str(),"-dxt3","-alpha_threshold","254",NULL);
 			unsigned int n= str.find_last_of('.');
 			if (n<str.length() && ret==0)
@@ -208,6 +209,16 @@ bool loadSubModel(cParser &p, osg::Group *root)
 				tex->setImage(osgDB::readImageFile("images/"+str.substr(0,n)+".dds"));
 				tex->setWrap(osg::Texture::WRAP_S, osg::Texture::REPEAT);
 				tex->setWrap(osg::Texture::WRAP_T, osg::Texture::REPEAT);
+				if (str[0]=='#')
+				{
+					tex->setFilter(osg::Texture::MAG_FILTER,osg::Texture::LINEAR);
+					tex->setFilter(osg::Texture::MIN_FILTER,osg::Texture::NEAREST);
+				}
+				else
+				{
+					tex->setFilter(osg::Texture::MAG_FILTER,osg::Texture::LINEAR);
+					tex->setFilter(osg::Texture::MIN_FILTER,osg::Texture::LINEAR_MIPMAP_LINEAR);
+				}
 				tex->setUnRefImageDataAfterApply(true);
 				tex->setUseHardwareMipMapGeneration(false);
 				stateset->setTextureAttributeAndModes(0, tex, osg::StateAttribute::ON);

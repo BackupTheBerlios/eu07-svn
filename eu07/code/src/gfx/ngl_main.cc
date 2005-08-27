@@ -157,7 +157,8 @@ nGlServer::nGlServer()
 		globalStateSet->setMode( GL_CULL_FACE, osg::StateAttribute::ON );        
 		osg::AlphaFunc* alphafunc = new osg::AlphaFunc;
 //		alphafunc->setFunction(osg::AlphaFunc::ALWAYS,0.0f);
-        alphafunc->setFunction(osg::AlphaFunc::GREATER,0.0f);
+//		alphafunc->setFunction(osg::AlphaFunc::LESS,0.1f);
+        alphafunc->setFunction(osg::AlphaFunc::GREATER,0.99f);
         globalStateSet->setAttributeAndModes(alphafunc, osg::StateAttribute::ON);
        
 		osg::LightModel *lm= new osg::LightModel();

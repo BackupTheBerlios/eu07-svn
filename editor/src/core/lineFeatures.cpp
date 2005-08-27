@@ -91,11 +91,13 @@ void edFenceFeature::applyFeature()
 		tex->setWrap(osg::Texture::WRAP_S, osg::Texture::REPEAT);
 		tex->setWrap(osg::Texture::WRAP_T, osg::Texture::REPEAT);
 		tex->setImage(osgDB::readImageFile(texture));
+		tex->setDataVariance(osg::Node::STATIC);
 		dstate= new osg::StateSet();
 		dstate->setTextureAttributeAndModes(0,tex);
 //		dstate->setAttributeAndModes(new osg::AlphaFunc(osg::AlphaFunc::GREATER,0.5));
 //		dstate->setAttributeAndModes(new osg::AlphaFunc(osg::AlphaFunc::GREATER,0.9), osg::StateAttribute::ON);
 		dstate->setAttributeAndModes(new osg::AlphaFunc(osg::AlphaFunc::GREATER,0.5), osg::StateAttribute::ON);
+		dstate->setDataVariance(osg::Node::STATIC);
 		Editor::insertObjectToCache(name,dstate);
 	}
 	osg::Vec3Array *v= new osg::Vec3Array();;
@@ -166,10 +168,13 @@ void edFenceFeature::applyFeature()
 	geom->setColorBinding( osg::Geometry::BIND_OVERALL );
 	geom->addPrimitiveSet(new osg::DrawArrays(osg::PrimitiveSet::QUADS,0,n));
 	geom->setStateSet(dstate);
+	geom->setDataVariance(osg::Node::STATIC);
 	geode->addDrawable(geom);
+	geode->setDataVariance(osg::Node::STATIC);
 	osg::Matrixd mat;
 	mat.makeTranslate(pos);
 	osg::MatrixTransform *mt= new osg::MatrixTransform(mat);
+	mt->setDataVariance(osg::Node::STATIC);
 	mt->addChild(geode);
 	Editor::lastInstance()->addObject(mt,0,1000);
 
