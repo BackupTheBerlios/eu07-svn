@@ -39,7 +39,7 @@ char * IntToStr(int iValue)
 
 //-------------------------------------------------------------------
 
-Globals::LoadFromFile(char *szFileName)
+void Globals::LoadFromFile(char *szFileName)
 {
 	char szIniFile[MAX_PATH+21];
 	GetCurrentDirectory(MAX_PATH+1,szIniFile);
@@ -82,7 +82,7 @@ Globals::LoadFromFile(char *szFileName)
 
 //-------------------------------------------------------------------
 
-Globals::SaveToFile(char *szFileName)
+void Globals::SaveToFile(char *szFileName)
 {
 	char szIniFile[MAX_PATH+21];
 

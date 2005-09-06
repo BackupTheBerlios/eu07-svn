@@ -65,11 +65,11 @@ public:
 
 //----------------------do zaimplementowania w GUI--------------------------------
 	void freeNodes();	
-	bool loadFromFile(const char *fileName);
-	bool saveToFile(const char *fileName);
-	bool exportToDirectory(const char *dirName);
-	bool changeMode(EditorMode _mode);
-	bool freeSelectedNode();
+	bool loadFromFile(const char *fileName); // true == sukces
+	bool saveToFile(const char *fileName); // true == sukces
+	bool exportToDirectory(const char *dirName); // true == sukces
+	bool changeMode(EditorMode _mode); // zawsze true?
+	bool freeSelectedNode(); // czasem false czasem true
 	
 //--------------------------------------------------------------------------------
 

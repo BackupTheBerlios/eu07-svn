@@ -28,8 +28,8 @@ public:
 	static class nChannelServer *channel;
 	static class nInputServer *input;
 
-	static LoadFromFile(char *szFileName=NULL);
-	static SaveToFile(char *szFileName=NULL);
+	static void LoadFromFile(char *szFileName=NULL);
+	static void SaveToFile(char *szFileName=NULL);
 
 	static void InitServers(nKernelServer *ks);
 };

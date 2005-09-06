@@ -19,8 +19,18 @@
 #       define N_PUBLIC __declspec(dllimport)
 #   endif
 #else
+/*
 #   define N_DLLCLASS
 #   define N_PUBLIC
+to bylo troche za malo dla gcc
+*/
+#   if defined(N_IMPLEMENTS) && defined(N_DEFINES) && (N_IMPLEMENTS==N_DEFINES)
+#       define N_DLLCLASS
+#       define N_PUBLIC __declspec(dllexport)
+#   else
+#       define N_DLLCLASS
+#       define N_PUBLIC __declspec(dllimport)
+#   endif
 #endif
 
 #ifdef N_INIT

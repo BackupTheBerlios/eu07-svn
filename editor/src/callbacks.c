@@ -60,6 +60,26 @@ gboolean gajewski_h(gpointer data)
          return TRUE;
 }
 
+void open_request()
+{
+     struct handler
+     {
+            static void file_activated ( GtkFileChooser *filechooser, gpointer data )
+            {
+                   gchar *full_name = gtk_file_chooser_get_filename(filechooser);
+                   gtk_widget_hide(GTK_WIDGET(filechooser));
+                   if ( ! ( Editor::instance ()->loadFromFile ( full_name ) ) )
+                      Publisher::warn("load failed");
+            }
+     };
+
+  GtkWidget *fcd = gtk_file_chooser_dialog_new (_("Scenery"), NULL, GTK_FILE_CHOOSER_ACTION_OPEN, NULL);
+  gtk_window_set_modal(GTK_WINDOW(fcd),TRUE);
+  g_signal_connect ( (gpointer) fcd, "file_activated",
+                   G_CALLBACK (handler::file_activated), NULL );
+  gtk_widget_show(fcd);
+}
+
 void
 init_interface (int *argcp, char ***argvp)
 {
@@ -84,7 +104,7 @@ printf("init_interface started\n");
 				GTK_WINDOW (main_window));
 
 
-  GtkWidget *fcd = gtk_file_chooser_dialog_new ("Choose a file", NULL, GTK_FILE_CHOOSER_ACTION_OPEN, NULL);
+  GtkWidget *fcd = gtk_file_chooser_dialog_new (_("Choose a file"), NULL, GTK_FILE_CHOOSER_ACTION_OPEN, NULL);
 
 printf("Wins created, not shown\n"); 
 
@@ -145,8 +165,6 @@ printf("ret/init_interface\n");
 };
 
 
-
-
 void
 on_new_toolbutton_clicked (GtkToolButton * toolbutton, gpointer user_data)
 {
@@ -157,8 +175,11 @@ on_new_toolbutton_clicked (GtkToolButton * toolbutton, gpointer user_data)
 void
 on_open_toolbutton_clicked (GtkToolButton * toolbutton, gpointer user_data)
 {
+  /*
   GtkWidget *toplevel = gtk_widget_get_toplevel (GTK_WIDGET (toolbutton));
   Editor::instance ()->loadFromFile (edOptions::instance()->sceneryFile.c_str());
+  */
+  open_request();
 }
 
 
@@ -458,16 +479,16 @@ on_quit_dialog_response                (GtkDialog       *dialog,
        case GTK_RESPONSE_YES:
             // trza zapisac:
 			Editor::instance ()->saveToFile ("test.bscn");
-                    
+
        case GTK_RESPONSE_NO:
             gtk_main_quit();
-            
+
        case GTK_RESPONSE_CANCEL:
             gtk_widget_hide(GTK_WIDGET(dialog));
-            
+
        case GTK_RESPONSE_DELETE_EVENT:
             return;
-       
+
        default:
             Publisher::warn("Code bug:\nUnknown response from the 'quit dialog'");
    }
@@ -487,7 +508,6 @@ on_main_window_destroy_event           (GtkWidget       *widget,
                                         GdkEvent        *event,
                                         gpointer         user_data)
 {
-
   return quit_request();
 }
 
@@ -497,7 +517,6 @@ on_window2_delete_event                (GtkWidget       *widget,
                                         GdkEvent        *event,
                                         gpointer         user_data)
 {
-
   return quit_request();
 }
 
@@ -507,7 +526,5 @@ on_window2_destroy_event               (GtkWidget       *widget,
                                         GdkEvent        *event,
                                         gpointer         user_data)
 {
-
   return quit_request();
 }
-

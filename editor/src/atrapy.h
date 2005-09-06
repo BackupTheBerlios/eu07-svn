@@ -54,8 +54,8 @@ class Editor
             em_CreateRailLines, em_CreateTracks, em_CreateFence, em_Divide,
             em_Fill, em_CreateSignals, em_CreateCatenary, em_Import } EditorMode;
 
-        void loadFromFile(const char *n) {};
-        void saveToFile(const char *n) {};
+        bool loadFromFile(const char *n) { return false; };
+        bool saveToFile(const char *n) { return true; };
         static Editor *instance()
         {
             static Editor ein;
@@ -69,3 +69,15 @@ class Editor
         void freeSelectedNode() {};
 };
 
+class edOptions
+{
+    public:
+        static edOptions *instance()
+        {
+               static edOptions eoin;
+               return &eoin;
+        };
+
+        struct { const char * c_str() {return "test.bscn";}; } sceneryFile;
+        struct { const char * c_str() {return "..\\eu07\\scenery\\test\\";}; } exportDir;
+};

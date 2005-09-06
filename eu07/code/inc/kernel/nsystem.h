@@ -158,8 +158,13 @@
 #   define N_EXPORTFUNC __declspec(dllexport)
 #   define N_IMPORTFUNC __declspec(dllimport)
 #else
+/*
 #   define N_EXPORTFUNC
 #   define N_IMPORTFUNC
+to troche za malo dla gcc
+*/
+#   define N_EXPORTFUNC __declspec(dllexport)
+#   define N_IMPORTFUNC __declspec(dllimport)
 #endif
 
 //--------------------------------------------------------------------
@@ -178,9 +183,20 @@
 #       define N_INLINECLASS
 #   endif
 #else
+/*
 #   define N_EXPORT
 #   define N_IMPORT
 #   define N_INLINECLASS
+*/
+#   ifndef N_STATIC
+#       define N_EXPORT __declspec(dllexport)
+#       define N_IMPORT __declspec(dllimport)
+#       define N_INLINECLASS
+#   else
+#       define N_EXPORT
+#       define N_IMPORT
+#       define N_INLINECLASS
+#   endif
 #endif
 
 //--------------------------------------------------------------------

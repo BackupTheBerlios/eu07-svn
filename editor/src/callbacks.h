@@ -138,3 +138,4 @@ gboolean
 on_window2_destroy_event               (GtkWidget       *widget,
                                         GdkEvent        *event,
                                         gpointer         user_data);
+
