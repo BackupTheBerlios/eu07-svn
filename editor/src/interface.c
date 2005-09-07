@@ -59,6 +59,8 @@ create_main_window (void)
   GtkWidget *new_toolbutton;
   GtkWidget *open_toolbutton;
   GtkWidget *save_toolbutton;
+  GtkWidget *tmp_image;
+  GtkWidget *settings_toolbutton;
   GtkWidget *quit_toolbutton;
   GtkWidget *separatortoolitem1;
   GSList *select_mode_radiotoolbutton_group = NULL;
@@ -202,6 +204,12 @@ create_main_window (void)
   save_toolbutton = (GtkWidget*) gtk_tool_button_new_from_stock ("gtk-save");
   gtk_widget_show (save_toolbutton);
   gtk_container_add (GTK_CONTAINER (main_toolbar), save_toolbutton);
+
+  tmp_image = gtk_image_new_from_stock ("gtk-preferences", tmp_toolbar_icon_size);
+  gtk_widget_show (tmp_image);
+  settings_toolbutton = (GtkWidget*) gtk_tool_button_new (tmp_image, _("Settings"));
+  gtk_widget_show (settings_toolbutton);
+  gtk_container_add (GTK_CONTAINER (main_toolbar), settings_toolbutton);
 
   quit_toolbutton = (GtkWidget*) gtk_tool_button_new_from_stock ("gtk-quit");
   gtk_widget_show (quit_toolbutton);
@@ -507,6 +515,7 @@ create_main_window (void)
   GLADE_HOOKUP_OBJECT (main_window, new_toolbutton, "new_toolbutton");
   GLADE_HOOKUP_OBJECT (main_window, open_toolbutton, "open_toolbutton");
   GLADE_HOOKUP_OBJECT (main_window, save_toolbutton, "save_toolbutton");
+  GLADE_HOOKUP_OBJECT (main_window, settings_toolbutton, "settings_toolbutton");
   GLADE_HOOKUP_OBJECT (main_window, quit_toolbutton, "quit_toolbutton");
   GLADE_HOOKUP_OBJECT (main_window, separatortoolitem1, "separatortoolitem1");
   GLADE_HOOKUP_OBJECT (main_window, select_mode_radiotoolbutton, "select_mode_radiotoolbutton");

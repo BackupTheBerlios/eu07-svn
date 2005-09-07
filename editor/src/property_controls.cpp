@@ -439,32 +439,20 @@ Kit::Item Kit::addFileSel(const char *prop_name, const char *dir_path, const cha
                 static GtkWidget *filechooserdialog = NULL;
                 if (!filechooserdialog)
                 {
-  if (DEBUG) printf(".\n");
                    GtkWidget *fcd = gtk_file_chooser_dialog_new ("Choose a file", NULL, GTK_FILE_CHOOSER_ACTION_OPEN, NULL);
-  if (DEBUG) printf(",\n");
                    filechooserdialog = fcd;
-  if (DEBUG) printf("..\n");
                    gtk_window_set_position (GTK_WINDOW (filechooserdialog), GTK_WIN_POS_CENTER_ON_PARENT);
-  if (DEBUG) printf("...\n");
                    gtk_window_set_modal (GTK_WINDOW (filechooserdialog), TRUE);
-  if (DEBUG) printf("=\n");
                    gtk_window_set_destroy_with_parent (GTK_WINDOW (filechooserdialog), TRUE);
-  if (DEBUG) printf("==\n");
                    gtk_window_set_skip_taskbar_hint (GTK_WINDOW (filechooserdialog), FALSE);
-  if (DEBUG) printf("===\n");
                    gtk_window_set_type_hint (GTK_WINDOW (filechooserdialog), GDK_WINDOW_TYPE_HINT_DIALOG);
-  if (DEBUG) printf("#\n");
                    gtk_window_set_transient_for ( GTK_WINDOW(filechooserdialog), 
                                                   GTK_WINDOW(gtk_widget_get_toplevel(GTK_WIDGET(external_widget))) );
-  if (DEBUG) printf("##\n");
                    g_signal_connect ( (gpointer) filechooserdialog, "file_activated",
                                     G_CALLBACK (support::file_activated), NULL );
-  if (DEBUG) printf("###\n");
                    g_signal_connect ( (gpointer) filechooserdialog, "delete_event",
                                     G_CALLBACK(gtk_widget_hide_on_delete), NULL );
-  if (DEBUG) printf("!\n");
                 }
-  if (DEBUG) printf("!!\n");
                 return filechooserdialog;
          }
 

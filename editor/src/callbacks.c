@@ -77,6 +77,12 @@ void open_request()
   gtk_window_set_modal(GTK_WINDOW(fcd),TRUE);
   g_signal_connect ( (gpointer) fcd, "file_activated",
                    G_CALLBACK (handler::file_activated), NULL );
+
+  GtkFileFilter *filter = gtk_file_filter_new();
+  g_object_ref(G_OBJECT(filter));
+  gtk_file_filter_add_pattern(filter, "*.bscn");
+  gtk_file_chooser_set_filter(GTK_FILE_CHOOSER(fcd),filter);
+
   gtk_widget_show(fcd);
 }
 
@@ -175,10 +181,6 @@ on_new_toolbutton_clicked (GtkToolButton * toolbutton, gpointer user_data)
 void
 on_open_toolbutton_clicked (GtkToolButton * toolbutton, gpointer user_data)
 {
-  /*
-  GtkWidget *toplevel = gtk_widget_get_toplevel (GTK_WIDGET (toolbutton));
-  Editor::instance ()->loadFromFile (edOptions::instance()->sceneryFile.c_str());
-  */
   open_request();
 }
 
@@ -201,7 +203,7 @@ on_new_mi_activate (GtkMenuItem * menuitem, gpointer user_data)
 void
 on_open_mi_activate (GtkMenuItem * menuitem, gpointer user_data)
 {
-  Editor::instance ()->loadFromFile ("test.bscn");
+  open_request();
 }
 
 
