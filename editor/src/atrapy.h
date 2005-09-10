@@ -55,7 +55,7 @@ class Editor
             em_Fill, em_CreateSignals, em_CreateCatenary, em_Import } EditorMode;
 
         bool loadFromFile(const char *n) { return false; };
-        bool saveToFile(const char *n) { return true; };
+        bool saveToFile(const char *n) { return false; };
         static Editor *instance()
         {
             static Editor ein;

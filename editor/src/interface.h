@@ -8,3 +8,4 @@ GtkWidget* create_ghost_window (void);
 GtkWidget* create_warning_window (void);
 GtkWidget* create_error_window (void);
 GtkWidget* create_quit_dialog (void);
+GtkWidget* create_new_dialog (void);

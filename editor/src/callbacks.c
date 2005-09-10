@@ -14,6 +14,7 @@
 #include <stdlib.h>
 #include <gdk/gdkkeysyms.h>
 
+#include <string>
 
 #ifndef EDITOR_FULL
 
@@ -30,7 +31,7 @@
 #endif
 
 
-GtkWidget *main_window, *window2, *quit_dialog;
+GtkWidget *main_window, *window2, *quit_dialog, *new_dialog;
 
 
 gboolean
@@ -60,16 +61,38 @@ gboolean gajewski_h(gpointer data)
          return TRUE;
 }
 
+struct scenery_name
+{
+       static void set(const char *n)
+            { name=n; a=1; }
+       static const char *get()
+             { return name.c_str(); }
+       static int assigned()
+             { return a; }
+       static void clear()
+             { a=0; }
+
+       private:
+               static std::string name;
+               static int a;
+};
+
+std::string scenery_name::name;
+int scenery_name::a=0;
+
 void open_request()
 {
      struct handler
      {
             static void file_activated ( GtkFileChooser *filechooser, gpointer data )
             {
+                   printf("activated\n");
                    gchar *full_name = gtk_file_chooser_get_filename(filechooser);
-                   gtk_widget_hide(GTK_WIDGET(filechooser));
                    if ( ! ( Editor::instance ()->loadFromFile ( full_name ) ) )
-                      Publisher::warn("load failed");
+                      Publisher::warn("Load failed,\ncheck the log for details");
+                   else
+                       scenery_name::set(full_name);
+                   gtk_widget_destroy(GTK_WIDGET(filechooser));
             }
      };
 
@@ -84,6 +107,92 @@ void open_request()
   gtk_file_chooser_set_filter(GTK_FILE_CHOOSER(fcd),filter);
 
   gtk_widget_show(fcd);
+}
+
+void save_as_request(void(*after_call)(void)=NULL)
+{
+     struct handler
+     {
+            static void file_activated ( GtkFileChooser *filechooser, void(*after_call)(void) )
+            {
+                   gchar *full_name = gtk_file_chooser_get_filename(filechooser);
+                   if ( ! ( Editor::instance ()->saveToFile ( full_name ) ) )
+                      Publisher::warn("Save failed,\ncheck the log for details");
+                   else
+                   {
+                       scenery_name::set(full_name);
+                       if (after_call)
+                          after_call();
+                   }
+                   gtk_widget_destroy(GTK_WIDGET(filechooser));
+            }
+            
+            static void response  (GtkDialog       *dialog,
+                                   gint             response_id,
+                                   void             (*after_call)(void))
+            {
+                   gchar *full_name;
+                   switch (response_id)
+                   {
+                          case GTK_RESPONSE_OK:
+                               full_name = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(dialog));
+                               printf("wpisano %s\n",full_name);
+                               if ( ! ( Editor::instance ()->saveToFile ( full_name ) ) )
+                                  Publisher::warn("Save failed,\ncheck the log for details");
+                               else
+                               {
+                                   if (after_call)
+                                       after_call();
+                                   else
+                                       scenery_name::set(full_name);
+                               }
+                          case GTK_RESPONSE_CANCEL:
+                               gtk_widget_destroy(GTK_WIDGET(dialog));
+                          /*/?/*/ case GTK_RESPONSE_DELETE_EVENT:
+                               break;
+
+                          default:
+                                  Publisher::warn("Code bug:\nUnknown response from the 'save-as dialog'");
+
+                   }
+            }
+     };
+
+  GtkWidget *fcd = gtk_file_chooser_dialog_new (_("Scenery"), NULL, GTK_FILE_CHOOSER_ACTION_SAVE,
+                                               GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+				                               GTK_STOCK_SAVE, GTK_RESPONSE_OK,
+                                               NULL);
+
+  gtk_window_set_modal(GTK_WINDOW(fcd),TRUE);
+  g_signal_connect ( (gpointer) fcd, "file_activated",
+                   G_CALLBACK (handler::file_activated),
+                   (gpointer)after_call );
+  
+  g_signal_connect ((gpointer) fcd, "response",
+                    G_CALLBACK (handler::response),
+                    (gpointer)after_call);
+
+  GtkFileFilter *filter = gtk_file_filter_new();
+  g_object_ref(G_OBJECT(filter));
+  gtk_file_filter_add_pattern(filter, "*.bscn");
+  gtk_file_chooser_set_filter(GTK_FILE_CHOOSER(fcd),filter);
+
+  gtk_widget_show(fcd);
+}
+
+void save_request(void(*after_call)(void)=NULL)
+{
+     if (!scenery_name::assigned())
+     {
+        save_as_request(after_call);
+        return;
+     }
+
+     if ( ! ( Editor::instance ()->saveToFile ( scenery_name::get() ) ) )
+        Publisher::warn("Save failed\ncheck the log for details");
+     else
+         if (after_call)
+            after_call();
 }
 
 void
@@ -109,6 +218,9 @@ printf("init_interface started\n");
   gtk_window_set_transient_for (GTK_WINDOW (quit_dialog),
 				GTK_WINDOW (main_window));
 
+  new_dialog = create_new_dialog();
+  gtk_window_set_transient_for (GTK_WINDOW (new_dialog),
+				GTK_WINDOW (main_window));
 
   GtkWidget *fcd = gtk_file_chooser_dialog_new (_("Choose a file"), NULL, GTK_FILE_CHOOSER_ACTION_OPEN, NULL);
 
@@ -171,10 +283,16 @@ printf("ret/init_interface\n");
 };
 
 
+void new_request()
+{
+     gtk_widget_show(new_dialog);
+}
+
+
 void
 on_new_toolbutton_clicked (GtkToolButton * toolbutton, gpointer user_data)
 {
-  Editor::instance ()->freeNodes ();
+  new_request();
 }
 
 
@@ -188,15 +306,14 @@ on_open_toolbutton_clicked (GtkToolButton * toolbutton, gpointer user_data)
 void
 on_save_toolbutton_clicked (GtkToolButton * toolbutton, gpointer user_data)
 {
-  GtkWidget *toplevel = gtk_widget_get_toplevel (GTK_WIDGET (toolbutton));
-  Editor::instance ()->saveToFile (edOptions::instance()->sceneryFile.c_str());
+  save_request();
 }
 
 
 void
 on_new_mi_activate (GtkMenuItem * menuitem, gpointer user_data)
 {
-  Editor::instance ()->freeNodes ();
+  new_request();
 }
 
 
@@ -210,14 +327,14 @@ on_open_mi_activate (GtkMenuItem * menuitem, gpointer user_data)
 void
 on_save_mi_activate (GtkMenuItem * menuitem, gpointer user_data)
 {
-  Editor::instance ()->saveToFile (edOptions::instance()->sceneryFile.c_str());
+  save_request();
 }
 
 
 void
 on_save_as_mi_activate (GtkMenuItem * menuitem, gpointer user_data)
 {
-  Editor::instance ()->saveToFile (edOptions::instance()->sceneryFile.c_str());
+  save_as_request();
 }
 
 
@@ -356,7 +473,9 @@ on_fill_mode_radiotoolbutton_toggled (GtkToggleToolButton * toggletoolbutton,
 void
 on_export_mi_activate (GtkMenuItem * menuitem, gpointer user_data)
 {
-  Editor::instance ()->saveToFile ("tmp.bscn");
+  // Editor::instance ()->saveToFile ("tmp.bscn");
+  save_request();
+
   Editor::instance ()->exportToDirectory (edOptions::instance()->exportDir.c_str());
   gtk_main_quit();
 //  Editor::instance ()->freeNodes ();
@@ -480,7 +599,9 @@ on_quit_dialog_response                (GtkDialog       *dialog,
    {
        case GTK_RESPONSE_YES:
             // trza zapisac:
-			Editor::instance ()->saveToFile ("test.bscn");
+            gtk_widget_hide(GTK_WIDGET(dialog));
+			save_request(gtk_main_quit);
+			return;
 
        case GTK_RESPONSE_NO:
             gtk_main_quit();
@@ -529,4 +650,39 @@ on_window2_destroy_event               (GtkWidget       *widget,
                                         gpointer         user_data)
 {
   return quit_request();
+}
+
+
+void clear_scenery()
+{
+  Editor::instance ()->freeNodes ();
+  scenery_name::clear();
+}
+
+
+void
+on_new_dialog_response                 (GtkDialog       *dialog,
+                                        gint             response_id,
+                                        gpointer         user_data)
+{
+   switch(response_id)
+   {
+       case GTK_RESPONSE_YES:
+            // trza zapisac:
+            gtk_widget_hide(GTK_WIDGET(dialog));
+			save_request(clear_scenery);
+			return;
+
+       case GTK_RESPONSE_NO:
+            clear_scenery();
+
+       case GTK_RESPONSE_CANCEL:
+            gtk_widget_hide(GTK_WIDGET(dialog));
+
+       case GTK_RESPONSE_DELETE_EVENT:
+            return;
+
+       default:
+            Publisher::warn("Code bug:\nUnknown response from the 'new dialog'");
+   }
 }

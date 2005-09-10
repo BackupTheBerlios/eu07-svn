@@ -139,3 +139,8 @@ on_window2_destroy_event               (GtkWidget       *widget,
                                         GdkEvent        *event,
                                         gpointer         user_data);
 
+
+void
+on_new_dialog_response                 (GtkDialog       *dialog,
+                                        gint             response_id,
+                                        gpointer         user_data);

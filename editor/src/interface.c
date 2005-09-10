@@ -854,3 +854,153 @@ create_quit_dialog (void)
   return quit_dialog;
 }
 
+GtkWidget*
+create_new_dialog (void)
+{
+  GtkWidget *new_dialog;
+  GtkWidget *dialog_vbox2;
+  GtkWidget *hbox9;
+  GtkWidget *image9;
+  GtkWidget *label10;
+  GtkWidget *dialog_action_area2;
+  GtkWidget *yes_new_button;
+  GtkWidget *alignment5;
+  GtkWidget *hbox6;
+  GtkWidget *image6;
+  GtkWidget *label7;
+  GtkWidget *no_new_button;
+  GtkWidget *alignment6;
+  GtkWidget *hbox7;
+  GtkWidget *image7;
+  GtkWidget *label8;
+  GtkWidget *cancel_new_button;
+  GtkWidget *alignment7;
+  GtkWidget *hbox8;
+  GtkWidget *image8;
+  GtkWidget *label9;
+
+  new_dialog = gtk_dialog_new ();
+  gtk_window_set_title (GTK_WINDOW (new_dialog), _("Editor - new / save"));
+  gtk_window_set_modal (GTK_WINDOW (new_dialog), TRUE);
+  gtk_window_set_resizable (GTK_WINDOW (new_dialog), FALSE);
+  gtk_window_set_type_hint (GTK_WINDOW (new_dialog), GDK_WINDOW_TYPE_HINT_DIALOG);
+
+  dialog_vbox2 = GTK_DIALOG (new_dialog)->vbox;
+  gtk_widget_show (dialog_vbox2);
+
+  hbox9 = gtk_hbox_new (FALSE, 0);
+  gtk_widget_show (hbox9);
+  gtk_box_pack_start (GTK_BOX (dialog_vbox2), hbox9, TRUE, TRUE, 0);
+
+  image9 = gtk_image_new_from_stock ("gtk-dialog-question", GTK_ICON_SIZE_BUTTON);
+  gtk_widget_show (image9);
+  gtk_box_pack_start (GTK_BOX (hbox9), image9, FALSE, FALSE, 0);
+  gtk_widget_set_size_request (image9, 30, 30);
+
+  label10 = gtk_label_new (_("Save scenery before creating new one?"));
+  gtk_widget_show (label10);
+  gtk_box_pack_start (GTK_BOX (hbox9), label10, FALSE, FALSE, 0);
+
+  dialog_action_area2 = GTK_DIALOG (new_dialog)->action_area;
+  gtk_widget_show (dialog_action_area2);
+  gtk_button_box_set_layout (GTK_BUTTON_BOX (dialog_action_area2), GTK_BUTTONBOX_END);
+
+  yes_new_button = gtk_button_new ();
+  gtk_widget_show (yes_new_button);
+  gtk_dialog_add_action_widget (GTK_DIALOG (new_dialog), yes_new_button, GTK_RESPONSE_YES);
+  GTK_WIDGET_SET_FLAGS (yes_new_button, GTK_CAN_DEFAULT);
+
+  alignment5 = gtk_alignment_new (0.5, 0.5, 0, 0);
+  gtk_widget_show (alignment5);
+  gtk_container_add (GTK_CONTAINER (yes_new_button), alignment5);
+
+  hbox6 = gtk_hbox_new (FALSE, 2);
+  gtk_widget_show (hbox6);
+  gtk_container_add (GTK_CONTAINER (alignment5), hbox6);
+
+  image6 = gtk_image_new_from_stock ("gtk-save", GTK_ICON_SIZE_BUTTON);
+  gtk_widget_show (image6);
+  gtk_box_pack_start (GTK_BOX (hbox6), image6, FALSE, FALSE, 0);
+
+  label7 = gtk_label_new_with_mnemonic (_("Yes"));
+  gtk_widget_show (label7);
+  gtk_box_pack_start (GTK_BOX (hbox6), label7, FALSE, FALSE, 0);
+
+  no_new_button = gtk_button_new ();
+  gtk_widget_show (no_new_button);
+  gtk_dialog_add_action_widget (GTK_DIALOG (new_dialog), no_new_button, GTK_RESPONSE_NO);
+  GTK_WIDGET_SET_FLAGS (no_new_button, GTK_CAN_DEFAULT);
+
+  alignment6 = gtk_alignment_new (0.5, 0.5, 0, 0);
+  gtk_widget_show (alignment6);
+  gtk_container_add (GTK_CONTAINER (no_new_button), alignment6);
+
+  hbox7 = gtk_hbox_new (FALSE, 2);
+  gtk_widget_show (hbox7);
+  gtk_container_add (GTK_CONTAINER (alignment6), hbox7);
+
+  image7 = gtk_image_new_from_stock ("gtk-delete", GTK_ICON_SIZE_BUTTON);
+  gtk_widget_show (image7);
+  gtk_box_pack_start (GTK_BOX (hbox7), image7, FALSE, FALSE, 0);
+
+  label8 = gtk_label_new_with_mnemonic (_("No"));
+  gtk_widget_show (label8);
+  gtk_box_pack_start (GTK_BOX (hbox7), label8, FALSE, FALSE, 0);
+
+  cancel_new_button = gtk_button_new ();
+  gtk_widget_show (cancel_new_button);
+  gtk_dialog_add_action_widget (GTK_DIALOG (new_dialog), cancel_new_button, GTK_RESPONSE_CANCEL);
+  GTK_WIDGET_SET_FLAGS (cancel_new_button, GTK_CAN_DEFAULT);
+
+  alignment7 = gtk_alignment_new (0.5, 0.5, 0, 0);
+  gtk_widget_show (alignment7);
+  gtk_container_add (GTK_CONTAINER (cancel_new_button), alignment7);
+
+  hbox8 = gtk_hbox_new (FALSE, 2);
+  gtk_widget_show (hbox8);
+  gtk_container_add (GTK_CONTAINER (alignment7), hbox8);
+
+  image8 = gtk_image_new_from_stock ("gtk-cancel", GTK_ICON_SIZE_BUTTON);
+  gtk_widget_show (image8);
+  gtk_box_pack_start (GTK_BOX (hbox8), image8, FALSE, FALSE, 0);
+
+  label9 = gtk_label_new_with_mnemonic (_("Cancel"));
+  gtk_widget_show (label9);
+  gtk_box_pack_start (GTK_BOX (hbox8), label9, FALSE, FALSE, 0);
+
+  g_signal_connect ((gpointer) new_dialog, "response",
+                    G_CALLBACK (on_new_dialog_response),
+                    NULL);
+  g_signal_connect ((gpointer) new_dialog, "delete_event",
+                    G_CALLBACK (gtk_true),
+                    NULL);
+  g_signal_connect ((gpointer) new_dialog, "destroy_event",
+                    G_CALLBACK (gtk_true),
+                    NULL);
+
+  /* Store pointers to all widgets, for use by lookup_widget(). */
+  GLADE_HOOKUP_OBJECT_NO_REF (new_dialog, new_dialog, "new_dialog");
+  GLADE_HOOKUP_OBJECT_NO_REF (new_dialog, dialog_vbox2, "dialog_vbox2");
+  GLADE_HOOKUP_OBJECT (new_dialog, hbox9, "hbox9");
+  GLADE_HOOKUP_OBJECT (new_dialog, image9, "image9");
+  GLADE_HOOKUP_OBJECT (new_dialog, label10, "label10");
+  GLADE_HOOKUP_OBJECT_NO_REF (new_dialog, dialog_action_area2, "dialog_action_area2");
+  GLADE_HOOKUP_OBJECT (new_dialog, yes_new_button, "yes_new_button");
+  GLADE_HOOKUP_OBJECT (new_dialog, alignment5, "alignment5");
+  GLADE_HOOKUP_OBJECT (new_dialog, hbox6, "hbox6");
+  GLADE_HOOKUP_OBJECT (new_dialog, image6, "image6");
+  GLADE_HOOKUP_OBJECT (new_dialog, label7, "label7");
+  GLADE_HOOKUP_OBJECT (new_dialog, no_new_button, "no_new_button");
+  GLADE_HOOKUP_OBJECT (new_dialog, alignment6, "alignment6");
+  GLADE_HOOKUP_OBJECT (new_dialog, hbox7, "hbox7");
+  GLADE_HOOKUP_OBJECT (new_dialog, image7, "image7");
+  GLADE_HOOKUP_OBJECT (new_dialog, label8, "label8");
+  GLADE_HOOKUP_OBJECT (new_dialog, cancel_new_button, "cancel_new_button");
+  GLADE_HOOKUP_OBJECT (new_dialog, alignment7, "alignment7");
+  GLADE_HOOKUP_OBJECT (new_dialog, hbox8, "hbox8");
+  GLADE_HOOKUP_OBJECT (new_dialog, image8, "image8");
+  GLADE_HOOKUP_OBJECT (new_dialog, label9, "label9");
+
+  return new_dialog;
+}
+
