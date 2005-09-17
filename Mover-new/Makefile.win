@@ -1,0 +1,87 @@
+# Project: Project1
+# Makefile created by Dev-C++ 4.9.9.2
+
+CPP  = g++.exe
+CC   = gcc.exe
+WINDRES = windres.exe
+RES  = 
+OBJ  = main.o Expression.o softwire/Assembler.o softwire/CodeGenerator.o softwire/Encoding.o softwire/Error.o softwire/Instruction.o softwire/InstructionSet.o softwire/Linker.o softwire/Loader.o softwire/Macro.o softwire/Operand.o softwire/Parser.o softwire/Scanner.o softwire/Synthesizer.o softwire/Token.o softwire/TokenList.o DataContainer.o Device.o Vehicle.o $(RES)
+LINKOBJ  = main.o Expression.o softwire/Assembler.o softwire/CodeGenerator.o softwire/Encoding.o softwire/Error.o softwire/Instruction.o softwire/InstructionSet.o softwire/Linker.o softwire/Loader.o softwire/Macro.o softwire/Operand.o softwire/Parser.o softwire/Scanner.o softwire/Synthesizer.o softwire/Token.o softwire/TokenList.o DataContainer.o Device.o Vehicle.o $(RES)
+LIBS =  -L"C:/Dev-Cpp/lib"  
+INCS =  -I"C:/Dev-Cpp/include" 
+CXXINCS =  -I"C:/Dev-Cpp/lib/gcc/mingw32/3.4.2/include"  -I"C:/Dev-Cpp/include/c++/3.4.2/backward"  -I"C:/Dev-Cpp/include/c++/3.4.2/mingw32"  -I"C:/Dev-Cpp/include/c++/3.4.2"  -I"C:/Dev-Cpp/include" 
+BIN  = main.exe
+CXXFLAGS = $(CXXINCS) -fno-operator-names  
+CFLAGS = $(INCS)  
+RM = rm -f
+
+.PHONY: all all-before all-after clean clean-custom
+
+all: all-before main.exe all-after
+
+
+clean: clean-custom
+	${RM} $(OBJ) $(BIN)
+
+$(BIN): $(OBJ)
+	$(CPP) $(LINKOBJ) -o "main.exe" $(LIBS)
+
+main.o: main.cpp
+	$(CPP) -c main.cpp -o main.o $(CXXFLAGS)
+
+Expression.o: Expression.cpp
+	$(CPP) -c Expression.cpp -o Expression.o $(CXXFLAGS)
+
+softwire/Assembler.o: softwire/Assembler.cpp
+	$(CPP) -c softwire/Assembler.cpp -o softwire/Assembler.o $(CXXFLAGS)
+
+softwire/CodeGenerator.o: softwire/CodeGenerator.cpp
+	$(CPP) -c softwire/CodeGenerator.cpp -o softwire/CodeGenerator.o $(CXXFLAGS)
+
+softwire/Encoding.o: softwire/Encoding.cpp
+	$(CPP) -c softwire/Encoding.cpp -o softwire/Encoding.o $(CXXFLAGS)
+
+softwire/Error.o: softwire/Error.cpp
+	$(CPP) -c softwire/Error.cpp -o softwire/Error.o $(CXXFLAGS)
+
+softwire/Instruction.o: softwire/Instruction.cpp
+	$(CPP) -c softwire/Instruction.cpp -o softwire/Instruction.o $(CXXFLAGS)
+
+softwire/InstructionSet.o: softwire/InstructionSet.cpp
+	$(CPP) -c softwire/InstructionSet.cpp -o softwire/InstructionSet.o $(CXXFLAGS)
+
+softwire/Linker.o: softwire/Linker.cpp
+	$(CPP) -c softwire/Linker.cpp -o softwire/Linker.o $(CXXFLAGS)
+
+softwire/Loader.o: softwire/Loader.cpp
+	$(CPP) -c softwire/Loader.cpp -o softwire/Loader.o $(CXXFLAGS)
+
+softwire/Macro.o: softwire/Macro.cpp
+	$(CPP) -c softwire/Macro.cpp -o softwire/Macro.o $(CXXFLAGS)
+
+softwire/Operand.o: softwire/Operand.cpp
+	$(CPP) -c softwire/Operand.cpp -o softwire/Operand.o $(CXXFLAGS)
+
+softwire/Parser.o: softwire/Parser.cpp
+	$(CPP) -c softwire/Parser.cpp -o softwire/Parser.o $(CXXFLAGS)
+
+softwire/Scanner.o: softwire/Scanner.cpp
+	$(CPP) -c softwire/Scanner.cpp -o softwire/Scanner.o $(CXXFLAGS)
+
+softwire/Synthesizer.o: softwire/Synthesizer.cpp
+	$(CPP) -c softwire/Synthesizer.cpp -o softwire/Synthesizer.o $(CXXFLAGS)
+
+softwire/Token.o: softwire/Token.cpp
+	$(CPP) -c softwire/Token.cpp -o softwire/Token.o $(CXXFLAGS)
+
+softwire/TokenList.o: softwire/TokenList.cpp
+	$(CPP) -c softwire/TokenList.cpp -o softwire/TokenList.o $(CXXFLAGS)
+
+DataContainer.o: DataContainer.cpp
+	$(CPP) -c DataContainer.cpp -o DataContainer.o $(CXXFLAGS)
+
+Device.o: Device.cpp
+	$(CPP) -c Device.cpp -o Device.o $(CXXFLAGS)
+
+Vehicle.o: Vehicle.cpp
+	$(CPP) -c Vehicle.cpp -o Vehicle.o $(CXXFLAGS)
