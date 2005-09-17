@@ -1,20 +1,20 @@
 [Editor_1]
 CursorCol=18
 CursorRow=80
-TopLine=48
+TopLine=141
 LeftChar=1
 Open=1
-Top=1
+Top=0
 
 [Editors]
-Focused=1
+Focused=17
 Order=0,17,21,20,18,19,1,-1
 
 [Editor_0]
 Open=1
 Top=0
 CursorCol=1
-CursorRow=18
+CursorRow=31
 TopLine=1
 LeftChar=1
 [Editor_2]
@@ -124,10 +124,10 @@ TopLine=1
 LeftChar=1
 [Editor_17]
 Open=1
-Top=0
-CursorCol=1
-CursorRow=195
-TopLine=165
+Top=1
+CursorCol=47
+CursorRow=73
+TopLine=55
 LeftChar=1
 [Editor_18]
 Open=1

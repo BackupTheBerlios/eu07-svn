@@ -70,6 +70,8 @@ int* DataContainer::addVariable(string vName)
 int* DataContainer::addConst(double value)
 {
     
+    if(parent) return parent->addConst(value);
+    
     string vName("const");
     vName.append(1, (char) constCount + 0x30);
     constCount++;
@@ -189,6 +191,7 @@ void DataContainer::optimize()
         
     };
     
+    cout << "before:" << endl;
     printVariables();
     
 };
