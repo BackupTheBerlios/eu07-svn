@@ -619,7 +619,7 @@ create_warning_window (void)
 
   label = gtk_label_new (_("??????\n????????????????????\n????"));
   gtk_widget_show (label);
-  gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (vbox), label, TRUE, TRUE, 0);
   gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_CENTER);
 
   hbox = gtk_hbox_new (FALSE, 0);

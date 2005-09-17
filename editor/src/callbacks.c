@@ -88,6 +88,7 @@ void open_request()
             {
                    printf("activated\n");
                    gchar *full_name = gtk_file_chooser_get_filename(filechooser);
+                   printf("activated %s\n",full_name);
                    if ( ! ( Editor::instance ()->loadFromFile ( full_name ) ) )
                       Publisher::warn("Load failed,\ncheck the log for details");
                    else
@@ -131,24 +132,29 @@ void save_as_request(void(*after_call)(void)=NULL)
                                    gint             response_id,
                                    void             (*after_call)(void))
             {
-                   gchar *full_name;
+                   std::string full_name;
                    switch (response_id)
                    {
                           case GTK_RESPONSE_OK:
                                full_name = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(dialog));
-                               printf("wpisano %s\n",full_name);
-                               if ( ! ( Editor::instance ()->saveToFile ( full_name ) ) )
+                               printf("wpisano %s\n",full_name.c_str());
+                               if (full_name.substr(full_name.length()-std::string(".bscn").length())!=".bscn")
+                                  full_name+=".bscn";
+                               printf("zapis do %s\n",full_name.c_str());
+                               if ( ! ( Editor::instance ()->saveToFile ( full_name.c_str() ) ) )
                                   Publisher::warn("Save failed,\ncheck the log for details");
                                else
                                {
                                    if (after_call)
                                        after_call();
                                    else
-                                       scenery_name::set(full_name);
+                                       scenery_name::set(full_name.c_str());
                                }
                           case GTK_RESPONSE_CANCEL:
                                gtk_widget_destroy(GTK_WIDGET(dialog));
-                          /*/?/*/ case GTK_RESPONSE_DELETE_EVENT:
+
+                          /* przy zakomentowanym wyskakuje dialog z niedopasowanym rozmiarem: */
+                          case GTK_RESPONSE_DELETE_EVENT:
                                break;
 
                           default:
