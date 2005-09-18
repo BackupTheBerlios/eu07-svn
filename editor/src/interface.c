@@ -73,6 +73,7 @@ create_main_window (void)
   GtkWidget *createLines_mode_radiotoolbutton;
   GtkWidget *connectPoints_mode_radiotoolbutton;
   GtkWidget *createRailLines_mode_radiotoolbutton;
+  GtkWidget *createMiscLines_mode_radiotoolbutton;
   GtkWidget *createTracks_mode_radiotoolbutton;
   GtkWidget *import_mode_radiotoolbutton;
   GtkWidget *createFence_mode_radiotoolbutton;
@@ -282,6 +283,13 @@ create_main_window (void)
   gtk_radio_tool_button_set_group (GTK_RADIO_TOOL_BUTTON (createRailLines_mode_radiotoolbutton), select_mode_radiotoolbutton_group);
   select_mode_radiotoolbutton_group = gtk_radio_tool_button_get_group (GTK_RADIO_TOOL_BUTTON (createRailLines_mode_radiotoolbutton));
 
+  createMiscLines_mode_radiotoolbutton = (GtkWidget*) gtk_radio_tool_button_new (NULL);
+  gtk_tool_button_set_label (GTK_TOOL_BUTTON (createMiscLines_mode_radiotoolbutton), _("M. lines"));
+  gtk_widget_show (createMiscLines_mode_radiotoolbutton);
+  gtk_container_add (GTK_CONTAINER (main_toolbar), createMiscLines_mode_radiotoolbutton);
+  gtk_radio_tool_button_set_group (GTK_RADIO_TOOL_BUTTON (createMiscLines_mode_radiotoolbutton), select_mode_radiotoolbutton_group);
+  select_mode_radiotoolbutton_group = gtk_radio_tool_button_get_group (GTK_RADIO_TOOL_BUTTON (createMiscLines_mode_radiotoolbutton));
+
   createTracks_mode_radiotoolbutton = (GtkWidget*) gtk_radio_tool_button_new (NULL);
   gtk_tool_button_set_label (GTK_TOOL_BUTTON (createTracks_mode_radiotoolbutton), _("Tracks"));
   gtk_widget_show (createTracks_mode_radiotoolbutton);
@@ -471,6 +479,9 @@ create_main_window (void)
   g_signal_connect ((gpointer) createRailLines_mode_radiotoolbutton, "toggled",
                     G_CALLBACK (on_createRailLines_mode_radiotoolbutton_toggled),
                     NULL);
+  g_signal_connect ((gpointer) createMiscLines_mode_radiotoolbutton, "toggled",
+                    G_CALLBACK (on_createMiscLines_mode_radiotoolbutton_toggled),
+                    NULL);
   g_signal_connect ((gpointer) createTracks_mode_radiotoolbutton, "toggled",
                     G_CALLBACK (on_createTracks_mode_radiotoolbutton_toggled),
                     NULL);
@@ -527,6 +538,7 @@ create_main_window (void)
   GLADE_HOOKUP_OBJECT (main_window, createLines_mode_radiotoolbutton, "createLines_mode_radiotoolbutton");
   GLADE_HOOKUP_OBJECT (main_window, connectPoints_mode_radiotoolbutton, "connectPoints_mode_radiotoolbutton");
   GLADE_HOOKUP_OBJECT (main_window, createRailLines_mode_radiotoolbutton, "createRailLines_mode_radiotoolbutton");
+  GLADE_HOOKUP_OBJECT (main_window, createMiscLines_mode_radiotoolbutton, "createMiscLines_mode_radiotoolbutton");
   GLADE_HOOKUP_OBJECT (main_window, createTracks_mode_radiotoolbutton, "createTracks_mode_radiotoolbutton");
   GLADE_HOOKUP_OBJECT (main_window, import_mode_radiotoolbutton, "import_mode_radiotoolbutton");
   GLADE_HOOKUP_OBJECT (main_window, createFence_mode_radiotoolbutton, "createFence_mode_radiotoolbutton");

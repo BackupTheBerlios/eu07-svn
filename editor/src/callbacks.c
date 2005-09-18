@@ -692,3 +692,12 @@ on_new_dialog_response                 (GtkDialog       *dialog,
             Publisher::warn("Code bug:\nUnknown response from the 'new dialog'");
    }
 }
+
+void
+on_createMiscLines_mode_radiotoolbutton_toggled
+                                        (GtkToggleToolButton *toggletoolbutton,
+                                        gpointer         user_data)
+{
+
+}
+

@@ -144,3 +144,8 @@ void
 on_new_dialog_response                 (GtkDialog       *dialog,
                                         gint             response_id,
                                         gpointer         user_data);
+
+void
+on_createMiscLines_mode_radiotoolbutton_toggled
+                                        (GtkToggleToolButton *toggletoolbutton,
+                                        gpointer         user_data);
