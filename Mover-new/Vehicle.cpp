@@ -7,7 +7,9 @@ void Vehicle::generateAsm()
     Assembler* x86 = new Assembler();    
     
     optimize();
-    
+
+    x86->push(ebx);
+    x86->mov(ebx, dword_ptr[&data]);
     x86->finit();
 
     if(!childs.size()) return;
@@ -15,11 +17,10 @@ void Vehicle::generateAsm()
     vector<void*>::iterator iter;
     for(iter = childs.begin(); iter != childs.end(); iter++) ((Device*)*iter)->generateAsm(x86);
    
+    x86->pop(ebx);
     x86->ret();
     
 	update = (void(*)())x86->callable();    
-    
-//    if(update) cout << x86->getListing() << endl;
     
 };
 
