@@ -13,6 +13,7 @@
 #include "property_controls.h"
 #include <stdlib.h>
 #include <gdk/gdkkeysyms.h>
+#include "undo.h"
 
 #include <string>
 
@@ -22,7 +23,6 @@
 #include <GL/glu.h>
 #include "core/GL_realizer.h"
 #include "atrapy.h"
-#include <windows.h>
 #else
 #include "core/TopView.h"
 #include "core/PerspectiveView.h"
@@ -127,7 +127,7 @@ void save_as_request(void(*after_call)(void)=NULL)
                    }
                    gtk_widget_destroy(GTK_WIDGET(filechooser));
             }
-            
+
             static void response  (GtkDialog       *dialog,
                                    gint             response_id,
                                    void             (*after_call)(void))
@@ -199,6 +199,12 @@ void save_request(void(*after_call)(void)=NULL)
      else
          if (after_call)
             after_call();
+}
+
+void clearLock_and_quit()
+{
+     Undo::clear_lock();
+     gtk_main_quit();
 }
 
 void
@@ -281,11 +287,20 @@ printf("Wins shown\n");
   // kit[1].activate();
   gtk_timeout_add (7000, to_handler, kit);
   //gtk_timeout_add (1000, gajewski_h, &kit[0]);
-  
+
 #endif
 
 printf("ret/init_interface\n");
 
+/*
+clear_tmp_dir();
+make_lock();
+clear_tmp_dir();
+start_undo_saver();
+*/
+
+Undo::init ( lookup_widget(main_window,"undo_toolbutton"),
+             lookup_widget(main_window,"record_toolbutton") );
 };
 
 
@@ -479,8 +494,8 @@ on_fill_mode_radiotoolbutton_toggled (GtkToggleToolButton * toggletoolbutton,
 void
 on_export_mi_activate (GtkMenuItem * menuitem, gpointer user_data)
 {
-  // Editor::instance ()->saveToFile ("tmp.bscn");
-  save_request();
+  Editor::instance ()->saveToFile ("tmp.bscn");
+  // save_request();
 
   Editor::instance ()->exportToDirectory (edOptions::instance()->exportDir.c_str());
   gtk_main_quit();
@@ -495,8 +510,13 @@ on_main_window_key_press_event (GtkWidget * widget,
   int i;
   switch (event->keyval)
     {
+    case GDK_r:
+    case GDK_R:
+      printf("store pod undo\n");
+      Undo::store();
+      break;
+
     case GDK_a:
-		
       printf ("a pr/rel\n");
       break;
     case GDK_A:
@@ -508,11 +528,13 @@ on_main_window_key_press_event (GtkWidget * widget,
       break;
     }
 
+/*
   i = event->keyval;
   // printf ("code: %d\n",i);
 
   for (int i = 0; i < 32; i++)
     printf ("%d%s", !!(event->state & (1 << i)), i == 31 ? "\n" : "");
+*/
 
   return FALSE;
 }
@@ -606,11 +628,11 @@ on_quit_dialog_response                (GtkDialog       *dialog,
        case GTK_RESPONSE_YES:
             // trza zapisac:
             gtk_widget_hide(GTK_WIDGET(dialog));
-			save_request(gtk_main_quit);
+			save_request(clearLock_and_quit);
 			return;
 
        case GTK_RESPONSE_NO:
-            gtk_main_quit();
+            clearLock_and_quit();
 
        case GTK_RESPONSE_CANCEL:
             gtk_widget_hide(GTK_WIDGET(dialog));
@@ -701,3 +723,17 @@ on_createMiscLines_mode_radiotoolbutton_toggled
 
 }
 
+
+void
+on_undo_toolbutton_clicked             (GtkToolButton   *toolbutton,
+                                        gpointer         user_data)
+{
+   Undo::perform();
+}
+
+void
+on_record_toolbutton_clicked           (GtkToolButton   *toolbutton,
+                                        gpointer         user_data)
+{
+   Undo::store();
+}

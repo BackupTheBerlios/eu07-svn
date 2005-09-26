@@ -481,13 +481,13 @@ Kit::Item Kit::addFileSel(const char *prop_name, const char *dir_path, const cha
                 return ( g_str_has_prefix ( full_name, ((GString*)dir_path)->str) ) ?
                        full_name + ((GString*)dir_path)->len + 1: NULL;
          }
-         
+
          static void file_activated ( GtkFileChooser *filechooser, gpointer data )
          {
                 // ukrywamy dialog
                 // wstawiamy nazwe pliku do entry
                 // reorganizujemy listy wyboru
-                
+
                 gtk_widget_hide(GTK_WIDGET(filechooser));
 
                 gpointer item = g_object_get_data(G_OBJECT(filechooser),"item");

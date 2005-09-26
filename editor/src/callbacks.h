@@ -149,3 +149,11 @@ void
 on_createMiscLines_mode_radiotoolbutton_toggled
                                         (GtkToggleToolButton *toggletoolbutton,
                                         gpointer         user_data);
+
+void
+on_undo_toolbutton_clicked             (GtkToolButton   *toolbutton,
+                                        gpointer         user_data);
+
+void
+on_record_toolbutton_clicked           (GtkToolButton   *toolbutton,
+                                        gpointer         user_data);

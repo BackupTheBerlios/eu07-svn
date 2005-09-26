@@ -59,10 +59,14 @@ create_main_window (void)
   GtkWidget *new_toolbutton;
   GtkWidget *open_toolbutton;
   GtkWidget *save_toolbutton;
+  GtkWidget *n1_separatortoolitem;
+  GtkWidget *undo_toolbutton;
+  GtkWidget *record_toolbutton;
+  GtkWidget *separatortoolitem3;
   GtkWidget *tmp_image;
   GtkWidget *settings_toolbutton;
   GtkWidget *quit_toolbutton;
-  GtkWidget *separatortoolitem1;
+  GtkWidget *n3_separatortoolitem;
   GSList *select_mode_radiotoolbutton_group = NULL;
   GtkWidget *select_mode_radiotoolbutton;
   GtkWidget *move_mode_radiotoolbutton;
@@ -94,6 +98,9 @@ create_main_window (void)
   GtkWidget *n4_statusbar;
   GtkWidget *n5_statusbar;
   GtkAccelGroup *accel_group;
+  GtkTooltips *tooltips;
+
+  tooltips = gtk_tooltips_new ();
 
   accel_group = gtk_accel_group_new ();
 
@@ -206,6 +213,25 @@ create_main_window (void)
   gtk_widget_show (save_toolbutton);
   gtk_container_add (GTK_CONTAINER (main_toolbar), save_toolbutton);
 
+  n1_separatortoolitem = (GtkWidget*) gtk_separator_tool_item_new ();
+  gtk_widget_show (n1_separatortoolitem);
+  gtk_container_add (GTK_CONTAINER (main_toolbar), n1_separatortoolitem);
+
+  undo_toolbutton = (GtkWidget*) gtk_tool_button_new_from_stock ("gtk-undo");
+  gtk_widget_show (undo_toolbutton);
+  gtk_container_add (GTK_CONTAINER (main_toolbar), undo_toolbutton);
+  gtk_widget_set_sensitive (undo_toolbutton, FALSE);
+
+  record_toolbutton = (GtkWidget*) gtk_tool_button_new_from_stock ("gtk-media-record");
+  gtk_widget_show (record_toolbutton);
+  gtk_container_add (GTK_CONTAINER (main_toolbar), record_toolbutton);
+  gtk_widget_set_sensitive (record_toolbutton, FALSE);
+  gtk_tool_item_set_tooltip (GTK_TOOL_ITEM (record_toolbutton), tooltips, _("Store current version for 'undo'"), NULL);
+
+  separatortoolitem3 = (GtkWidget*) gtk_separator_tool_item_new ();
+  gtk_widget_show (separatortoolitem3);
+  gtk_container_add (GTK_CONTAINER (main_toolbar), separatortoolitem3);
+
   tmp_image = gtk_image_new_from_stock ("gtk-preferences", tmp_toolbar_icon_size);
   gtk_widget_show (tmp_image);
   settings_toolbutton = (GtkWidget*) gtk_tool_button_new (tmp_image, _("Settings"));
@@ -216,9 +242,9 @@ create_main_window (void)
   gtk_widget_show (quit_toolbutton);
   gtk_container_add (GTK_CONTAINER (main_toolbar), quit_toolbutton);
 
-  separatortoolitem1 = (GtkWidget*) gtk_separator_tool_item_new ();
-  gtk_widget_show (separatortoolitem1);
-  gtk_container_add (GTK_CONTAINER (main_toolbar), separatortoolitem1);
+  n3_separatortoolitem = (GtkWidget*) gtk_separator_tool_item_new ();
+  gtk_widget_show (n3_separatortoolitem);
+  gtk_container_add (GTK_CONTAINER (main_toolbar), n3_separatortoolitem);
 
   select_mode_radiotoolbutton = (GtkWidget*) gtk_radio_tool_button_new (NULL);
   gtk_tool_button_set_label (GTK_TOOL_BUTTON (select_mode_radiotoolbutton), _("Select"));
@@ -449,6 +475,12 @@ create_main_window (void)
   g_signal_connect ((gpointer) save_toolbutton, "clicked",
                     G_CALLBACK (on_save_toolbutton_clicked),
                     NULL);
+  g_signal_connect ((gpointer) undo_toolbutton, "clicked",
+                    G_CALLBACK (on_undo_toolbutton_clicked),
+                    NULL);
+  g_signal_connect ((gpointer) record_toolbutton, "clicked",
+                    G_CALLBACK (on_record_toolbutton_clicked),
+                    NULL);
   g_signal_connect ((gpointer) quit_toolbutton, "clicked",
                     G_CALLBACK (on_quit_toolbutton_clicked),
                     NULL);
@@ -526,9 +558,13 @@ create_main_window (void)
   GLADE_HOOKUP_OBJECT (main_window, new_toolbutton, "new_toolbutton");
   GLADE_HOOKUP_OBJECT (main_window, open_toolbutton, "open_toolbutton");
   GLADE_HOOKUP_OBJECT (main_window, save_toolbutton, "save_toolbutton");
+  GLADE_HOOKUP_OBJECT (main_window, n1_separatortoolitem, "n1_separatortoolitem");
+  GLADE_HOOKUP_OBJECT (main_window, undo_toolbutton, "undo_toolbutton");
+  GLADE_HOOKUP_OBJECT (main_window, record_toolbutton, "record_toolbutton");
+  GLADE_HOOKUP_OBJECT (main_window, separatortoolitem3, "separatortoolitem3");
   GLADE_HOOKUP_OBJECT (main_window, settings_toolbutton, "settings_toolbutton");
   GLADE_HOOKUP_OBJECT (main_window, quit_toolbutton, "quit_toolbutton");
-  GLADE_HOOKUP_OBJECT (main_window, separatortoolitem1, "separatortoolitem1");
+  GLADE_HOOKUP_OBJECT (main_window, n3_separatortoolitem, "n3_separatortoolitem");
   GLADE_HOOKUP_OBJECT (main_window, select_mode_radiotoolbutton, "select_mode_radiotoolbutton");
   GLADE_HOOKUP_OBJECT (main_window, move_mode_radiotoolbutton, "move_mode_radiotoolbutton");
   GLADE_HOOKUP_OBJECT (main_window, signals_mode_radiotoolbutton, "signals_mode_radiotoolbutton");
@@ -558,6 +594,7 @@ create_main_window (void)
   GLADE_HOOKUP_OBJECT (main_window, n3_statusbar, "n3_statusbar");
   GLADE_HOOKUP_OBJECT (main_window, n4_statusbar, "n4_statusbar");
   GLADE_HOOKUP_OBJECT (main_window, n5_statusbar, "n5_statusbar");
+  GLADE_HOOKUP_OBJECT_NO_REF (main_window, tooltips, "tooltips");
 
   gtk_window_add_accel_group (GTK_WINDOW (main_window), accel_group);
 
@@ -571,7 +608,7 @@ create_window2 (void)
   GtkWidget *drawingarea2;
 
   window2 = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-  gtk_window_set_title (GTK_WINDOW (window2), _("window2"));
+  gtk_window_set_title (GTK_WINDOW (window2), _("Editor - 3D view"));
 
   drawingarea2 = gtk_drawing_area_new ();
   gtk_container_add (GTK_CONTAINER (window2), drawingarea2);
@@ -615,12 +652,13 @@ create_warning_window (void)
 {
   GtkWidget *warning_window;
   GtkWidget *vbox;
+  GtkWidget *viewport;
   GtkWidget *label;
   GtkWidget *hbox;
   GtkWidget *ok_button;
 
   warning_window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-  gtk_window_set_title (GTK_WINDOW (warning_window), _("Warning"));
+  gtk_window_set_title (GTK_WINDOW (warning_window), _("Editor - warning"));
   gtk_window_set_position (GTK_WINDOW (warning_window), GTK_WIN_POS_MOUSE);
   gtk_window_set_resizable (GTK_WINDOW (warning_window), FALSE);
 
@@ -629,9 +667,14 @@ create_warning_window (void)
   gtk_container_add (GTK_CONTAINER (warning_window), vbox);
   gtk_container_set_border_width (GTK_CONTAINER (vbox), 6);
 
+  viewport = gtk_viewport_new (NULL, NULL);
+  gtk_widget_show (viewport);
+  gtk_box_pack_start (GTK_BOX (vbox), viewport, TRUE, TRUE, 0);
+  gtk_viewport_set_shadow_type (GTK_VIEWPORT (viewport), GTK_SHADOW_NONE);
+
   label = gtk_label_new (_("??????\n????????????????????\n????"));
   gtk_widget_show (label);
-  gtk_box_pack_start (GTK_BOX (vbox), label, TRUE, TRUE, 0);
+  gtk_container_add (GTK_CONTAINER (viewport), label);
   gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_CENTER);
 
   hbox = gtk_hbox_new (FALSE, 0);
@@ -656,6 +699,7 @@ create_warning_window (void)
   /* Store pointers to all widgets, for use by lookup_widget(). */
   GLADE_HOOKUP_OBJECT_NO_REF (warning_window, warning_window, "warning_window");
   GLADE_HOOKUP_OBJECT (warning_window, vbox, "vbox");
+  GLADE_HOOKUP_OBJECT (warning_window, viewport, "viewport");
   GLADE_HOOKUP_OBJECT (warning_window, label, "label");
   GLADE_HOOKUP_OBJECT (warning_window, hbox, "hbox");
   GLADE_HOOKUP_OBJECT (warning_window, ok_button, "ok_button");
@@ -673,7 +717,7 @@ create_error_window (void)
   GtkWidget *button;
 
   error_window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-  gtk_window_set_title (GTK_WINDOW (error_window), _("Error"));
+  gtk_window_set_title (GTK_WINDOW (error_window), _("Editor - error"));
   gtk_window_set_resizable (GTK_WINDOW (error_window), FALSE);
 
   vbox = gtk_vbox_new (FALSE, 6);

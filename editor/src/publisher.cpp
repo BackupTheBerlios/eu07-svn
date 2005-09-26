@@ -42,11 +42,21 @@ void Publisher::err(const char *msg)
     gtk_main_quit();
 };
 
+void Publisher::err(std::string msg) 
+{
+    err(msg.c_str()); 
+}
+
 void Publisher::warn(const char *msg) 
 {
     gtk_label_set_text ( GTK_LABEL ( lookup_widget(warn_window,"label") ), msg );
     gtk_widget_show(warn_window);
 };
+
+void Publisher::warn(std::string msg) 
+{
+     warn(msg.c_str());
+}
 
 int Publisher::set_status_msg(int sbar_num,const char *msg)
 {
