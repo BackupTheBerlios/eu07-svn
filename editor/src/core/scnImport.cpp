@@ -197,11 +197,15 @@ bool edSCNImport::import(osg::Vec3d pos, double r)
 						parser.getTokens();	parser >> r;
 
 						//switchL34R300.ive
+						/*
 						if ((r==300 || r==-300) && l==34)
-						{
+						{*/
+						
 						char dir= (r<0 ? 'R' : 'L');
 						char buf[256];
 						sprintf(buf,"switch%c%dR%d.ive",dir,l,abs(r));
+
+                        printf("switch-buf=%s\n",buf);
 
 						edTemplateTrack *tt= new edTemplateTrack();
 						tt->setTemplate(buf);
@@ -209,7 +213,7 @@ bool edSCNImport::import(osg::Vec3d pos, double r)
 						tt->moveTo(osg::Quat(osg::DegreesToRadians(angle),osg::Vec3d(0,0,1))*pt1+pos);
 						tt->setRotation(osg::Quat(osg::DegreesToRadians(angle)+a,osg::Vec3d(0,0,1)));
 						trk= tt;
-						}
+						/*}*/
 
 					}
 
