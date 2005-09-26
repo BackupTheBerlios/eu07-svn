@@ -512,10 +512,9 @@ on_main_window_key_press_event (GtkWidget * widget,
     {
     case GDK_r:
     case GDK_R:
-      printf("store pod undo\n");
-      Undo::store();
+      if (GTK_WIDGET_IS_SENSITIVE(lookup_widget(main_window,"record_toolbutton")))
+         Undo::store();
       break;
-
     case GDK_a:
       printf ("a pr/rel\n");
       break;
