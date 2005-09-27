@@ -30,9 +30,10 @@
 #include "core/options.h"
 #endif
 
+const int AUTOSAVE_DELAY_SECONDS = 120;
+const char *AUTOSAVE_FILENAME = "autosave.bscn";
 
 GtkWidget *main_window, *window2, *quit_dialog, *new_dialog;
-
 
 gboolean
 to_handler (gpointer data)
@@ -207,6 +208,13 @@ void clearLock_and_quit()
      gtk_main_quit();
 }
 
+gboolean autosave_callback(gpointer data)
+{
+     if ( ! ( Editor::instance ()->saveToFile ( AUTOSAVE_FILENAME ) ) )
+          Publisher::warn("Autosave failed,\ncheck the log for details");
+     return TRUE;
+}
+
 void
 init_interface (int *argcp, char ***argvp)
 {
@@ -242,17 +250,12 @@ printf("Wins created, not shown\n");
 #ifdef EDITOR_FULL
   osg::ref_ptr < TopView > top =
     new TopView (lookup_widget (main_window, "main_drawingarea"));
-printf("(1)\n");
   osg::ref_ptr < PerspectiveView > perspective =
     new PerspectiveView (lookup_widget (window2, "drawingarea2"));
-printf("(2)\n");
   static Editor editor (top.get ());
-printf("(3)\n");
   editor.addPerspectiveView (perspective.get ());
-printf("(4)\n");
   perspective->
     unsetNodeMask (Editor::Masks::nm_Nodes | Editor::Masks::nm_Maps);
-printf("(5)\n");
 #else
   Publisher::set_status_msg (3, "Publisher::set_status_msg(...)");
   static foo realizer2 (lookup_widget (window2, "drawingarea2"));
@@ -290,17 +293,10 @@ printf("Wins shown\n");
 
 #endif
 
-printf("ret/init_interface\n");
-
-/*
-clear_tmp_dir();
-make_lock();
-clear_tmp_dir();
-start_undo_saver();
-*/
-
-Undo::init ( lookup_widget(main_window,"undo_toolbutton"),
+  Undo::init ( lookup_widget(main_window,"undo_toolbutton"),
              lookup_widget(main_window,"record_toolbutton") );
+             
+  g_timeout_add(AUTOSAVE_DELAY_SECONDS*1000,autosave_callback,NULL);
 };
 
 

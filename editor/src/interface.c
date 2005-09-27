@@ -653,6 +653,8 @@ create_warning_window (void)
   GtkWidget *warning_window;
   GtkWidget *vbox;
   GtkWidget *viewport;
+  GtkWidget *hbox10;
+  GtkWidget *image10;
   GtkWidget *label;
   GtkWidget *hbox;
   GtkWidget *ok_button;
@@ -662,7 +664,7 @@ create_warning_window (void)
   gtk_window_set_position (GTK_WINDOW (warning_window), GTK_WIN_POS_MOUSE);
   gtk_window_set_resizable (GTK_WINDOW (warning_window), FALSE);
 
-  vbox = gtk_vbox_new (FALSE, 6);
+  vbox = gtk_vbox_new (FALSE, 4);
   gtk_widget_show (vbox);
   gtk_container_add (GTK_CONTAINER (warning_window), vbox);
   gtk_container_set_border_width (GTK_CONTAINER (vbox), 6);
@@ -672,9 +674,17 @@ create_warning_window (void)
   gtk_box_pack_start (GTK_BOX (vbox), viewport, TRUE, TRUE, 0);
   gtk_viewport_set_shadow_type (GTK_VIEWPORT (viewport), GTK_SHADOW_NONE);
 
+  hbox10 = gtk_hbox_new (FALSE, 6);
+  gtk_widget_show (hbox10);
+  gtk_container_add (GTK_CONTAINER (viewport), hbox10);
+
+  image10 = gtk_image_new_from_stock ("gtk-dialog-warning", GTK_ICON_SIZE_DIALOG);
+  gtk_widget_show (image10);
+  gtk_box_pack_start (GTK_BOX (hbox10), image10, FALSE, FALSE, 0);
+
   label = gtk_label_new (_("??????\n????????????????????\n????"));
   gtk_widget_show (label);
-  gtk_container_add (GTK_CONTAINER (viewport), label);
+  gtk_box_pack_start (GTK_BOX (hbox10), label, FALSE, FALSE, 0);
   gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_CENTER);
 
   hbox = gtk_hbox_new (FALSE, 0);
@@ -700,6 +710,8 @@ create_warning_window (void)
   GLADE_HOOKUP_OBJECT_NO_REF (warning_window, warning_window, "warning_window");
   GLADE_HOOKUP_OBJECT (warning_window, vbox, "vbox");
   GLADE_HOOKUP_OBJECT (warning_window, viewport, "viewport");
+  GLADE_HOOKUP_OBJECT (warning_window, hbox10, "hbox10");
+  GLADE_HOOKUP_OBJECT (warning_window, image10, "image10");
   GLADE_HOOKUP_OBJECT (warning_window, label, "label");
   GLADE_HOOKUP_OBJECT (warning_window, hbox, "hbox");
   GLADE_HOOKUP_OBJECT (warning_window, ok_button, "ok_button");
@@ -712,6 +724,8 @@ create_error_window (void)
 {
   GtkWidget *error_window;
   GtkWidget *vbox;
+  GtkWidget *hbox11;
+  GtkWidget *image11;
   GtkWidget *label;
   GtkWidget *hbox;
   GtkWidget *button;
@@ -720,14 +734,22 @@ create_error_window (void)
   gtk_window_set_title (GTK_WINDOW (error_window), _("Editor - error"));
   gtk_window_set_resizable (GTK_WINDOW (error_window), FALSE);
 
-  vbox = gtk_vbox_new (FALSE, 6);
+  vbox = gtk_vbox_new (FALSE, 4);
   gtk_widget_show (vbox);
   gtk_container_add (GTK_CONTAINER (error_window), vbox);
   gtk_container_set_border_width (GTK_CONTAINER (vbox), 6);
 
+  hbox11 = gtk_hbox_new (FALSE, 6);
+  gtk_widget_show (hbox11);
+  gtk_box_pack_start (GTK_BOX (vbox), hbox11, FALSE, FALSE, 0);
+
+  image11 = gtk_image_new_from_stock ("gtk-dialog-error", GTK_ICON_SIZE_DIALOG);
+  gtk_widget_show (image11);
+  gtk_box_pack_start (GTK_BOX (hbox11), image11, FALSE, FALSE, 0);
+
   label = gtk_label_new (_("???????????????????????????\n????????????????????\n"));
   gtk_widget_show (label);
-  gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (hbox11), label, FALSE, FALSE, 0);
   gtk_label_set_justify (GTK_LABEL (label), GTK_JUSTIFY_CENTER);
 
   hbox = gtk_hbox_new (FALSE, 0);
@@ -752,6 +774,8 @@ create_error_window (void)
   /* Store pointers to all widgets, for use by lookup_widget(). */
   GLADE_HOOKUP_OBJECT_NO_REF (error_window, error_window, "error_window");
   GLADE_HOOKUP_OBJECT (error_window, vbox, "vbox");
+  GLADE_HOOKUP_OBJECT (error_window, hbox11, "hbox11");
+  GLADE_HOOKUP_OBJECT (error_window, image11, "image11");
   GLADE_HOOKUP_OBJECT (error_window, label, "label");
   GLADE_HOOKUP_OBJECT (error_window, hbox, "hbox");
   GLADE_HOOKUP_OBJECT (error_window, button, "button");
@@ -793,18 +817,17 @@ create_quit_dialog (void)
   dialog_vbox1 = GTK_DIALOG (quit_dialog)->vbox;
   gtk_widget_show (dialog_vbox1);
 
-  hbox1 = gtk_hbox_new (FALSE, 0);
+  hbox1 = gtk_hbox_new (FALSE, 4);
   gtk_widget_show (hbox1);
   gtk_box_pack_start (GTK_BOX (dialog_vbox1), hbox1, FALSE, FALSE, 0);
 
-  image1 = gtk_image_new_from_stock ("gtk-dialog-question", GTK_ICON_SIZE_BUTTON);
+  image1 = gtk_image_new_from_stock ("gtk-dialog-question", GTK_ICON_SIZE_DIALOG);
   gtk_widget_show (image1);
   gtk_box_pack_start (GTK_BOX (hbox1), image1, FALSE, FALSE, 0);
-  gtk_widget_set_size_request (image1, 30, 30);
 
   label1 = gtk_label_new (_("Save scenery before quit?"));
   gtk_widget_show (label1);
-  gtk_box_pack_start (GTK_BOX (hbox1), label1, FALSE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (hbox1), label1, FALSE, FALSE, 0);
   gtk_misc_set_padding (GTK_MISC (label1), 4, 4);
 
   dialog_action_area1 = GTK_DIALOG (quit_dialog)->action_area;
@@ -944,14 +967,13 @@ create_new_dialog (void)
   dialog_vbox2 = GTK_DIALOG (new_dialog)->vbox;
   gtk_widget_show (dialog_vbox2);
 
-  hbox9 = gtk_hbox_new (FALSE, 0);
+  hbox9 = gtk_hbox_new (FALSE, 6);
   gtk_widget_show (hbox9);
-  gtk_box_pack_start (GTK_BOX (dialog_vbox2), hbox9, TRUE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (dialog_vbox2), hbox9, FALSE, FALSE, 0);
 
-  image9 = gtk_image_new_from_stock ("gtk-dialog-question", GTK_ICON_SIZE_BUTTON);
+  image9 = gtk_image_new_from_stock ("gtk-dialog-question", GTK_ICON_SIZE_DIALOG);
   gtk_widget_show (image9);
   gtk_box_pack_start (GTK_BOX (hbox9), image9, FALSE, FALSE, 0);
-  gtk_widget_set_size_request (image9, 30, 30);
 
   label10 = gtk_label_new (_("Save scenery before creating new one?"));
   gtk_widget_show (label10);
