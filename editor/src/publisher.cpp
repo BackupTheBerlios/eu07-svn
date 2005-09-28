@@ -27,6 +27,13 @@ void Publisher::init(GtkWidget* main_window)
     GtkWidget *hbox = lookup_widget(main_window,"status_hbox");
     if (!hbox)
        warn("Code bug:\nInaccessible status_hbox\nStatus msgs will not appear probably");
+       
+    gtk_window_set_transient_for (GTK_WINDOW (err_window),
+				                  GTK_WINDOW (main_window));
+
+    gtk_window_set_transient_for (GTK_WINDOW (warn_window),
+				                  GTK_WINDOW (main_window));
+
 /*
     gtk_statusbar_push ( 
         GTK_STATUSBAR ( left_sb = lookup_widget(main_window,"left_statusbar") ),

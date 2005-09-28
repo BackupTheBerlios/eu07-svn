@@ -54,7 +54,7 @@ void Undo::init(GtkWidget *undo, GtkWidget *record)
 
       while (1)
       {
-         fd = open ( name.c_str(), O_RDWR | O_CREAT | O_EXCL, S_IRUSR | S_IWUSR );
+         fd = open ( name.c_str(), O_RDWR | O_CREAT | O_EXCL, S_IREAD | S_IWRITE );
          if (fd==-1)
             if (errno==EINTR)
                continue;
