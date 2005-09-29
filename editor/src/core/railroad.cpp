@@ -489,8 +489,9 @@ void edRailLine::applyFeature()
 //		if (nrl)
 //			nrl->applyFeature();
 		edPoint *pt= ( isLast() ? pt2.get() : NULL);
-		pt1->free();
-		if (pt)
+		if (pt1->getType()==edPoint::getClassID())
+			pt1->free();
+		if (pt && pt->getType()==edPoint::getClassID())
 			pt->free();
 	}
 	Editor::instance()->enableRedraws();

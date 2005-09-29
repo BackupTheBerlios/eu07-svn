@@ -798,7 +798,9 @@ edRailLine *Editor::createRailLine(edPoint *pt1, edPoint *pt2)
 {
 	edRailLine *ln= NULL;
 	if (pt1 && pt2 && pt2!=pt1 && !pt2->connected(pt1) && !pt1->getFlag(nf_NoSave) && !pt2->getFlag(nf_NoSave) && 
-		pt1->getType()==edPoint::getClassID() && pt2->getType()==edPoint::getClassID())
+		( pt1->getType()==edPoint::getClassID() || pt1->getType()==edPointFeature::getClassID() ) &&
+		( pt2->getType()==edPoint::getClassID() || pt2->getType()==edPointFeature::getClassID() ) )
+//		pt1->getType()==edPoint::getClassID() && pt2->getType()==edPoint::getClassID())
 	{
 		ln= createRailLine();
 		ln->setPoints(pt1,pt2);
@@ -1096,6 +1098,19 @@ bool Editor::saveToFile(const char *fileName)
 	return true;
 }
 
+class FixupDatabaseVisitor : public osg::NodeVisitor
+{
+public:
+	FixupDatabaseVisitor() : NodeVisitor(TRAVERSE_ALL_CHILDREN) {};
+	virtual void apply(osg::Node& node) 
+	{
+		node.setUserData(NULL);
+		if (!(node.getNodeMask() & Editor::nm_DynamicFlatReflection))
+			node.setNodeMask(0xFFFFFFFF);
+		traverse(node); 
+	}
+};
+
 class PagedLODSave : public osg::NodeVisitor
 {
 public:
@@ -1107,11 +1122,13 @@ public:
 	}
 	virtual void apply(osg::PagedLOD& node) 
 	{
+		FixupDatabaseVisitor fdv;
 		unsigned int i;
 		for (i=0; i<node.getNumChildren(); i++)
 			if (!node.getFileName(i).empty())
 			{
-				
+//				fdv.reset();
+//				node.getChild(i)->accept(fdv);
 				osgUtil::Optimizer optimizer;
 				optimizer.optimize(node.getChild(i),
 					osgUtil::Optimizer::FLATTEN_STATIC_TRANSFORMS|
@@ -1252,9 +1269,11 @@ osg::MatrixTransform *Editor::getOrCreateCell(int x, int y)
 	if (!trans)
 	{
 		osg::PagedLOD *lod= new osg::PagedLOD();
+		lod->setDataVariance(osg::Node::STATIC);
 		osg::Matrixd mat;
 		mat.makeTranslate(getCellX(x),getCellY(y),0);
 		trans= new osg::MatrixTransform(mat);
+		trans->setDataVariance(osg::Node::STATIC);
 		nameFromCoords5(buf,x,y);
 		lod->setName(buf);
 		lod->setCenterMode(osg::LOD::CenterMode::USER_DEFINED_CENTER);
@@ -1314,12 +1333,14 @@ void Editor::addObject(osg::MatrixTransform *gmt, osg::MatrixTransform *mt, floa
 	else
 	{
 		lod= new osg::LOD();
+		lod->setDataVariance(osg::Node::STATIC);
 		lod->setName(buf);
 		gmt->addChild(lod);
 	}
 	if (!group)
 	{
 		group= new osg::Group();
+		group->setDataVariance(osg::Node::STATIC);
 		lod->addChild(group,minDist,maxDist);
 	}
 

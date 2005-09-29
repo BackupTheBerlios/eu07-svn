@@ -257,6 +257,9 @@
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
+			<File
+				RelativePath="..\src\undo.cpp">
+			</File>
 		</Filter>
 		<Filter
 			Name="Header Files"

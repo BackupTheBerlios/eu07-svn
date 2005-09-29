@@ -5,6 +5,8 @@
 #include <fcntl.h>
 #include <errno.h>
 #include <sys/stat.h>
+#include <io.h>
+#include <direct.h>
 
 #ifndef EDITOR_FULL
 #include <GL/gl.h>
