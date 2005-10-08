@@ -14,7 +14,8 @@ public:
 	{
 		edNode::setupProps(pr);
 		registerProp(pr,"scn",setScnFile,getScnFile,"",".","*.sc[nm]");
-		registerProp(pr,"angle",setAngle,getAngle,0,-360,360,1);
+		registerProp(pr,"angle",setAngle,getAngle,0,-360,360,1); 
+        /* ^^^ mw158979: bylo ",10);", czyli za duzo dla Barta ^^^ */
 	}
 
 	static edSCNImport *instance();
