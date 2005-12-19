@@ -195,11 +195,15 @@ void edWireFeature::applyFeature()
 		osg::Geode *geode= new osg::Geode();
 		osg::Geometry *geom = new osg::Geometry();
 
+// 181205 ShaXbee: poprawka wyswietlania trakcji (znikajaca zupelnie przy odleglosci ~70m) namieszane z LOD
+// <StaryKod>
 //		a= 1.0-1.0/double(l+1);
-		a= 1.0/double(lods-l+1)-1.0/double(lods+1);
+//		a= 1.0/double(lods-l+1)-1.0/double(lods+1);
+// </StaryKod>
+
 		ms= ( l==1 || l==2 ? 1.0 : l );//1-(1.0/double(lods-l+1)-1.0/double(lods));
-//		a= lods;
-//		a/= l;
+		a= lods;
+		a/= l;
 
 			osg::Vec3Array *v;
 			osg::Vec3Array *norm;
