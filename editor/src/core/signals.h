@@ -28,6 +28,12 @@ public:
 
 	void setName(const char* n) { name= n; };
 	const char* getName() { return name.c_str(); };
+
+// mw158979 (dwie zaslepki)
+            void setSkinFile(const char *sf)
+                 { printf("setSkinFile zaslepka!\n"); };
+            const char *getSkinFile()
+                  { printf("getSkinFile zaslepka!\n"); return NULL; };
 	
 	void setTrackPiece(TrackPiece *tp);
 	void clearTrackPiece(TrackPiece *tp);

@@ -8,6 +8,10 @@ void edSignal::setupProps(Properties &pr)
 	registerProp(pr,"name",setName,getName,"");
 	registerProp(pr,"station",setStation,getStation,"none");
 	registerProp(pr,"signal",setSignalName,getSignalName,"SSzpcpI.ive","\\models\\signals","*.ive");
+
+// mw158979 (kontrolka do replacableskinu)
+	        registerProp(pr,"replacable skin",setSkinFile,getSkinFile,"A-m.tga","\\textures","*.*");
+
 //		registerProp(pr,"signal2",setSignalName,getSignalName,"PKP/SSzpcpI");
 //		registerProp(pr,"",setCurveI,getCurveI,0,1);
 
