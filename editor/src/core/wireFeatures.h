@@ -16,7 +16,7 @@ public:
 		registerProp(pr,"override wire params",setOverride,getOverride,1);
 		registerProp(pr,"type",setWireType,getWireType,1,0,1,1);
 		registerProp(pr,"wires",setNumWires,getNumWires,3,0,3,1);
-		registerProp(pr,"models",setModels,getModels,"tr/B-STB1-3K.ive;tr/B-STB1-3D.ive");
+		registerProp(pr,"models",setModels,getModels,"tr/STB-3K1.65#1.ive;tr/STB-3D1.65#1.ive");
 
 	}
 

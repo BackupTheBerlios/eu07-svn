@@ -1,8 +1,8 @@
 #include "wireFeatures.h"
 #include "editor.h"
 #include "nodes.h"
-
-std::string edWireFeature::models("tr/STB1-2D.ive;tr/STB1-2K.ive");
+// Bart: Zmiana modeli dolaczanych do trakcji 191205
+std::string edWireFeature::models("tr/STB-3D1.65#1.ive;tr/STB-3K1.65#1.ive");
 
 void edWireFeature::load(std::istream &stream, int version, CollectNodes *cn)
 {

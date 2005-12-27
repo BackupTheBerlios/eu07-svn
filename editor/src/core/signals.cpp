@@ -7,17 +7,17 @@ void edSignal::setupProps(Properties &pr)
 	edDynamicGeom::setupProps(pr);
 	registerProp(pr,"name",setName,getName,"");
 	registerProp(pr,"station",setStation,getStation,"none");
-	registerProp(pr,"signal",setSignalName,getSignalName,"SSzpcpI.ive","\\models\\signals","*.ive");
+	registerProp(pr,"signal",setSignalName,getSignalName,"ss4zcpbI.ive","\\models\\signals","*.ive");
 
 // mw158979 (kontrolka do replacableskinu)
 	        registerProp(pr,"replacable skin",setSkinFile,getSkinFile,"A-m.tga","\\textures","*.*");
 
-//		registerProp(pr,"signal2",setSignalName,getSignalName,"PKP/SSzpcpI");
+//		registerProp(pr,"signal2",setSignalName,getSignalName,"PKP/ss4zcpbI");
 //		registerProp(pr,"",setCurveI,getCurveI,0,1);
 
 }
 
-edSignal::edSignal() : edDynamicGeom(), track(NULL), signalName("SSzpcpI.ive"), name(""), signalID(0xFFFFFFFF)
+edSignal::edSignal() : edDynamicGeom(), track(NULL), signalName("ss4zcpI.ive"), name(""), signalID(0xFFFFFFFF)
 {
 }
 
