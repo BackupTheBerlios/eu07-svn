@@ -1,6 +1,7 @@
 #include "wireFeatures.h"
 #include "editor.h"
 #include "nodes.h"
+
 // Bart: Zmiana modeli dolaczanych do trakcji 191205
 std::string edWireFeature::models("tr/STB-3D1.65#1.ive;tr/STB-3K1.65#1.ive");
 

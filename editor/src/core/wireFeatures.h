@@ -16,7 +16,8 @@ public:
 		registerProp(pr,"override wire params",setOverride,getOverride,1);
 		registerProp(pr,"type",setWireType,getWireType,1,0,1,1);
 		registerProp(pr,"wires",setNumWires,getNumWires,3,0,3,1);
-		registerProp(pr,"models",setModels,getModels,"tr/STB-3K1.65#1.ive;tr/STB-3D1.65#1.ive");
+		registerProp(pr,"models",setModels,getModels,models);
+//		registerProp(pr,"models",setModels,getModels,"tr/STB-3K1.65#1.ive;tr/STB-3D1.65#1.ive");
 
 	}
 
@@ -56,7 +57,7 @@ protected:
 	void setModels(const char *m) { models= m; };
 	const char *getModels() { return models.c_str(); };
 
-	static std::string models;
+	static std::string models; //("tr/STB-3D1.65#1.ive;tr/STB-3K1.65#1.ive");
 //	static std::string model2;
 
 	void setOverride(int t) { overrideParams= t==1; }
