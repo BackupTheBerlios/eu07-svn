@@ -1,23 +1,24 @@
 //#include "editor.h"
 #include "signals.h"
+#include "findNodeVisitor.h"
 //#include "tracks.h"
 
 void edSignal::setupProps(Properties &pr)
 {
 	edDynamicGeom::setupProps(pr);
+
 	registerProp(pr,"name",setName,getName,"");
 	registerProp(pr,"station",setStation,getStation,"none");
 	registerProp(pr,"signal",setSignalName,getSignalName,"ss4zcpbI.ive","\\models\\signals","*.ive");
+    registerProp(pr,"replacable skin",setSkinFile,getSkinFile,"A-m.tga","\\textures","*.*");
 
 // mw158979 (kontrolka do replacableskinu)
-	        registerProp(pr,"replacable skin",setSkinFile,getSkinFile,"A-m.tga","\\textures","*.*");
-
 //		registerProp(pr,"signal2",setSignalName,getSignalName,"PKP/ss4zcpbI");
 //		registerProp(pr,"",setCurveI,getCurveI,0,1);
 
 }
 
-edSignal::edSignal() : edDynamicGeom(), track(NULL), signalName("ss4zcpI.ive"), name(""), signalID(0xFFFFFFFF)
+edSignal::edSignal() : edDynamicGeom(), track(NULL), signalName("ss4zcpI.ive"), name(""), skinFile(""), signalID(0xFFFFFFFF)
 {
 }
 
@@ -33,6 +34,7 @@ void edSignal::load(std::istream &stream, int version, CollectNodes *cn)
 	read(stream,name);
 	setStation(readS(stream).c_str());
 	setSignalName(readS(stream).c_str());
+	setSkinFile(readS(stream).c_str());
 }
 
 void edSignal::save(std::ostream &stream)
@@ -41,6 +43,7 @@ void edSignal::save(std::ostream &stream)
 	write(stream,name);
 	write(stream,station);
 	write(stream,signalName);
+	write(stream,skinFile);
 }
 
 void edSignal::export(std::ostream &stream)
@@ -71,7 +74,32 @@ void edSignal::setSignalName(const char* tex)
 	{
 //		signalName.substr(0,n);
 		this->setGeom(osgDB::readNodeFile(signalName));
+		printf("setGeom %d\n", trans);
 	}
+}
+
+void edSignal::setSkinFile(const char *sf)
+{
+
+	skinFile = sf;
+
+	if(!this->trans) { printf("Geometry not found in semaphore %d\n", trans); return; };
+	findNodeVisitor findNode("MAIN");
+	trans->accept(findNode);
+
+	if(!findNode.getNodeList().size()) { printf("Replaceable node MAIN not found in semaphore\n"); return; };
+	osg::Node* replaceable = findNode.getNodeList().front();
+//	if(!replaceable) { printf("Replaceable node %s not found in semaphore\n", sf); return; };
+
+	//skinFile.assign(sf);
+	osg::Image *image = osgDB::readImageFile(std::string(sf));
+    if(!image) { printf("Error loading semaphore replaceable texture\n"); return; };
+    osg::Texture2D *texture = new osg::Texture2D;
+    texture->setImage(image); 
+
+	osg::StateSet *state = replaceable->getOrCreateStateSet();
+	state->setTextureAttributeAndModes(0,texture,osg::StateAttribute::OVERRIDE|osg::StateAttribute::ON);
+
 }
 
 void edSignal::setTrackPiece(TrackPiece *tp)

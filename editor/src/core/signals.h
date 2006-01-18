@@ -30,10 +30,9 @@ public:
 	const char* getName() { return name.c_str(); };
 
 // mw158979 (dwie zaslepki)
-            void setSkinFile(const char *sf)
-                 { printf("setSkinFile zaslepka!\n"); };
-            const char *getSkinFile()
-                  { printf("getSkinFile zaslepka!\n"); return NULL; };
+        void setSkinFile(const char *sf);
+//                 { printf("setSkinFile zaslepka!\n"); };
+        const char *getSkinFile() { return skinFile.c_str(); };
 	
 	void setTrackPiece(TrackPiece *tp);
 	void clearTrackPiece(TrackPiece *tp);
@@ -48,6 +47,7 @@ protected:
 	std::string station;
 
 	std::string signalName;
+	std::string skinFile;
 
 	std::string name;
 
