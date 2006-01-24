@@ -283,12 +283,18 @@ printf("Wins shown\n");
   kit[0].addTextEntry ("Janowski", "");
   kit[0].addTextEntry ("Zalewski", "");
   kit[0].addButton ("Borowski", 1, 0);
-  kit[0].addFileSel ("Majewski", "C:\\WINDOWS\\Desktop\\Editor","*.*","Zielinski");
+  // kit[0].addFileSel ("Majewski", "C:\\WINDOWS\\Desktop","*.*","Zielinski");
+  std::vector<std::string> p, e;
+  p.push_back(std::string("*.*"));
+  e.push_back(std::string("emb #1"));
+  e.push_back(std::string("emb #2"));
+  e.push_back(std::string("emb #3"));
+  kit[0].addFileSel ("Majewski", /*"C:\\WINDOWS\\Desktop"*/ NULL,p,"Zielinski",3,true,e);
   static Kit::Item gajewski_item = kit[0].addButton ("Gajewski", 1, 1);
   // gajewski_item.switching();
 
   // kit[1].activate();
-  gtk_timeout_add (7000, to_handler, kit);
+  gtk_timeout_add (27000, to_handler, kit);
   //gtk_timeout_add (1000, gajewski_h, &kit[0]);
 
 #endif

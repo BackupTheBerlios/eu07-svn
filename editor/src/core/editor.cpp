@@ -2186,7 +2186,8 @@ bool Editor::addKit(unsigned int classID, PropertySet::Properties &props)
 					GetCurrentDirectory(256,buf);
 					strcat(buf,it->second.dir.c_str());
 					unsigned int t= GetTickCount();
-					kit->addFileSel(it->first.c_str(),buf,it->second.pattern.c_str(),it->second.defaultStr.c_str());
+					// kit->addFileSel(it->first.c_str(),buf,it->second.pattern.c_str(),it->second.defaultStr.c_str());
+					kit->addFileSel(it->first.c_str(),buf,it->second.patterns,it->second.defaultStr.c_str(), it->second.store_size, it->second.editable_combo, it->second.embedded );
 					printf("filesel time: %d\n",GetTickCount()-t);
 				}
 			break;

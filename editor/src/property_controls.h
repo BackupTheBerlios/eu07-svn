@@ -1,6 +1,9 @@
 #ifndef PROPERTY_CONTROLS_HPP
 #define PROPERTY_CONTROLS_HPP 1
 
+#include <string>
+#include <vector>
+
 #include <gtk/gtk.h>
 
 class PropertySet;
@@ -28,6 +31,14 @@ class Kit
         Item addIntEntry ( const char* prop_name, int min, int max, int step, int default_val );
         Item addButton ( const char *prop_name, bool toggle, bool toggle_state );
         Item addFileSel ( const char *prop_name, const char *dir_path, const char *pattern, const char *default_val );
+        Item addFileSel ( const char *prop_name, const char *dir_path, std::vector<std::string> patterns, const char *default_val, int store_size, bool editable, std::vector<std::string> embedded_vals );
+        /*
+          dir_path: sciezka ustawiana w otwieranym dialogu, NULL oznacza samo combo
+          patterns: vector ze stringami typu "*.exe"
+          store_size: liczba elementow do zapamietania w rozwijanym menu (oprocz embd)
+          editable: czy entry powinno przyjmowac wpisy reczne
+          embedded_vals: stale pozycje do rozwijanego menu
+        */
 
         void activate();
         static void disable();

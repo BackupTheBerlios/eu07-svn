@@ -79,6 +79,7 @@ public:
 			step= _step;
 		}
 	};
+/*	
 	void init(SetString setString, GetString getString, std::string _defaultStr, std::string _dir="", std::string _pattern="")
 	{
 		if (type==pt_Empty)
@@ -91,6 +92,21 @@ public:
 			pattern= _pattern;
 //			if (!dir.empty())
 //				subType= SubType::st_FileDialog;
+		}
+	};
+*/
+	void init(SetString setString, GetString getString, std::string _defaultStr, std::string _dir="", std::vector<std::string> _patterns=std::vector<std::string>(), std::vector<std::string> _embedded=std::vector<std::string>(), int editable_combo=0 )
+	{ // mw158979: init dla filechooser'a SE
+		if (type==pt_Empty)
+		{
+			type= pt_String;
+			setm.asString= setString;
+			getm.asString= getString;
+			defaultStr= _defaultStr;
+			dir= _dir;
+			patterns= _patterns;
+			embedded= _embedded;
+			editable_combo= _editable_combo;
 		}
 	};
 
@@ -113,8 +129,11 @@ public:
 	static bool ownerValid() { return owner!=NULL; };
 	static void setOwner(PropertySet* _owner) { owner= _owner; };
 
-	std::string defaultStr,dir,pattern;
-	double defaultVal;
+	std::string defaultStr,dir;//,pattern;
+	std::vector<std::string> patterns, embedded;
+	int editable_combo;
+
+    double defaultVal;
 	double min;
 	double max;
 	double step;
@@ -171,6 +190,15 @@ private:
 		pr[name].init((Property::SetFloat)set,(Property::GetFloat)get,_defaultVal,_min,_max,_step); \
 		return true; \
 	}; \
+	static bool registerProp(Properties& pr, const char *name, void (CLASS_NAME::*set)(const char* val), const char* (CLASS_NAME::*get)(), std::string _defaultStr, std::string _dir="", std::vector<std::string> _patterns=std::vector<std::string>(), std::vector<std::string> _embedded=std::vector<std::string>(), int editable_combo=0 ) \
+	{ \
+		if (pr.find(name)!=pr.end()) \
+			return false; \
+		pr[name].init((Property::SetString)set,(Property::GetString)get,_defaultStr,_dir,_patterns,embedded,editable_combo); \
+		return true; \
+	};
+/*
+mw158979: cd #define'a przy pierwotnej kontrolce combo+filechooser
 	static bool registerProp(Properties& pr, const char *name, void (CLASS_NAME::*set)(const char* val), const char* (CLASS_NAME::*get)(), std::string _defaultStr, std::string _dir="", std::string _pattern="") \
 	{ \
 		if (pr.find(name)!=pr.end()) \
@@ -178,7 +206,7 @@ private:
 		pr[name].init((Property::SetString)set,(Property::GetString)get,_defaultStr,_dir,_pattern); \
 		return true; \
 	};
-
+*/
 
 class PropertySet// : public osg::Referenced
 {

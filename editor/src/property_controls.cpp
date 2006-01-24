@@ -3,6 +3,9 @@
 #include "publisher.h"
 #include "core/PropertySet.h"
 
+#include <string>
+#include <vector>
+
 #define DEBUG 0
 
 GtkBox *Kit::external_widget;
@@ -429,6 +432,7 @@ Kit::Item Kit::addButton ( const char *prop_name, bool toggle, bool toggle_state
 
 Kit::Item Kit::addFileSel(const char *prop_name, const char *dir_path, const char *pattern, const char *default_val)
 {
+/*
   if (DEBUG)
      printf("addFileSel(dir:%s,val:%s) ...\n",dir_path,default_val);
 
@@ -625,6 +629,251 @@ Kit::Item Kit::addFileSel(const char *prop_name, const char *dir_path, const cha
   g_object_set_data ( G_OBJECT(item), "entry", GTK_BIN(comboboxentry)->child );
   g_object_set_data ( G_OBJECT(item), "combo", comboboxentry );
   g_object_set_data ( G_OBJECT(item), "filter", filter );
+  g_object_set_data_full ( G_OBJECT(item), "dirpath", g_string_new(dir_path), my_gstring_free );
+
+  registerPropertyItem ( GTK_BOX(item), support::write_func,
+                         support::read_func, prop_name );
+
+  if (DEBUG)
+     printf("addFileSel done\n");
+                         
+  return Kit::Item(item);
+  */
+  
+  return addFileSel ( prop_name,
+                      dir_path,
+                      std::vector<std::string>(1,std::string(pattern)),
+                      default_val,
+                      6,
+                      false,
+                      std::vector<std::string>()
+                      );
+}
+
+Kit::Item Kit::addFileSel(const char *prop_name, const char *dir_path,
+          std::vector<std::string> patterns, const char *default_val,
+          int store_size, bool editable, std::vector<std::string> embedded_vals )
+{
+  if (DEBUG)
+     printf("addFileSel(dir:%s,val:%s) ...\n",dir_path,default_val);
+
+  struct support
+  {
+         static GtkWidget* get_dialog()
+         {
+                static GtkWidget *filechooserdialog = NULL;
+                if (!filechooserdialog)
+                {
+                   GtkWidget *fcd = gtk_file_chooser_dialog_new ("Choose a file", NULL, GTK_FILE_CHOOSER_ACTION_OPEN, NULL);
+                   filechooserdialog = fcd;
+                   gtk_window_set_position (GTK_WINDOW (filechooserdialog), GTK_WIN_POS_CENTER_ON_PARENT);
+                   gtk_window_set_modal (GTK_WINDOW (filechooserdialog), TRUE);
+                   gtk_window_set_destroy_with_parent (GTK_WINDOW (filechooserdialog), TRUE);
+                   gtk_window_set_skip_taskbar_hint (GTK_WINDOW (filechooserdialog), FALSE);
+                   gtk_window_set_type_hint (GTK_WINDOW (filechooserdialog), GDK_WINDOW_TYPE_HINT_DIALOG);
+                   gtk_window_set_transient_for ( GTK_WINDOW(filechooserdialog), 
+                                                  GTK_WINDOW(gtk_widget_get_toplevel(GTK_WIDGET(external_widget))) );
+                   g_signal_connect ( (gpointer) filechooserdialog, "file_activated",
+                                    G_CALLBACK (support::file_activated), NULL );
+                   g_signal_connect ( (gpointer) filechooserdialog, "delete_event",
+                                    G_CALLBACK(gtk_widget_hide_on_delete), NULL );
+                }
+                return filechooserdialog;
+         }
+
+         static void combo_changed ( GtkComboBox *combobox, gpointer item )
+         {
+                // reorganizujemy listy wyboru
+         }
+         
+         static void entry_changed ( GtkEditable *editable, gpointer item )
+         {
+                // wyslamy wartosc do wlasciciela
+                write_func(GTK_BOX(item));
+         }
+         
+         static const gchar* filename_slimming ( gchar *full_name, gpointer item )
+         {
+                gpointer dir_path = g_object_get_data(G_OBJECT(item),"dirpath");
+                if (!dir_path)
+                {
+                   Publisher::warn("Code bug:\nInaccessible dirpath gstring for file-sel property item");
+                   return "";
+                }
+                
+                printf("Slimming, dir %s, file %s\n",((GString*)dir_path)->str,full_name);
+                
+                return ( g_str_has_prefix ( full_name, ((GString*)dir_path)->str) ) ?
+                       full_name + ((GString*)dir_path)->len + 1: NULL;
+         }
+
+         static void file_activated ( GtkFileChooser *filechooser, gpointer data )
+         {
+                // ukrywamy dialog
+                // wstawiamy nazwe pliku do entry
+                // reorganizujemy listy wyboru
+
+                gtk_widget_hide(GTK_WIDGET(filechooser));
+
+                gpointer item = g_object_get_data(G_OBJECT(filechooser),"item");
+                if (!item)
+                {
+                   Publisher::warn("Code bug:\nInaccessible item for file-sel dialog");
+                   return;
+                }
+
+				//MW - coby pamietal sciezke na ktorej skonczylismy
+//				gchar *dir_path = gtk_file_chooser_get_current_folder(filechooser);
+//			    g_object_set_data_full ( G_OBJECT(item), "dirpath", g_string_new(dir_path), my_gstring_free );
+				//MW
+
+
+                gchar *full_name = gtk_file_chooser_get_filename(filechooser);
+                
+                const gchar *short_name = filename_slimming ( full_name, item );
+
+                if (!short_name)
+                {
+                   Publisher::warn("Invalid selection");
+                   return;
+                }
+
+                printf("File activated <%s> <%s>\n",short_name,full_name);
+
+                GtkEntry *entry = GTK_ENTRY ( g_object_get_data(G_OBJECT(item),"entry") );
+                if (!entry)
+                   Publisher::warn("Code bug:\nInaccessible entry widget for file-sel property item");
+                else
+                   gtk_entry_set_text(entry,short_name);
+
+                GtkComboBox *combo = GTK_COMBO_BOX ( g_object_get_data(G_OBJECT(item),"combo") );
+                if (!entry)
+                {
+                   Publisher::warn("Code bug:\nInaccessible combo widget for file-sel property item");
+                   return;
+                }
+
+                int s_size = (int) g_object_get_data ( G_OBJECT(item),"store_size" );
+                if (!s_size)
+                {
+                   Publisher::warn("Code bug:\nInaccessible store size int for file-sel property item");
+                   return;
+                }
+
+                int embd = (int) g_object_get_data ( G_OBJECT(item),"embd_amount" );
+                if (!embd)
+                {
+                   Publisher::warn("Code bug:\nInaccessible embedded amount int for file-sel property item");
+                   return;
+                }
+
+                gtk_combo_box_insert_text ( combo, embd-1, short_name );
+                gtk_combo_box_remove_text ( combo, s_size-1 );
+         }
+
+         static void button_released ( GtkButton *button, gpointer item )
+         {
+                GtkWidget *dialog = get_dialog();
+                printf("setting item for dialog (%X)\n",dialog);
+                g_object_set_data(G_OBJECT(dialog),"item",item);
+                printf("set\n");
+                gpointer dir_path = g_object_get_data(G_OBJECT(item),"dirpath");
+                if (!dir_path)
+                {
+                   Publisher::warn("Code bug:\nInaccessible dirpath gstring for file-sel property item");
+                   return;
+                }
+                gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(dialog),((GString*)dir_path)->str);
+                gpointer filter = g_object_get_data(G_OBJECT(item),"filter");
+                if (!filter)
+                {
+                   Publisher::warn("Code bug:\nInaccessible filter for file-sel property item");
+                   return;
+                }
+                gtk_file_chooser_set_filter(GTK_FILE_CHOOSER(dialog),GTK_FILE_FILTER(filter));
+                gtk_widget_show(GTK_WIDGET(dialog));
+         }
+
+         static void read_func(GtkBox *item)
+         {
+            GtkEntry *entry = GTK_ENTRY(g_object_get_data(G_OBJECT(item),"entry"));
+            PropertySet *owner = getOwner(item);
+            const char* prop_name = getPropName(item);
+            if (owner) gtk_entry_set_text(entry,owner->getString(prop_name));
+            printf("read property %s\n",prop_name);
+         }
+
+         static void write_func(GtkBox *item)
+         {
+            GtkEntry *entry = GTK_ENTRY(g_object_get_data(G_OBJECT(item),"entry"));
+            PropertySet *owner = getOwner(item);
+            const char* prop_name = getPropName(item);
+			if (!disableOnChange)		//MW - HACK :)
+               if (owner) owner->set ( prop_name, (const char*)gtk_entry_get_text(entry) );
+            printf("write property %s\n",prop_name);
+         }
+  };
+
+  if (E_DEBUG)
+     printf("addFileSel/creating widgets\n");
+  
+  GtkWidget *item = gtk_vbox_new (FALSE, 4);
+  gtk_widget_show (item);
+  gtk_container_set_border_width (GTK_CONTAINER (item), 4);
+
+  GtkWidget *label = gtk_label_new (_(prop_name));
+  gtk_widget_show (label);
+  gtk_box_pack_start (GTK_BOX (item), label, FALSE, FALSE, 0);
+
+  GtkWidget *hbox = gtk_hbox_new (FALSE, 4);
+  gtk_widget_show (hbox);
+  gtk_box_pack_start (GTK_BOX (item), hbox, TRUE, TRUE, 0);
+
+  GtkWidget *comboboxentry = gtk_combo_box_entry_new_text ();
+  gtk_widget_show (comboboxentry);
+  gtk_box_pack_start (GTK_BOX (hbox), comboboxentry, TRUE, TRUE, 0);
+  gtk_entry_set_text ( GTK_ENTRY(GTK_BIN(comboboxentry)->child), default_val );
+  gtk_entry_set_editable ( GTK_ENTRY(GTK_BIN(comboboxentry)->child), editable );
+
+  for ( int i=0; i<embedded_vals.size(); i++)
+        gtk_combo_box_append_text ( GTK_COMBO_BOX(comboboxentry), embedded_vals[i].c_str() );
+
+  g_signal_connect ((gpointer) comboboxentry, "changed", G_CALLBACK (support::combo_changed),item);
+  g_signal_connect ((gpointer) GTK_ENTRY(GTK_BIN(comboboxentry)->child), "changed", G_CALLBACK (support::entry_changed),item);
+
+  if (DEBUG) printf("addFileSel/accessing dialog\n");
+  GtkWidget *filechooserdialog = support::get_dialog();
+
+  GtkFileFilter *filter;
+  if (dir_path)
+  {
+     if (DEBUG) printf("addFileSel/creating filter\n");
+     filter = gtk_file_filter_new();
+     if (DEBUG) printf("*\n");
+     g_object_ref(G_OBJECT(filter));
+     for (int j=0;j<patterns.size();j++)
+     {
+         gtk_file_filter_add_pattern(filter, patterns[j].c_str());
+         if (DEBUG) printf("-> %s\n",patterns[j].c_str());
+     }
+  }
+
+  if (DEBUG) printf("addFileSel/creating button\n");
+  GtkWidget *button = gtk_button_new_with_mnemonic (_("..."));
+  if (dir_path)
+     gtk_widget_show (button);
+  gtk_box_pack_start (GTK_BOX (hbox), button, FALSE, FALSE, 0);
+
+  if (DEBUG)
+     printf("addFileSel/connecting signals\n");
+
+  g_signal_connect ((gpointer) button, "released", G_CALLBACK (support::button_released), item );
+  
+  g_object_set_data ( G_OBJECT(item), "entry", GTK_BIN(comboboxentry)->child );
+  g_object_set_data ( G_OBJECT(item), "combo", comboboxentry );
+  g_object_set_data ( G_OBJECT(item), "filter", filter );
+  g_object_set_data ( G_OBJECT(item), "store_size", (gpointer) (store_size+embedded_vals.size()+1) );
+  g_object_set_data ( G_OBJECT(item), "embd_amount", (gpointer) (embedded_vals.size()+1) );
   g_object_set_data_full ( G_OBJECT(item), "dirpath", g_string_new(dir_path), my_gstring_free );
 
   registerPropertyItem ( GTK_BOX(item), support::write_func,
