@@ -197,6 +197,13 @@ private:
 			return false; \
 		pr[name].init((Property::SetString)set,(Property::GetString)get,_defaultStr,_dir,_patterns,_embedded,_editable_combo,_store_size); \
 		return true; \
+	};\
+	static bool registerProp(Properties& pr, const char *name, void (CLASS_NAME::*set)(const char* val), const char* (CLASS_NAME::*get)(), std::string _defaultStr, std::string _dir="", std::string _pattern="") \
+	{ \
+		if (pr.find(name)!=pr.end()) \
+			return false; \
+		pr[name].init((Property::SetString)set,(Property::GetString)get,_defaultStr,_dir,std::vector<std::string>(1,_pattern),std::vector<std::string>(),false,6 ); \
+		return true; \
 	};
 /*
 mw158979: cd #define'a przy pierwotnej kontrolce combo+filechooser
