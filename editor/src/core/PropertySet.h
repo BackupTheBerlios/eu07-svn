@@ -191,7 +191,7 @@ private:
 		pr[name].init((Property::SetFloat)set,(Property::GetFloat)get,_defaultVal,_min,_max,_step); \
 		return true; \
 	}; \
-	static bool registerProp(Properties& pr, const char *name, void (CLASS_NAME::*set)(const char* val), const char* (CLASS_NAME::*get)(), std::string _defaultStr, std::string _dir="", std::vector<std::string> _patterns=std::vector<std::string>(), std::vector<std::string> _embedded=std::vector<std::string>(), int _editable_combo=0, int _store_size=0 ) \
+	static bool registerProp(Properties& pr, const char *name, void (CLASS_NAME::*set)(const char* val), const char* (CLASS_NAME::*get)(), std::string _defaultStr, std::string _dir, std::vector<std::string> _patterns, std::vector<std::string> _embedded, int _editable_combo, int _store_size ) \
 	{ \
 		if (pr.find(name)!=pr.end()) \
 			return false; \
