@@ -194,7 +194,7 @@ private:
 	{ \
 		if (pr.find(name)!=pr.end()) \
 			return false; \
-		pr[name].init((Property::SetString)set,(Property::GetString)get,_defaultStr,_dir,_patterns,embedded,_editable_combo); \
+		pr[name].init((Property::SetString)set,(Property::GetString)get,_defaultStr,_dir,_patterns,_embedded,_editable_combo); \
 		return true; \
 	};
 /*
