@@ -95,7 +95,7 @@ public:
 		}
 	};
 */
-	void init(SetString setString, GetString getString, std::string _defaultStr, std::string _dir="", std::vector<std::string> _patterns=std::vector<std::string>(), std::vector<std::string> _embedded=std::vector<std::string>(), int editable_combo=0 )
+	void init(SetString setString, GetString getString, std::string _defaultStr, std::string _dir="", std::vector<std::string> _patterns=std::vector<std::string>(), std::vector<std::string> _embedded=std::vector<std::string>(), int _editable_combo=0 )
 	{ // mw158979: init dla filechooser'a SE
 		if (type==pt_Empty)
 		{
@@ -190,11 +190,11 @@ private:
 		pr[name].init((Property::SetFloat)set,(Property::GetFloat)get,_defaultVal,_min,_max,_step); \
 		return true; \
 	}; \
-	static bool registerProp(Properties& pr, const char *name, void (CLASS_NAME::*set)(const char* val), const char* (CLASS_NAME::*get)(), std::string _defaultStr, std::string _dir="", std::vector<std::string> _patterns=std::vector<std::string>(), std::vector<std::string> _embedded=std::vector<std::string>(), int editable_combo=0 ) \
+	static bool registerProp(Properties& pr, const char *name, void (CLASS_NAME::*set)(const char* val), const char* (CLASS_NAME::*get)(), std::string _defaultStr, std::string _dir="", std::vector<std::string> _patterns=std::vector<std::string>(), std::vector<std::string> _embedded=std::vector<std::string>(), int _editable_combo=0 ) \
 	{ \
 		if (pr.find(name)!=pr.end()) \
 			return false; \
-		pr[name].init((Property::SetString)set,(Property::GetString)get,_defaultStr,_dir,_patterns,embedded,editable_combo); \
+		pr[name].init((Property::SetString)set,(Property::GetString)get,_defaultStr,_dir,_patterns,embedded,_editable_combo); \
 		return true; \
 	};
 /*
