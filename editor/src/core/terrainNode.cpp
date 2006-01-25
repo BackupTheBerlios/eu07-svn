@@ -93,8 +93,7 @@ void edTerrainNode::load(std::istream &stream, int version, CollectNodes *cn)
 		p2->addTerrainOwner(this);
 		p3->addTerrainOwner(this);
 	}
-	stream.read((char*)&UID,sizeof(UID));
-	material= Editor::lastInstance()->getMaterial(UID);
+	material= Editor::lastInstance()->getOrCreateMaterial(readS(stream));
 
 	if (version<2)
 	{
@@ -361,7 +360,7 @@ void edTerrainNode::updateVisual()
 						}
 					}
 					if (dblMatTris.empty())
-						material= Editor::instance()->getMaterial(1);
+						material= Editor::instance()->getDefaultMaterial();
 //					getTerrainOwnersList()
 				}
 				if (material.valid())
@@ -489,16 +488,37 @@ void edTerrainNode::applyCulture(const char *cultureFile)
 	redrawAll();
 }
 
-void edTerrainNode::setMaterialI(int val)
+/*void edTerrainNode::setMaterialI(int val)
 {
 //	Editor::instance()->selectMaterial(val);
-	setMaterial(Editor::instance()->getMaterial(val)); 
+	setMaterial(Editor::instance()->getOrCreateMaterial(val)); 
 	redrawAll(); 
 }
 
 int edTerrainNode::getMaterialI()
 {
 	return (material.valid() ? material->UID : 0);
+}
+*/
+
+void edTerrainNode::setMaterialName(const char* name)
+{
+
+	printf("setMaterialName %s\n");
+	_materialName = name;
+//	TerrainMaterial* mat = Editor::instance()->getOrCreateMaterial(name);
+
+	Editor::instance()->selectMaterial(name);
+	redrawAll();
+
+}
+
+const char* edTerrainNode::getMaterialName()
+{
+
+//	printf("atrapa");
+	return _materialName.c_str();
+
 }
 
 unsigned int edTerrainNode::getNodeMask() 

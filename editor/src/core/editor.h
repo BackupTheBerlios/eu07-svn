@@ -91,7 +91,7 @@ public:
 
 	virtual void updateNodeDesc();
 
-	virtual void selectMaterial(int i);
+	virtual void selectMaterial(std::string name);
 	virtual void selectModel(int i);
 
 	static edPoint *createPoint(osg::Vec3d pos);
@@ -127,7 +127,8 @@ public:
 	virtual bool onDrag(unsigned int state);
 	virtual bool onMove(unsigned int state);
 
-	inline TerrainMaterial* getMaterial(unsigned int i) { return materials[i].get(); };
+	TerrainMaterial* getOrCreateMaterial(std::string name);
+	TerrainMaterial* getDefaultMaterial();
 
 	inline osg::Group* getRoot() { return root.get(); };
 	inline osg::Group* getTerrainRoot() { return terrainRoot.get(); };
@@ -263,11 +264,14 @@ protected:
 
 	std::vector<osgText::Text*> statusBar;
 
-	std::vector< osg::ref_ptr<TerrainMaterial> > materials;
+	typedef std::pair< std::string, osg::ref_ptr<TerrainMaterial> > materialsItem_t;
+	typedef	std::map< std::string, osg::ref_ptr<TerrainMaterial> > materials_t;
+	materials_t materials;
 	TerrainMaterial *material;
 	osg::Matrixd textureMatrix;
 
 	std::string model;
+	std::string _defaultMaterial;
 
 //	double previewPitch, previewYaw, previewDist;
 

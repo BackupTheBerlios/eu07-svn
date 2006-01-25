@@ -72,9 +72,17 @@ public:
 	static void setupProps(Properties &pr)
 	{
 		edGeomNode::setupProps(pr);
-		registerProp(pr,"material",setMaterialI,getMaterialI,1,0,100);
+
+		std::vector<std::string> filters; filters.push_back("*.mat");
+		std::vector<std::string> embedded; embedded.push_back("blend");
+
+		registerProp(pr,"material", setMaterialName, getMaterialName, "grass.mat", "\\editor\\materials", filters, embedded, 0, 5);
+//		registerProp(pr,"material",setMaterialI,getMaterialI,1,0,100);
 		registerProp(pr,"culture file",setCultureFile,getCultureFile,"very_sparse_trees.clt","\\cultures","*.clt");
 		registerProp(pr,"apply culture",applyCultureI);
+
+//		setMaterialName("\\editor\\materials\\grass.mat"); 
+
 	}
 //	virtual unsigned int getType() { return 'TERR'; };
 	edTerrainNode() : edGeomNode() { };
@@ -89,8 +97,12 @@ public:
 //	virtual void onSelect(osg::Geode *geom);
 //	virtual void onDeselect();
 //	virtual void free();
-	void setMaterialI(int val);
-	int getMaterialI();
+//	void setMaterialI(int val);
+//	int getMaterialI();
+
+	std::string _materialName; // sciezka definicji materialu
+	void setMaterialName(const char* name); // zaladuj definicje materialu
+	const char* getMaterialName(); // pobierz sciezke definicji aktualnego materialu
 
 	inline void setMaterial(TerrainMaterial *mat) { material= mat; };
 

@@ -20,20 +20,20 @@
 #include <osg/TextureCubeMap>
 #include <osg/TexGen>
 
-
 class TerrainMaterial : public osg::Referenced
 {
 public:
-	TerrainMaterial() :	UID(0), type(0), texDim(1,1) { texMat.identity(); };
+	TerrainMaterial() :	UID(0), type(0), texDim(1,1) { texMat.identity(); blend = false; };
 	virtual ~TerrainMaterial() {};
 
-	void load(std::istream &file);
+	void load(std::string name);
 	inline bool	hasTex() { return !tex.empty(); };
 	osg::Vec2f getTexCoord(osg::Vec3d v) 
 	{
 		osg::Vec3d vrt= texMat*v;
 		return osg::Vec2f(vrt.x()/texDim.x(),vrt.y()/texDim.y());
 	}
+	bool blend;
 	unsigned int UID;
 	int	type;
 	std::string tex,reflectionTex,texfront,texright,texback,texleft,texup,texdown;

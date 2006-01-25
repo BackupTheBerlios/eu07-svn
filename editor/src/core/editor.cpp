@@ -87,7 +87,9 @@ Editor *Editor::instance()
 
 Editor::Editor(TopView *_mainView) : MouseAdapter(), mainView(_mainView), mode(em_Select), allowRedraws(false), options(NULL)
 {
-	material= NULL;
+
+	_defaultMaterial = "grass.mat";
+	material= getDefaultMaterial();
 	self= this;
 
 //	defaultOptions= new osgDB::ReaderWriter::Options();
@@ -176,6 +178,7 @@ Editor::Editor(TopView *_mainView) : MouseAdapter(), mainView(_mainView), mode(e
 	textureMatrix.makeIdentity();
 	
 
+/*
 	osg::ref_ptr<TerrainMaterial> tm;
 	std::ifstream file("default.mat", std::ios::in);
 	char buf[256];
@@ -207,6 +210,7 @@ Editor::Editor(TopView *_mainView) : MouseAdapter(), mainView(_mainView), mode(e
 	
 	file.close();
 	selectMaterial( materials.size()>1 ? 1 : -1 );
+*/
 	
 	selectModel(0);
 
@@ -664,22 +668,22 @@ void Editor::updateNodeDesc()
 	}
 }
 
-void Editor::selectMaterial(int i)
+void Editor::selectMaterial(std::string name)
 {
-	printf("select material!\n");
-	if (i<0 || !materials[i].valid())
-	{
-		material= NULL;
+
+	printf("Select material: %s\n", name.c_str());
+	material = getOrCreateMaterial(name);
+
 //		Publisher::set_status_msg(4,"blend");
 //		statusBar[7]->setText("blend");
-	}
-	else
-	{
-		material= materials[i].get();
+//	}
+//	else
+//	{
+//		material= materials[i].get();
 //		Publisher::set_status_msg(4,material->tex.c_str());
 //		statusBar[7]->setText(material->tex);
-		
-	}
+//	}
+
 }
 
 void Editor::selectModel(int i)
@@ -994,7 +998,7 @@ bool Editor::loadFromFile(const char *fileName)
 				default: throw "invalid terrain node";
 			}
 			tn->load(file,ver,&cn);
-			if (tn->getMaterialI()>0)
+			if (tn->getMaterialName() != "blend")
 				tn->updateVisual();
 			else
 				blendTerrains.push_back(tn);
@@ -2255,4 +2259,40 @@ void Editor::setLinesInPreview3D(bool v)
 			(*it)->unsetNodeMask(nm_Nodes);
 		(*it)->exposed();
 	}
+}
+
+TerrainMaterial* Editor::getOrCreateMaterial(std::string name)
+{
+
+	std::string filename("editor\\materials\\");
+	filename.append(name);
+
+	printf("getOrCreateMaterial %s\n", name.c_str());
+
+	osg::ref_ptr<TerrainMaterial> tm;
+	
+	materials_t::iterator iter = materials.find(name);
+	if(iter == materials.end())
+	{
+		tm = new TerrainMaterial();
+		tm->load(filename);
+		std::pair< std::string, osg::ref_ptr<TerrainMaterial> > item(name, tm);
+//		materialsItem_t item(name, tm);
+		materials.insert(item);
+			
+	} else {
+
+		tm = iter->second;
+
+	};
+
+	return (tm.valid() ? tm.get() : NULL);
+
+}
+
+TerrainMaterial* Editor::getDefaultMaterial()
+{
+
+	return getOrCreateMaterial(_defaultMaterial);
+
 }
