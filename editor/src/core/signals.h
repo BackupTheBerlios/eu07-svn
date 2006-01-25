@@ -29,10 +29,8 @@ public:
 	void setName(const char* n) { name= n; };
 	const char* getName() { return name.c_str(); };
 
-// mw158979 (dwie zaslepki)
-        void setSkinFile(const char *sf);
-//                 { printf("setSkinFile zaslepka!\n"); };
-        const char *getSkinFile() { return skinFile.c_str(); };
+    void setSkinFile(const char *sf);
+    const char *getSkinFile() { return skinFile.c_str(); };
 	
 	void setTrackPiece(TrackPiece *tp);
 	void clearTrackPiece(TrackPiece *tp);
@@ -46,10 +44,12 @@ protected:
 	
 	std::string station;
 
-	std::string signalName;
-	std::string skinFile;
+	std::string signalName; // nazwa pliku z modelem semafora
+	std::string skinFile; // nazwa pliku z tekstura tabliczki
 
-	std::string name;
+	osg::StateSet* skinState; // node w którym zmieniamy tabliczke
+
+	std::string name; // id semafora
 
 };
 

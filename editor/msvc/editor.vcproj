@@ -186,6 +186,9 @@
 				RelativePath="config.h">
 			</File>
 			<File
+				RelativePath="..\src\core\findNodeVisitor.cpp">
+			</File>
+			<File
 				RelativePath="..\src\interface.c">
 				<FileConfiguration
 					Name="Release|Win32">
@@ -268,6 +271,9 @@
 				RelativePath="..\src\callbacks.h">
 			</File>
 			<File
+				RelativePath="..\src\core\findNodeVisitor.h">
+			</File>
+			<File
 				RelativePath="..\src\interface.h">
 			</File>
 			<File
@@ -334,12 +340,6 @@
 					<Tool
 						Name="VCCustomBuildTool"/>
 				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="..\src\core\loft.cpp">
-			</File>
-			<File
-				RelativePath="..\src\core\loft.h">
 			</File>
 			<File
 				RelativePath="..\src\core\MilePost.cpp">

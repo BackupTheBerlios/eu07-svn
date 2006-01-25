@@ -1,6 +1,7 @@
 //#include "editor.h"
 #include "signals.h"
 #include "findNodeVisitor.h"
+#include <osgDB/ReaderWriter>
 //#include "tracks.h"
 
 void edSignal::setupProps(Properties &pr)
@@ -20,6 +21,9 @@ void edSignal::setupProps(Properties &pr)
 
 edSignal::edSignal() : edDynamicGeom(), track(NULL), signalName("ss4zcpI.ive"), name(""), skinFile(""), signalID(0xFFFFFFFF)
 {
+
+	skinState = NULL;
+
 }
 
 edSignal::~edSignal()
@@ -68,43 +72,78 @@ void edSignal::export(std::ostream &stream)
 
 void edSignal::setSignalName(const char* tex) 
 {
-	signalName= tex;
+	signalName = tex;
+
+	printf("set signal model %s\n", tex);
 //	unsigned int n= signalName.find_last_of('/');
 //	if (n<signalName.size())
 	{
 //		signalName.substr(0,n);
-		this->setGeom(osgDB::readNodeFile(signalName));
-		printf("setGeom %d\n", trans);
+		osgDB::ReaderWriter::Options* signalsCacheOptions = new osgDB::ReaderWriter::Options();
+		signalsCacheOptions->setObjectCacheHint((osgDB::ReaderWriter::Options::CacheHintOptions) (osgDB::ReaderWriter::Options::CACHE_ALL & !osgDB::ReaderWriter::Options::CACHE_NODES));
+
+		this->setGeom(osgDB::readNodeFile(signalName, signalsCacheOptions));
+
+		if(this->trans)
+		{
+
+			findNodeVisitor findNode("MAIN");
+			trans->accept(findNode);
+
+			// je¿eli znaleziono obiekt z tekstura tabliczki to ustaw stateset na node replaceable
+// DEBUG:		printf("skinState %d", skinState); 
+			skinState = (osg::StateSet*) (findNode.getNodeList().size() ? findNode.getNodeList().front()->getOrCreateStateSet() : NULL);
+
+			// ShaXbee: nasty hack - musialem to wstawic bo write property sa w niepoprawnej kolejnosci wywolywane
+			setSkinFile(skinFile.c_str());
+
+		} else {
+			
+			// nie zaladowano geometrii semafora - cos poszlo nie tak
+			printf("Geometry not found in semaphore (ptr: %d)\n", trans);
+
+		};
+
+//		printf("setGeom %d\n", trans);
 	}
 }
 
+// ShaXbee 18-01-2005
+// zmiana tekstury tabliczki
 void edSignal::setSkinFile(const char *sf)
 {
 
+//	if(skinFile == sf) return; // jesli nic sie nie zmienilo
 	skinFile = sf;
 
-	if(!this->trans) { printf("Geometry not found in semaphore %d\n", trans); return; };
-	findNodeVisitor findNode("MAIN");
-	trans->accept(findNode);
+	if(skinState)
+	{
 
-	if(!findNode.getNodeList().size()) { printf("Replaceable node MAIN not found in semaphore\n"); return; };
-	osg::Node* replaceable = findNode.getNodeList().front();
-//	if(!replaceable) { printf("Replaceable node %s not found in semaphore\n", sf); return; };
+		osg::Image *image = osgDB::readImageFile(std::string(sf));
+		if(image)
+		{
 
-	//skinFile.assign(sf);
-	osg::Image *image = osgDB::readImageFile(std::string(sf));
-    if(!image) { printf("Error loading semaphore replaceable texture\n"); return; };
-    osg::Texture2D *texture = new osg::Texture2D;
-    texture->setImage(image); 
+			osg::Texture2D *texture = new osg::Texture2D;
+			texture->setImage(image); 
 
-	osg::StateSet *state = replaceable->getOrCreateStateSet();
-	state->setTextureAttributeAndModes(0,texture,osg::StateAttribute::OVERRIDE|osg::StateAttribute::ON);
+// DEBUG:			printf("attempt to change state\n");
+			skinState->setTextureAttributeAndModes(0,texture, osg::StateAttribute::OVERRIDE|osg::StateAttribute::ON);
+// DEBUG:			printf("state written\n");
+
+		} else {
+
+			// nie udalo sie zaladowac tekstury
+			printf("Failed to load semaphore skin file %s\n", sf);
+
+		};
+
+	};
 
 }
 
 void edSignal::setTrackPiece(TrackPiece *tp)
 {
-	track= tp;
+	track = tp;
 	track->addSignal(this);
 }
 

@@ -95,11 +95,14 @@ public:
 		}
 	};
 */
-	void init(SetString setString, GetString getString, std::string _defaultStr, std::string _dir="", std::vector<std::string> _patterns=std::vector<std::string>(), std::vector<std::string> _embedded=std::vector<std::string>(), int _editable_combo=0, int _store_size=0 )
+	void init(SetString setString, GetString getString, std::string _defaultStr, std::string _dir, std::vector<std::string> _patterns=std::vector<std::string>(), std::vector<std::string> _embedded=std::vector<std::string>(), int _editable_combo=0, int _store_size=0 )
 	{ // mw158979: init dla filechooser'a SE
+
+//		printf("dir: %s default: %s\n", _dir.c_str(), _defaultStr.c_str());
 		if (type==pt_Empty)
 		{
 			type= pt_String;
+//			subType= st_FileDialog;
 			setm.asString= setString;
 			getm.asString= getString;
 			defaultStr= _defaultStr;
