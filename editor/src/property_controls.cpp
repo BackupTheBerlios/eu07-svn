@@ -809,8 +809,10 @@ Kit::Item Kit::addFileSel(const char *prop_name, const char *dir_path,
             PropertySet *owner = getOwner(item);
             const char* prop_name = getPropName(item);
 			if (!disableOnChange)		//MW - HACK :)
+			{
                if (owner) owner->set ( prop_name, (const char*)gtk_entry_get_text(entry) );
-            printf("write property %s\n",prop_name);
+               printf("write property %s\n",prop_name);
+            }
          }
   };
 
