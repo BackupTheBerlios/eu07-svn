@@ -811,7 +811,7 @@ Kit::Item Kit::addFileSel(const char *prop_name, const char *dir_path,
 			if (!disableOnChange)		//MW - HACK :)
 			{
                if (owner) owner->set ( prop_name, (const char*)gtk_entry_get_text(entry) );
-               printf("write property %s\n",prop_name);
+               printf("write property %s %d\n",prop_name,owner);
             }
          }
   };
