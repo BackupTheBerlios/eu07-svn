@@ -668,6 +668,13 @@ void Editor::updateNodeDesc()
 	}
 }
 
+void Editor::selectMaterial(TerrainMaterial* mat)
+{
+
+	material = mat;
+
+}
+
 void Editor::selectMaterial(std::string name)
 {
 
@@ -2049,6 +2056,7 @@ typedef std::map< CellCoords, TriList, ltpair> Terrain;
 
 bool Editor::fill(osg::Vec3d pos)
 {
+
 //	double cellDim= 1000.0;
 	osg::Matrix texMat;
 	texMat.makeIdentity();
@@ -2106,12 +2114,14 @@ bool Editor::fill(osg::Vec3d pos)
 		if (out.triangleattributelist[i]==1)
 			nt++;
 
-	edTerrainNode *tn= NULL;
-	if (nt>0 && in.numberofpoints==out.numberofpoints && material!=NULL)
+	edTerrainNode* tn = NULL;
+
+	if (nt>0 && in.numberofpoints==out.numberofpoints)
 	{
 		tn= new edTerrainNode();
-		tn->setMaterial(material);
+		setKitOwnerWithWrite(tn);
 
+		tn->setMaterial(material);
 		tn->setNumTriangles(nt);
 
 		int j= 0;
@@ -2138,12 +2148,16 @@ bool Editor::fill(osg::Vec3d pos)
 	SafeFree(out.edgemarkerlist);
 	SafeFree(out.neighborlist);
 
+	if(tn) tn->updateVisual();
+
+/*
 	if (tn)
 	{
 		setKitOwnerWithWrite(tn);
 		tn->updateVisual();
 //		selectNode(tn);
 	}
+*/
 
 	return false;
 }

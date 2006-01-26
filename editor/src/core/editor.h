@@ -91,6 +91,7 @@ public:
 
 	virtual void updateNodeDesc();
 
+	virtual void selectMaterial(TerrainMaterial* mat);
 	virtual void selectMaterial(std::string name);
 	virtual void selectModel(int i);
 

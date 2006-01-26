@@ -93,7 +93,8 @@ void edTerrainNode::load(std::istream &stream, int version, CollectNodes *cn)
 		p2->addTerrainOwner(this);
 		p3->addTerrainOwner(this);
 	}
-	material= Editor::lastInstance()->getOrCreateMaterial(readS(stream));
+	_materialName = readS(stream);
+	material = Editor::instance()->getOrCreateMaterial(_materialName);
 
 	if (version<2)
 	{
@@ -117,8 +118,8 @@ void edTerrainNode::save(std::ostream &stream)
 		ptUID= triangles[i].v[2]->getUID();
 		stream.write((char*)&ptUID,sizeof(ptUID));
 	}
-	UID= ( material.valid() ? material->UID : 0 ); 
-	stream.write((char*)&UID,sizeof(UID));
+
+	write(stream, _materialName);
 
 //	stream.write((char*)texMat.ptr(),sizeof(osg::Matrixd::value_type)*16);
 		
@@ -504,11 +505,13 @@ int edTerrainNode::getMaterialI()
 void edTerrainNode::setMaterialName(const char* name)
 {
 
-	printf("setMaterialName %s\n");
+	printf("setMaterialName %s\n", name);
 	_materialName = name;
 //	TerrainMaterial* mat = Editor::instance()->getOrCreateMaterial(name);
 
-	Editor::instance()->selectMaterial(name);
+	material = Editor::instance()->getOrCreateMaterial(name);
+	Editor::instance()->selectMaterial(material.get());
+
 	redrawAll();
 
 }
