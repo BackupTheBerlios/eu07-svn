@@ -90,6 +90,7 @@ Editor::Editor(TopView *_mainView) : MouseAdapter(), mainView(_mainView), mode(e
 
 	_defaultMaterial = "grass.mat";
 	material= getDefaultMaterial();
+	materials.insert(materialsItem_t("blend", NULL));
 	self= this;
 
 //	defaultOptions= new osgDB::ReaderWriter::Options();
@@ -2278,10 +2279,7 @@ void Editor::setLinesInPreview3D(bool v)
 TerrainMaterial* Editor::getOrCreateMaterial(std::string name)
 {
 
-	std::string filename("editor\\materials\\");
-	filename.append(name);
-
-	printf("getOrCreateMaterial %s\n", name.c_str());
+//	printf("getOrCreateMaterial %s\n", name.c_str());
 
 	osg::ref_ptr<TerrainMaterial> tm;
 	
@@ -2289,7 +2287,7 @@ TerrainMaterial* Editor::getOrCreateMaterial(std::string name)
 	if(iter == materials.end())
 	{
 		tm = new TerrainMaterial();
-		tm->load(filename);
+		tm->load(name);
 		std::pair< std::string, osg::ref_ptr<TerrainMaterial> > item(name, tm);
 //		materialsItem_t item(name, tm);
 		materials.insert(item);

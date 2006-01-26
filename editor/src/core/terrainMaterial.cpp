@@ -36,8 +36,8 @@ class ReflMapCallback : public osg::Drawable::DrawCallback
 void TerrainMaterial::load(std::string name)
 {
 
-	if(name == "editor\\materials\\blend") { blend = true; return; };
-	blend = false;
+	if(name == "blend") return;
+	name.insert(0, "editor\\materials\\");
 
 	std::ifstream file(name.c_str());
 
