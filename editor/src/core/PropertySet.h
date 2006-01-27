@@ -95,7 +95,7 @@ public:
 		}
 	};
 */
-	void init(SetString setString, GetString getString, std::string _defaultStr, std::string _dir, std::vector<std::string> _patterns=std::vector<std::string>(), std::vector<std::string> _embedded=std::vector<std::string>(), int _editable_combo=0, int _store_size=0 )
+	void init(SetString setString, GetString getString, std::string _defaultStr, std::string _dir, std::vector<std::string> _patterns=std::vector<std::string>(), std::vector<std::string> _embedded=std::vector<std::string>(), int _editable_combo= 0, int _store_size=0 )
 	{ // mw158979: init dla filechooser'a SE
 
 //		printf("dir: %s default: %s\n", _dir.c_str(), _defaultStr.c_str());
@@ -205,7 +205,7 @@ private:
 	{ \
 		if (pr.find(name)!=pr.end()) \
 			return false; \
-		pr[name].init((Property::SetString)set,(Property::GetString)get,_defaultStr,_dir,std::vector<std::string>(1,_pattern),std::vector<std::string>(),false,6 ); \
+		pr[name].init((Property::SetString)set,(Property::GetString)get,_defaultStr,_dir,std::vector<std::string>(1,_pattern),std::vector<std::string>(),true,6 ); \
 		return true; \
 	};
 /*
