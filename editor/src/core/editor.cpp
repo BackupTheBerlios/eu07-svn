@@ -71,7 +71,7 @@ Editor::ObjectsCache Editor::objectsCache;
 //bool Editor::releaseGeometry= true;
 
 const unsigned int	dwMagic= 'BSCN';
-const int			version= 5;
+const int			version= 6;
 
 Editor *Editor::lastInstance()
 {

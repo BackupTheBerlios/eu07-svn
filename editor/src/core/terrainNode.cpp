@@ -4,6 +4,8 @@
 #include <osgUtil/IntersectVisitor>
 #include <osgUtil/SmoothingVisitor>
 
+const char* v5materials[] = { "blend", "grass.mat", "water.mat", "grassDead2.mat", "groundYellowBrown.mat", "farm0.mat", "farm1.mat", "farm2.mat", "farm3.mat", "farm4.mat", "grassGreen1.mat", "grassGreen2.mat", "water2.mat", "farm5.mat", "farm6.mat" };
+
 TerrainMaterial *Triangle::getValidMaterial(int i)
 {
 	TerrainMaterial *ret= NULL;
@@ -78,7 +80,7 @@ void edTerrainNode::load(std::istream &stream, int version, CollectNodes *cn)
 	edNode::load(stream, version, cn);
 	unsigned int n= 0;
 	stream.read((char*)&n,sizeof(n));
-	unsigned int ptUID, UID;;
+	unsigned int ptUID, UID;
 	triangles.resize(n);
 	for (unsigned int i=0; i<n; i++)
 	{
@@ -93,7 +95,19 @@ void edTerrainNode::load(std::istream &stream, int version, CollectNodes *cn)
 		p2->addTerrainOwner(this);
 		p3->addTerrainOwner(this);
 	}
-	_materialName = readS(stream);
+
+	if(version<6)
+	{
+
+		stream.read((char*)&UID,sizeof(UID));
+		_materialName = v5materials[UID];
+
+	} else {
+
+		_materialName = readS(stream);
+
+	};
+
 	material = Editor::instance()->getOrCreateMaterial(_materialName);
 
 	if (version<2)

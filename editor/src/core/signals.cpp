@@ -38,7 +38,7 @@ void edSignal::load(std::istream &stream, int version, CollectNodes *cn)
 	read(stream,name);
 	setStation(readS(stream).c_str());
 	setSignalName(readS(stream).c_str());
-	setSkinFile(readS(stream).c_str());
+	if(version >= 6) setSkinFile(readS(stream).c_str());
 }
 
 void edSignal::save(std::ostream &stream)
