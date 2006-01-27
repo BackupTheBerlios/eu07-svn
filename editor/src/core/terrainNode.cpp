@@ -108,7 +108,7 @@ void edTerrainNode::load(std::istream &stream, int version, CollectNodes *cn)
 
 	};
 
-	material = Editor::instance()->getOrCreateMaterial(_materialName);
+	setMaterialName(_materialName.c_str());
 
 	if (version<2)
 	{
