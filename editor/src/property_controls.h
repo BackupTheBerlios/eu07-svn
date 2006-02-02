@@ -70,12 +70,14 @@ Organizacja widgetow:
 
     kit_widget:
             widget zawierajacy kontrolki danego zestawu (property_item)
-    
+            Po nowemu: takze posrednio, poprzez ekspandery
+
     property_item:
             widget reprezentujacy jedna kontrolke (np TextEntry),
             przechowyje takze funkcje do komunikacji z wlascicielem
             (PropertySet*, odczyt/zapis wlasciwosci) oraz nazwe
             przypisanej wlasciwosci (w niewidzialnym GtkLabel)
+            Po nowemu: moze byc rowniez ekspanderem
 */
 
 #endif

@@ -40,6 +40,8 @@ create_main_window (void)
   GtkWidget *open_menuitem;
   GtkWidget *save_menuitem;
   GtkWidget *save_as;
+  GtkWidget *merge;
+  GtkWidget *image12;
   GtkWidget *separator1_menuitem;
   GtkWidget *export_menuitem;
   GtkWidget *separator1;
@@ -138,6 +140,14 @@ create_main_window (void)
   save_as = gtk_image_menu_item_new_from_stock ("gtk-save-as", accel_group);
   gtk_widget_show (save_as);
   gtk_container_add (GTK_CONTAINER (file_menuitem_menu), save_as);
+
+  merge = gtk_image_menu_item_new_with_mnemonic (_("Merge"));
+  gtk_widget_show (merge);
+  gtk_container_add (GTK_CONTAINER (file_menuitem_menu), merge);
+
+  image12 = gtk_image_new_from_stock ("gtk-dnd-multiple", GTK_ICON_SIZE_MENU);
+  gtk_widget_show (image12);
+  gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (merge), image12);
 
   separator1_menuitem = gtk_separator_menu_item_new ();
   gtk_widget_show (separator1_menuitem);
@@ -445,6 +455,9 @@ create_main_window (void)
   g_signal_connect ((gpointer) save_as, "activate",
                     G_CALLBACK (on_save_as_mi_activate),
                     NULL);
+  g_signal_connect ((gpointer) merge, "activate",
+                    G_CALLBACK (on_merge_mi_activate),
+                    NULL);
   g_signal_connect ((gpointer) export_menuitem, "activate",
                     G_CALLBACK (on_export_mi_activate),
                     NULL);
@@ -540,6 +553,8 @@ create_main_window (void)
   GLADE_HOOKUP_OBJECT (main_window, open_menuitem, "open_menuitem");
   GLADE_HOOKUP_OBJECT (main_window, save_menuitem, "save_menuitem");
   GLADE_HOOKUP_OBJECT (main_window, save_as, "save_as");
+  GLADE_HOOKUP_OBJECT (main_window, merge, "merge");
+  GLADE_HOOKUP_OBJECT (main_window, image12, "image12");
   GLADE_HOOKUP_OBJECT (main_window, separator1_menuitem, "separator1_menuitem");
   GLADE_HOOKUP_OBJECT (main_window, export_menuitem, "export_menuitem");
   GLADE_HOOKUP_OBJECT (main_window, separator1, "separator1");
@@ -851,7 +866,7 @@ create_quit_dialog (void)
   gtk_widget_show (image5);
   gtk_box_pack_start (GTK_BOX (hbox5), image5, FALSE, FALSE, 0);
 
-  label5 = gtk_label_new_with_mnemonic ("Yes");
+  label5 = gtk_label_new_with_mnemonic (_("Yes"));
   gtk_widget_show (label5);
   gtk_box_pack_start (GTK_BOX (hbox5), label5, FALSE, FALSE, 0);
 
@@ -872,7 +887,7 @@ create_quit_dialog (void)
   gtk_widget_show (image3);
   gtk_box_pack_start (GTK_BOX (hbox3), image3, FALSE, FALSE, 0);
 
-  label3 = gtk_label_new_with_mnemonic ("No");
+  label3 = gtk_label_new_with_mnemonic (_("No"));
   gtk_widget_show (label3);
   gtk_box_pack_start (GTK_BOX (hbox3), label3, FALSE, FALSE, 0);
 
@@ -893,7 +908,7 @@ create_quit_dialog (void)
   gtk_widget_show (image4);
   gtk_box_pack_start (GTK_BOX (hbox4), image4, FALSE, FALSE, 0);
 
-  label4 = gtk_label_new_with_mnemonic ("Cancel");
+  label4 = gtk_label_new_with_mnemonic (_("Cancel"));
   gtk_widget_show (label4);
   gtk_box_pack_start (GTK_BOX (hbox4), label4, FALSE, FALSE, 0);
 

@@ -35,6 +35,26 @@ const char *AUTOSAVE_FILENAME = "autosave.bscn";
 
 GtkWidget *main_window, *window2, *quit_dialog, *new_dialog;
 
+void attach_icon(const char *toolbutton_name, const char *filename)
+{
+     GtkWidget *img,*button = lookup_widget ( main_window, toolbutton_name );
+
+     if (!button)
+        Publisher::warn ( std::string("Code bug:\nattach_icon() called with an invalid widget name\n")+toolbutton_name );
+     else
+     {
+         img = gtk_image_new_from_file(filename);
+         gtk_widget_show(img);
+         gtk_tool_button_set_icon_widget (GTK_TOOL_BUTTON (button), img);
+     }
+}
+
+void fill_toolbar_with_icons()
+{
+     attach_icon("select_mode_radiotoolbutton","editor_icons\\select.png");
+     attach_icon("move_mode_radiotoolbutton","editor_icons\\move.png");
+}
+
 gboolean
 to_handler (gpointer data)
 {
@@ -223,6 +243,8 @@ printf("init_interface started\n");
 
   main_window = create_main_window ();
   Publisher::init (main_window);
+  fill_toolbar_with_icons();
+  
   Kit::external_widget =
     (GtkBox *) lookup_widget (main_window, "properties_vbox");
   g_signal_connect ((gpointer) main_window, "destroy",
@@ -286,15 +308,17 @@ printf("Wins shown\n");
   // kit[0].addFileSel ("Majewski", "C:\\WINDOWS\\Desktop","*.*","Zielinski");
   std::vector<std::string> p, e;
   p.push_back(std::string("*.*"));
+  /*
   e.push_back(std::string("emb #1"));
   e.push_back(std::string("emb #2"));
   e.push_back(std::string("emb #3"));
-  kit[0].addFileSel ("Majewski", /*"C:\\WINDOWS\\Desktop"*/ NULL,p,"Zielinski",3,true,e);
+  */
+  kit[0].addFileSel ("Majewski", "C:\\WINDOWS\\Desktop",p,"Zielinski",3,true,e);
   static Kit::Item gajewski_item = kit[0].addButton ("Gajewski", 1, 1);
   // gajewski_item.switching();
 
   // kit[1].activate();
-  gtk_timeout_add (27000, to_handler, kit);
+  gtk_timeout_add (7000, to_handler, kit);
   //gtk_timeout_add (1000, gajewski_h, &kit[0]);
 
 #endif
@@ -738,3 +762,11 @@ on_record_toolbutton_clicked           (GtkToolButton   *toolbutton,
 {
    Undo::store();
 }
+
+void
+on_merge_mi_activate                   (GtkMenuItem     *menuitem,
+                                        gpointer         user_data)
+{
+
+}
+

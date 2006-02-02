@@ -157,3 +157,7 @@ on_undo_toolbutton_clicked             (GtkToolButton   *toolbutton,
 void
 on_record_toolbutton_clicked           (GtkToolButton   *toolbutton,
                                         gpointer         user_data);
+
+void
+on_merge_mi_activate                   (GtkMenuItem     *menuitem,
+                                        gpointer         user_data);

@@ -41,18 +41,12 @@ void Kit::activate()
     if (DEBUG) printf("entering Kit::activate\n");
     if (active)
         gtk_widget_hide(active);
-    // while ()
     gtk_widget_show(active=GTK_WIDGET(kit_widget));
-    //gtk_widget_queue_resize(active);
-    /*
-    GtkWidget *hpaned = lookup_widget(GTK_WIDGET(external_widget),"main_hpaned");
-    gtk_paned_set_position(GTK_PANED(hpaned),10000);
-    */
     if (DEBUG) printf("leaving Kit::activate\n");
 }
 
 void Kit::disable()
-{
+{ // static
     if (DEBUG) printf("entering Kit::disable\n");
     if (active)
         gtk_widget_hide(active);
@@ -85,6 +79,7 @@ void Kit::setOwnerWithWrite(PropertySet *set)
 void Kit::readProperty(GtkWidget *item, gpointer owner)
 { // static
     if (DEBUG) printf("entering Kit::readProperty\n");
+
     void (*f)(GObject*) = 
         (void(*)(GObject*)) g_object_get_data(G_OBJECT(item),READ_FUNC_KEY);
 
@@ -92,12 +87,14 @@ void Kit::readProperty(GtkWidget *item, gpointer owner)
         Publisher::warn("Code bug:\nInaccessible 'read function' in Kit::readProperty\nProperty editor will not function correctly");
     else
         f(G_OBJECT(item));
+
     if (DEBUG) printf("leaving Kit::readProperty\n");
 }
 
 void Kit::writeProperty(GtkWidget *item, gpointer owner)
 { // static
     if (DEBUG) printf("entering Kit::writeProperty\n");
+
     void (*f)(GObject*) = 
         (void(*)(GObject*)) g_object_get_data(G_OBJECT(item),WRITE_FUNC_KEY);
 
@@ -105,6 +102,7 @@ void Kit::writeProperty(GtkWidget *item, gpointer owner)
         Publisher::warn("Code bug:\nInaccessible 'write function' in Kit::writeProperty\nProperty editor will not function correctly");
     else
         f(G_OBJECT(item));
+
     if (DEBUG) printf("leaving Kit::readProperty\n");
 }
 
@@ -123,7 +121,7 @@ PropertySet* Kit::getOwner(GtkBox *prop_item)
 }
 
 const char* Kit::getPropName(GtkBox *prop_item)
-{
+{ // static
     if (DEBUG) printf("entering Kit::getPropName\n");
 
     gpointer label = g_object_get_data(G_OBJECT(prop_item),PROP_LABEL_KEY);
@@ -140,7 +138,7 @@ const char* Kit::getPropName(GtkBox *prop_item)
 }    
 
 void Kit::update_visibility ( GtkWidget *prop_item, gpointer data )
-{
+{ // static
      if (DEBUG) printf("entering Kit::update_visibility\n");
 
      PropertySet *owner = getOwner(GTK_BOX(prop_item));
@@ -886,3 +884,134 @@ Kit::Item Kit::addFileSel(const char *prop_name, const char *dir_path,
                          
   return Kit::Item(item);
 }
+
+
+/*
+GtkWidget*
+create_window1 (void)
+{
+  GtkWidget *window1;
+  GtkWidget *hbox1;
+  GtkWidget *label1;
+  GtkWidget *vbox1;
+  GtkWidget *expander1;
+  GtkWidget *label5;
+  GtkWidget *label2;
+  GtkWidget *expander2;
+  GtkWidget *viewport1;
+  GtkWidget *hbox2;
+  GtkWidget *scrolledwindow1;
+  GtkWidget *treeview1;
+  GtkWidget *vseparator1;
+  GtkWidget *label7;
+  GtkWidget *label3;
+  GtkWidget *expander3;
+  GtkWidget *notebook1;
+  GtkWidget *label12;
+  GtkWidget *label9;
+  GtkWidget *label13;
+  GtkWidget *label10;
+  GtkWidget *label14;
+  GtkWidget *label11;
+  GtkWidget *label8;
+
+  window1 = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  gtk_window_set_title (GTK_WINDOW (window1), _("window1"));
+
+  hbox1 = gtk_hbox_new (FALSE, 0);
+  gtk_widget_show (hbox1);
+  gtk_container_add (GTK_CONTAINER (window1), hbox1);
+
+  label1 = gtk_label_new (_("label1"));
+  gtk_widget_show (label1);
+  gtk_box_pack_start (GTK_BOX (hbox1), label1, FALSE, FALSE, 0);
+
+  vbox1 = gtk_vbox_new (FALSE, 0);
+  gtk_widget_show (vbox1);
+  gtk_box_pack_start (GTK_BOX (hbox1), vbox1, TRUE, TRUE, 0);
+
+  expander1 = gtk_expander_new (NULL);
+  gtk_widget_show (expander1);
+  gtk_box_pack_start (GTK_BOX (vbox1), expander1, FALSE, FALSE, 0);
+
+  label5 = gtk_label_new (_("label5"));
+  gtk_widget_show (label5);
+  gtk_container_add (GTK_CONTAINER (expander1), label5);
+
+  label2 = gtk_label_new (_("label2"));
+  gtk_widget_show (label2);
+  gtk_expander_set_label_widget (GTK_EXPANDER (expander1), label2);
+
+  expander2 = gtk_expander_new (NULL);
+  gtk_widget_show (expander2);
+  gtk_box_pack_start (GTK_BOX (vbox1), expander2, FALSE, FALSE, 0);
+  gtk_expander_set_expanded (GTK_EXPANDER (expander2), TRUE);
+
+  viewport1 = gtk_viewport_new (NULL, NULL);
+  gtk_widget_show (viewport1);
+  gtk_container_add (GTK_CONTAINER (expander2), viewport1);
+
+  hbox2 = gtk_hbox_new (FALSE, 8);
+  gtk_widget_show (hbox2);
+  gtk_container_add (GTK_CONTAINER (viewport1), hbox2);
+  gtk_container_set_border_width (GTK_CONTAINER (hbox2), 8);
+
+  scrolledwindow1 = gtk_scrolled_window_new (NULL, NULL);
+  gtk_widget_show (scrolledwindow1);
+  gtk_box_pack_start (GTK_BOX (hbox2), scrolledwindow1, TRUE, TRUE, 0);
+
+  treeview1 = gtk_tree_view_new ();
+  gtk_widget_show (treeview1);
+  gtk_container_add (GTK_CONTAINER (scrolledwindow1), treeview1);
+  gtk_tree_view_set_enable_search (GTK_TREE_VIEW (treeview1), FALSE);
+
+  vseparator1 = gtk_vseparator_new ();
+  gtk_widget_show (vseparator1);
+  gtk_box_pack_start (GTK_BOX (hbox2), vseparator1, FALSE, FALSE, 0);
+
+  label7 = gtk_label_new (_("label7"));
+  gtk_widget_show (label7);
+  gtk_box_pack_start (GTK_BOX (hbox2), label7, TRUE, FALSE, 0);
+
+  label3 = gtk_label_new (_("label3"));
+  gtk_widget_show (label3);
+  gtk_expander_set_label_widget (GTK_EXPANDER (expander2), label3);
+
+  expander3 = gtk_expander_new (NULL);
+  gtk_widget_show (expander3);
+  gtk_box_pack_start (GTK_BOX (vbox1), expander3, TRUE, TRUE, 0);
+  gtk_expander_set_expanded (GTK_EXPANDER (expander3), TRUE);
+
+  notebook1 = gtk_notebook_new ();
+  gtk_widget_show (notebook1);
+  gtk_container_add (GTK_CONTAINER (expander3), notebook1);
+
+  label12 = gtk_label_new (_("label12"));
+  gtk_widget_show (label12);
+  gtk_container_add (GTK_CONTAINER (notebook1), label12);
+
+  label9 = gtk_label_new (_("label9"));
+  gtk_widget_show (label9);
+  gtk_notebook_set_tab_label (GTK_NOTEBOOK (notebook1), gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook1), 0), label9);
+
+  label13 = gtk_label_new (_("label13"));
+  gtk_widget_show (label13);
+  gtk_container_add (GTK_CONTAINER (notebook1), label13);
+
+  label10 = gtk_label_new (_("label10"));
+  gtk_widget_show (label10);
+  gtk_notebook_set_tab_label (GTK_NOTEBOOK (notebook1), gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook1), 1), label10);
+
+  label14 = gtk_label_new (_("label14"));
+  gtk_widget_show (label14);
+  gtk_container_add (GTK_CONTAINER (notebook1), label14);
+
+  label11 = gtk_label_new (_("label11"));
+  gtk_widget_show (label11);
+  gtk_notebook_set_tab_label (GTK_NOTEBOOK (notebook1), gtk_notebook_get_nth_page (GTK_NOTEBOOK (notebook1), 2), label11);
+
+  label8 = gtk_label_new (_("label8"));
+  gtk_widget_show (label8);
+  gtk_expander_set_label_widget (GTK_EXPANDER (expander3), label8);
+
+*/
