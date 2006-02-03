@@ -43,7 +43,8 @@ void attach_icon(const char *toolbutton_name, const char *filename)
         Publisher::warn ( std::string("Code bug:\nattach_icon() called with an invalid widget name\n")+toolbutton_name );
      else
      {
-         img = gtk_image_new_from_file(filename);
+         // img = gtk_image_new_from_file(filename);
+         img = create_pixmap (main_window,filename);
          gtk_widget_show(img);
          gtk_tool_button_set_icon_widget (GTK_TOOL_BUTTON (button), img);
      }
