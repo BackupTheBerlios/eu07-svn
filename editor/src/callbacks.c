@@ -149,6 +149,7 @@ void attach_icon(const char *toolbutton_name, const char *filename)
 {
      GtkWidget *img,*button = lookup_widget ( main_window, toolbutton_name );
      GdkPixbuf *pixbuf;
+     static int i=0;
 
      if (!button)
         Publisher::warn ( std::string("Code bug:\nattach_icon() called with an invalid widget name\n")+toolbutton_name );
@@ -161,9 +162,11 @@ void attach_icon(const char *toolbutton_name, const char *filename)
          // img = gtk_image_new();
          // gtk_image_set_from_file(GTK_IMAGE(img),filename);
 
-         // pixbuf = gdk_pixbuf_new_from_inline(-1,icon_move,false,NULL);
-         pixbuf = gdk_pixbuf_new_from_file("c:\\select.png",NULL);
-         
+         if (i++)
+            pixbuf = gdk_pixbuf_new_from_inline(-1,icon_move,false,NULL);
+         else
+             pixbuf = gdk_pixbuf_new_from_file("c:\\select.png",NULL);
+
          if (!pixbuf)
          {
                      printf("Shan't!\n");
@@ -185,8 +188,8 @@ void attach_icon(const char *toolbutton_name, const char *filename)
 
 void fill_toolbar_with_icons()
 {
-//     attach_icon("select_mode_radiotoolbutton","c:\\select.png");
      attach_icon("move_mode_radiotoolbutton","c:\\move.jpeg");
+     attach_icon("select_mode_radiotoolbutton","c:\\select.png");
 }
 
 gboolean
