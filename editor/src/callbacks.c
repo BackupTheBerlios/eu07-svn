@@ -156,13 +156,13 @@ void attach_icon(const char *toolbutton_name, const char *filename)
         Publisher::warn ( std::string("Code bug:\nattach_icon() called with an invalid widget name\n")+toolbutton_name );
      else
      {
-         // img = gtk_image_new_from_file(filename);
+          img = gtk_image_new_from_file(filename);
 
          // img = create_pixmap (main_window,filename);
 
          // img = gtk_image_new();
          // gtk_image_set_from_file(GTK_IMAGE(img),filename);
-
+/*
          if (i++)
             pixbuf = gdk_pixbuf_new_from_inline(-1,icon_move,false,NULL);
          else
@@ -175,7 +175,7 @@ void attach_icon(const char *toolbutton_name, const char *filename)
          }
          
          img = gtk_image_new_from_pixbuf(pixbuf);
-
+*/
          if (!img)
          {
                      printf("Shan't! (2)\n");
@@ -189,8 +189,8 @@ void attach_icon(const char *toolbutton_name, const char *filename)
 
 void fill_toolbar_with_icons()
 {
-     attach_icon("move_mode_radiotoolbutton","c:\\move.jpeg");
-     attach_icon("select_mode_radiotoolbutton","c:\\select.png");
+     attach_icon("move_mode_radiotoolbutton","editor_icons\\move.png");
+     attach_icon("select_mode_radiotoolbutton","editor_icons\\select.png");
 }
 
 gboolean
