@@ -51,7 +51,7 @@ void attach_icon(const char *toolbutton_name, const char *filename)
 
 void fill_toolbar_with_icons()
 {
-     attach_icon("select_mode_radiotoolbutton","editor_icons\\select.png");
+     attach_icon("select_mode_radiotoolbutton","D:\\Projects\\NebulaMoje\\eu07\\editor_icons\\select.png");
      attach_icon("move_mode_radiotoolbutton","editor_icons\\move.png");
 }
 
