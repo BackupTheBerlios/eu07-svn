@@ -162,7 +162,7 @@ void attach_icon(const char *toolbutton_name, const char *filename)
          // gtk_image_set_from_file(GTK_IMAGE(img),filename);
 
          // pixbuf = gdk_pixbuf_new_from_inline(-1,icon_move,false,NULL);
-         pixbuf = gdk_pixbuf_new_from_file("\\select.png",NULL);
+         pixbuf = gdk_pixbuf_new_from_file("c:\\select.png",NULL);
          
          if (!pixbuf)
          {
