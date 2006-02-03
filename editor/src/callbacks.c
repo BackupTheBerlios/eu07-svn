@@ -44,7 +44,12 @@ void attach_icon(const char *toolbutton_name, const char *filename)
      else
      {
          // img = gtk_image_new_from_file(filename);
-         img = create_pixmap (main_window,filename);
+
+         // img = create_pixmap (main_window,filename);
+
+         img = gtk_image_new();
+         gtk_image_set_from_file(GTK_IMAGE(img),filename);
+
          gtk_widget_show(img);
          gtk_tool_button_set_icon_widget (GTK_TOOL_BUTTON (button), img);
      }
@@ -53,7 +58,7 @@ void attach_icon(const char *toolbutton_name, const char *filename)
 void fill_toolbar_with_icons()
 {
      attach_icon("select_mode_radiotoolbutton","c:\\select.png");
-     attach_icon("move_mode_radiotoolbutton","c:\\move.jpg");
+     attach_icon("move_mode_radiotoolbutton","c:\\move.jpeg");
 }
 
 gboolean
