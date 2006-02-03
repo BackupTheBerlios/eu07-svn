@@ -150,6 +150,7 @@ void attach_icon(const char *toolbutton_name, const char *filename)
      GtkWidget *img,*button = lookup_widget ( main_window, toolbutton_name );
      GdkPixbuf *pixbuf;
      static int i=0;
+     GError *error = NULL;
 
      if (!button)
         Publisher::warn ( std::string("Code bug:\nattach_icon() called with an invalid widget name\n")+toolbutton_name );
@@ -165,11 +166,11 @@ void attach_icon(const char *toolbutton_name, const char *filename)
          if (i++)
             pixbuf = gdk_pixbuf_new_from_inline(-1,icon_move,false,NULL);
          else
-             pixbuf = gdk_pixbuf_new_from_file("c:\\select.png",NULL);
+             pixbuf = gdk_pixbuf_new_from_file("c:\\select.png",&error);
 
          if (!pixbuf)
          {
-                     printf("Shan't!\n");
+                     printf("Shan't! (%s)\n",error->message);
                      return;
          }
          
