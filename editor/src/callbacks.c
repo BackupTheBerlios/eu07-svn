@@ -62,7 +62,7 @@ void attach_icon(const char *toolbutton_name, const char *filename)
 
      if (!img)
      {
-        printf("Shan't! (2)\n");
+        Publisher::warn ( "Unknown origin bug:\nCould not create an image from a pixmap" );
         return;
      }
 
