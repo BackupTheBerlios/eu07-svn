@@ -378,6 +378,7 @@
 	      <property name="visible">True</property>
 	      <property name="label" translatable="yes">Select</property>
 	      <property name="use_underline">True</property>
+	      <property name="icon">select.png</property>
 	      <property name="visible_horizontal">True</property>
 	      <property name="visible_vertical">True</property>
 	      <property name="is_important">False</property>
@@ -395,6 +396,7 @@
 	      <property name="visible">True</property>
 	      <property name="label" translatable="yes">Move</property>
 	      <property name="use_underline">True</property>
+	      <property name="icon">move.png</property>
 	      <property name="visible_horizontal">True</property>
 	      <property name="visible_vertical">True</property>
 	      <property name="is_important">False</property>
@@ -413,6 +415,7 @@
 	      <property name="visible">True</property>
 	      <property name="label" translatable="yes">Signals</property>
 	      <property name="use_underline">True</property>
+	      <property name="icon">signal.png</property>
 	      <property name="visible_horizontal">True</property>
 	      <property name="visible_vertical">True</property>
 	      <property name="is_important">False</property>
@@ -448,6 +451,7 @@
 	      <property name="visible">True</property>
 	      <property name="label" translatable="yes">Points</property>
 	      <property name="use_underline">True</property>
+	      <property name="icon">point.png</property>
 	      <property name="visible_horizontal">True</property>
 	      <property name="visible_vertical">True</property>
 	      <property name="is_important">False</property>
@@ -466,6 +470,7 @@
 	      <property name="visible">True</property>
 	      <property name="label" translatable="yes">P. feats</property>
 	      <property name="use_underline">True</property>
+	      <property name="icon">model.png</property>
 	      <property name="visible_horizontal">True</property>
 	      <property name="visible_vertical">True</property>
 	      <property name="is_important">False</property>
@@ -484,6 +489,7 @@
 	      <property name="visible">True</property>
 	      <property name="label" translatable="yes">Lines</property>
 	      <property name="use_underline">True</property>
+	      <property name="icon">line.png</property>
 	      <property name="visible_horizontal">True</property>
 	      <property name="visible_vertical">True</property>
 	      <property name="is_important">False</property>
@@ -520,6 +526,7 @@
 	      <property name="visible">True</property>
 	      <property name="label" translatable="yes">R. lines</property>
 	      <property name="use_underline">True</property>
+	      <property name="icon">track.png</property>
 	      <property name="visible_horizontal">True</property>
 	      <property name="visible_vertical">True</property>
 	      <property name="is_important">False</property>

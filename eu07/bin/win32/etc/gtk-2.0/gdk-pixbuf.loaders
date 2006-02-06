@@ -1,9 +1,9 @@
 # GdkPixbuf Image Loader Modules file
 # Automatically generated file, do not edit
 #
-# LoaderDir = G:\GTK/lib/gtk-2.0/2.4.0/loaders
+# LoaderDir = bin/win32/
 #
-"G:/GTK/lib/gtk-2.0/2.4.0/loaders/libpixbufloader-pcx.dll"
+"bin/win32/libpixbufloader-pcx.dll"
 "pcx" 0 "gtk20" "The PCX image format"
 "image/x-pcx" ""
 "pcx" ""
@@ -13,7 +13,7 @@
 "\n\004\001" "" 100
 "\n\005\001" "" 100
 
-"G:/GTK/lib/gtk-2.0/2.4.0/loaders/libpixbufloader-tga.dll"
+"bin/win32/libpixbufloader-tga.dll"
 "tga" 0 "gtk20" "The Targa image format"
 "image/x-tga" ""
 "tga" "targa" ""
@@ -24,26 +24,26 @@
 "  \n" "xz " 100
 "  \013" "xz " 100
 
-"G:/GTK/lib/gtk-2.0/2.4.0/loaders/libpixbufloader-xbm.dll"
+"bin/win32/libpixbufloader-xbm.dll"
 "xbm" 0 "gtk20" "The XBM image format"
 "image/x-xbitmap" ""
 "xbm" ""
 "#define " "" 100
 "/*" "" 50
 
-"G:/GTK/lib/gtk-2.0/2.4.0/loaders/libpixbufloader-wbmp.dll"
+"bin/win32/libpixbufloader-wbmp.dll"
 "wbmp" 0 "gtk20" "The WBMP image format"
 "image/vnd.wap.wbmp" ""
 "wbmp" ""
 " " "z" 1
 
-"G:/GTK/lib/gtk-2.0/2.4.0/loaders/libpixbufloader-bmp.dll"
+"bin/win32/libpixbufloader-bmp.dll"
 "bmp" 0 "gtk20" "The BMP image format"
 "image/bmp" "image/x-bmp" "image/x-MS-bmp" ""
 "bmp" ""
 "BM" "" 100
 
-"G:/GTK/lib/gtk-2.0/2.4.0/loaders/libpixbufloader-pnm.dll"
+"bin/win32/libpixbufloader-pnm.dll"
 "pnm" 0 "gtk20" "The PNM/PBM/PGM/PPM image format family"
 "image/x-portable-anymap" "image/x-portable-bitmap" "image/x-portable-graymap" "image/x-portable-pixmap" ""
 "pnm" "pbm" "pgm" "ppm" ""
@@ -54,51 +54,51 @@
 "P5" "" 100
 "P6" "" 100
 
-"G:/GTK/lib/gtk-2.0/2.4.0/loaders/libpixbufloader-tiff.dll"
+"bin/win32/libpixbufloader-tiff.dll"
 "tiff" 0 "gtk20" "The TIFF image format"
 "image/tiff" ""
 "tiff" "tif" ""
 "MM *" "  z " 100
 "II* " "   z" 100
 
-"G:/GTK/lib/gtk-2.0/2.4.0/loaders/libpixbufloader-xpm.dll"
+"bin/win32/libpixbufloader-xpm.dll"
 "xpm" 0 "gtk20" "The XPM image format"
 "image/x-xpixmap" ""
 "xpm" ""
 "/* XPM */" "" 100
 
-"G:/GTK/lib/gtk-2.0/2.4.0/loaders/libpixbufloader-ras.dll"
+"bin/win32/libpixbufloader-ras.dll"
 "ras" 0 "gtk20" "The Sun raster image format"
 "image/x-cmu-raster" "image/x-sun-raster" ""
 "ras" ""
 "Y\246j\225" "" 100
 
-"G:/GTK/lib/gtk-2.0/2.4.0/loaders/libpixbufloader-ani.dll"
+"bin/win32/libpixbufloader-ani.dll"
 "ani" 0 "gtk20" "The ANI image format"
 "application/x-navi-animation" ""
 "ani" ""
 "RIFF    ACON" "    xxxx    " 100
 
-"G:/GTK/lib/gtk-2.0/2.4.0/loaders/libpixbufloader-ico.dll"
+"bin/win32/libpixbufloader-ico.dll"
 "ico" 1 "gtk20" "The ICO image format"
 "image/x-icon" ""
 "ico" "cur" ""
 "  \001   " "zz znz" 100
 "  \002   " "zz znz" 100
 
-"G:/GTK/lib/gtk-2.0/2.4.0/loaders/libpixbufloader-gif.dll"
+"bin/win32/libpixbufloader-gif.dll"
 "gif" 0 "gtk20" "The GIF image format"
 "image/gif" ""
 "gif" ""
 "GIF8" "" 100
 
-"G:/GTK/lib/gtk-2.0/2.4.0/loaders/libpixbufloader-jpeg.dll"
+"bin/win32/libpixbufloader-jpeg.dll"
 "jpeg" 1 "gtk20" "The JPEG image format"
 "image/jpeg" ""
 "jpeg" "jpe" "jpg" ""
 "\377\330" "" 100
 
-"G:/GTK/lib/gtk-2.0/2.4.0/loaders/libpixbufloader-png.dll"
+"bin/win32/libpixbufloader-png.dll"
 "png" 1 "gtk20" "The PNG image format"
 "image/png" ""
 "png" ""
