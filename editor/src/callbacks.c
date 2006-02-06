@@ -72,8 +72,13 @@ void attach_icon(const char *toolbutton_name, const char *filename)
 
 void fill_toolbar_with_icons()
 {
-     attach_icon("move_mode_radiotoolbutton","editor_icons\\move.png");
-     attach_icon("select_mode_radiotoolbutton","editor_icons\\select.png");
+     attach_icon("move_mode_radiotoolbutton","editor\\icons\\move.png");
+     attach_icon("select_mode_radiotoolbutton","editor\\icons\\select.png");
+     attach_icon("signals_mode_radiotoolbutton","editor\\icons\\signal.png");
+     attach_icon("createPoints_mode_radiotoolbutton","editor\\icons\\point.png");
+     attach_icon("createPointFeatures_mode_radiotoolbutton","editor\\icons\\model.png");
+     attach_icon("createLines_mode_radiotoolbutton","editor\\icons\\line.png");
+     attach_icon("createRailLines_mode_radiotoolbutton","editor\\icons\\track.png");
 }
 
 gboolean
