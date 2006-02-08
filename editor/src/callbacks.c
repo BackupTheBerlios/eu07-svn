@@ -30,6 +30,8 @@
 #include "core/options.h"
 #endif
 
+#define DEBUG 0
+
 const int AUTOSAVE_DELAY_SECONDS = 120;
 const char *AUTOSAVE_FILENAME = "autosave.bscn";
 
@@ -250,7 +252,7 @@ void save_request(void(*after_call)(void)=NULL)
 
 void clearLock_and_quit()
 {
-     Undo::clear_lock();
+     // Undo::clear_lock();
      gtk_main_quit();
 }
 
@@ -264,12 +266,16 @@ gboolean autosave_callback(gpointer data)
 void
 init_interface (int *argcp, char ***argvp)
 {
-printf("init_interface started\n");
+  printf("init_interface started\n");
   GL_realizer::gl_init (argcp, argvp);
 
   main_window = create_main_window ();
+  if (DEBUG) printf("main_window created\n");
   Publisher::init (main_window);
+
+  if (DEBUG) printf("filing with icons\n");
   fill_toolbar_with_icons();
+  if (DEBUG) printf("toolbar ready\n");
   
   Kit::external_widget =
     (GtkBox *) lookup_widget (main_window, "properties_vbox");
@@ -277,22 +283,28 @@ printf("init_interface started\n");
 		    G_CALLBACK (gtk_main_quit), NULL);
 
   window2 = create_window2 ();
+  if (DEBUG) printf("window2 created\n");
+  
   g_signal_connect ((gpointer) window2, "destroy", G_CALLBACK (gtk_main_quit),
 		    NULL);
   gtk_window_set_transient_for (GTK_WINDOW (window2),
 				GTK_WINDOW (main_window));
+  if (DEBUG) printf("window2 transient\n");
 		    
   quit_dialog = create_quit_dialog();
   gtk_window_set_transient_for (GTK_WINDOW (quit_dialog),
 				GTK_WINDOW (main_window));
+  if (DEBUG) printf("quit dialog created\n");
 
   new_dialog = create_new_dialog();
   gtk_window_set_transient_for (GTK_WINDOW (new_dialog),
 				GTK_WINDOW (main_window));
 
+  if (DEBUG) printf("new dialog created and transient\n");
+
   GtkWidget *fcd = gtk_file_chooser_dialog_new (_("Choose a file"), NULL, GTK_FILE_CHOOSER_ACTION_OPEN, NULL);
 
-printf("Wins created, not shown\n"); 
+  printf("Wins created, not shown\n"); 
 
 
 #ifdef EDITOR_FULL
@@ -350,7 +362,8 @@ printf("Wins shown\n");
 #endif
 
   Undo::init ( lookup_widget(main_window,"undo_toolbutton"),
-             lookup_widget(main_window,"record_toolbutton") );
+             lookup_widget(main_window,"redo_toolbutton") );
+
              
   g_timeout_add(AUTOSAVE_DELAY_SECONDS*1000,autosave_callback,NULL);
 };
@@ -564,8 +577,10 @@ on_main_window_key_press_event (GtkWidget * widget,
     {
     case GDK_r:
     case GDK_R:
+         /*
       if (GTK_WIDGET_IS_SENSITIVE(lookup_widget(main_window,"record_toolbutton")))
          Undo::store();
+         */
       break;
     case GDK_a:
       printf ("a pr/rel\n");
@@ -779,14 +794,15 @@ void
 on_undo_toolbutton_clicked             (GtkToolButton   *toolbutton,
                                         gpointer         user_data)
 {
-   Undo::perform();
+   // Undo::perform();
+   Editor::instance()->undo();
 }
 
 void
 on_record_toolbutton_clicked           (GtkToolButton   *toolbutton,
                                         gpointer         user_data)
 {
-   Undo::store();
+   // Undo::store();
 }
 
 void
@@ -794,5 +810,13 @@ on_merge_mi_activate                   (GtkMenuItem     *menuitem,
                                         gpointer         user_data)
 {
 
+}
+
+
+void
+on_redo_toolbutton_clicked             (GtkToolButton   *toolbutton,
+                                        gpointer         user_data)
+{
+  Editor::instance()->redo();
 }
 

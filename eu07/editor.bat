@@ -1,1 +1,1 @@
-start bin\win32\editor.exe
+bin\win32\editor.exe

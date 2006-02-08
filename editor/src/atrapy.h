@@ -67,6 +67,9 @@ class Editor
         void toggleCurve() {};
         void applyFeatures() {};
         void freeSelectedNode() {};
+        
+        void undo() {};
+        void redo() {};
 };
 
 class edOptions
@@ -81,3 +84,4 @@ class edOptions
         struct { const char * c_str() {return "test.bscn";}; } sceneryFile;
         struct { const char * c_str() {return "..\\eu07\\scenery\\test\\";}; } exportDir;
 };
+

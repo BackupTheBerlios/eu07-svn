@@ -814,7 +814,7 @@ Kit::Item Kit::addFileSel(const char *prop_name, const char *dir_path,
          }
   };
 
-  if (E_DEBUG)
+  if (DEBUG)
      printf("addFileSel/creating widgets\n");
   
   GtkWidget *item = gtk_vbox_new (FALSE, 4);

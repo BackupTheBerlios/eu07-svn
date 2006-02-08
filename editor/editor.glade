@@ -15,7 +15,6 @@
   <property name="skip_pager_hint">False</property>
   <property name="type_hint">GDK_WINDOW_TYPE_HINT_NORMAL</property>
   <property name="gravity">GDK_GRAVITY_NORTH_WEST</property>
-  <property name="focus_on_map">True</property>
   <signal name="key_press_event" handler="on_main_window_key_press_event" last_modification_time="Fri, 18 Mar 2005 13:59:55 GMT"/>
   <signal name="delete_event" handler="on_main_window_delete_event" last_modification_time="Wed, 04 May 2005 15:36:02 GMT"/>
   <signal name="destroy_event" handler="on_main_window_destroy_event" last_modification_time="Wed, 04 May 2005 15:36:10 GMT"/>
@@ -301,7 +300,6 @@
 
 	  <child>
 	    <widget class="GtkToolButton" id="record_toolbutton">
-	      <property name="visible">True</property>
 	      <property name="sensitive">False</property>
 	      <property name="tooltip" translatable="yes">Store current version for 'undo'</property>
 	      <property name="stock_id">gtk-media-record</property>
@@ -309,6 +307,21 @@
 	      <property name="visible_vertical">True</property>
 	      <property name="is_important">False</property>
 	      <signal name="clicked" handler="on_record_toolbutton_clicked" last_modification_time="Sat, 24 Sep 2005 14:23:04 GMT"/>
+	    </widget>
+	    <packing>
+	      <property name="expand">False</property>
+	      <property name="homogeneous">True</property>
+	    </packing>
+	  </child>
+
+	  <child>
+	    <widget class="GtkToolButton" id="redo_toolbutton">
+	      <property name="visible">True</property>
+	      <property name="stock_id">gtk-redo</property>
+	      <property name="visible_horizontal">True</property>
+	      <property name="visible_vertical">True</property>
+	      <property name="is_important">False</property>
+	      <signal name="clicked" handler="on_redo_toolbutton_clicked" last_modification_time="Wed, 08 Feb 2006 21:14:53 GMT"/>
 	    </widget>
 	    <packing>
 	      <property name="expand">False</property>
@@ -713,10 +726,6 @@ zestawow edycyjnych.
 			  <property name="yalign">0.5</property>
 			  <property name="xpad">0</property>
 			  <property name="ypad">0</property>
-			  <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
-			  <property name="width_chars">-1</property>
-			  <property name="single_line_mode">False</property>
-			  <property name="angle">0</property>
 			</widget>
 			<packing>
 			  <property name="padding">0</property>
@@ -850,7 +859,6 @@ zestawow edycyjnych.
   <property name="skip_pager_hint">False</property>
   <property name="type_hint">GDK_WINDOW_TYPE_HINT_NORMAL</property>
   <property name="gravity">GDK_GRAVITY_NORTH_WEST</property>
-  <property name="focus_on_map">True</property>
   <signal name="delete_event" handler="on_window2_delete_event" last_modification_time="Wed, 04 May 2005 15:36:38 GMT"/>
   <signal name="destroy_event" handler="on_window2_destroy_event" last_modification_time="Wed, 04 May 2005 15:36:46 GMT"/>
 
@@ -873,7 +881,6 @@ zestawow edycyjnych.
   <property name="skip_pager_hint">False</property>
   <property name="type_hint">GDK_WINDOW_TYPE_HINT_NORMAL</property>
   <property name="gravity">GDK_GRAVITY_NORTH_WEST</property>
-  <property name="focus_on_map">True</property>
 
   <child>
     <widget class="GtkDrawingArea" id="drawingarea">
@@ -895,7 +902,6 @@ zestawow edycyjnych.
   <property name="skip_pager_hint">False</property>
   <property name="type_hint">GDK_WINDOW_TYPE_HINT_NORMAL</property>
   <property name="gravity">GDK_GRAVITY_NORTH_WEST</property>
-  <property name="focus_on_map">True</property>
   <signal name="delete_event" handler="gtk_widget_hide" last_modification_time="Tue, 16 Nov 2004 11:19:39 GMT"/>
   <signal name="destroy_event" handler="gtk_widget_hide" last_modification_time="Tue, 16 Nov 2004 11:19:52 GMT"/>
 
@@ -949,10 +955,6 @@ zestawow edycyjnych.
 		  <property name="yalign">0.5</property>
 		  <property name="xpad">0</property>
 		  <property name="ypad">0</property>
-		  <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
-		  <property name="width_chars">-1</property>
-		  <property name="single_line_mode">False</property>
-		  <property name="angle">0</property>
 		</widget>
 		<packing>
 		  <property name="padding">0</property>
@@ -1017,7 +1019,6 @@ zestawow edycyjnych.
   <property name="skip_pager_hint">False</property>
   <property name="type_hint">GDK_WINDOW_TYPE_HINT_NORMAL</property>
   <property name="gravity">GDK_GRAVITY_NORTH_WEST</property>
-  <property name="focus_on_map">True</property>
   <signal name="delete_event" handler="gtk_main_quit" last_modification_time="Tue, 16 Nov 2004 11:27:54 GMT"/>
   <signal name="destroy_event" handler="gtk_main_quit" last_modification_time="Tue, 16 Nov 2004 11:28:08 GMT"/>
 
@@ -1066,10 +1067,6 @@ zestawow edycyjnych.
 	      <property name="yalign">0.5</property>
 	      <property name="xpad">0</property>
 	      <property name="ypad">0</property>
-	      <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
-	      <property name="width_chars">-1</property>
-	      <property name="single_line_mode">False</property>
-	      <property name="angle">0</property>
 	    </widget>
 	    <packing>
 	      <property name="padding">0</property>
@@ -1132,7 +1129,6 @@ zestawow edycyjnych.
   <property name="skip_pager_hint">False</property>
   <property name="type_hint">GDK_WINDOW_TYPE_HINT_DIALOG</property>
   <property name="gravity">GDK_GRAVITY_NORTH_WEST</property>
-  <property name="focus_on_map">True</property>
   <property name="has_separator">True</property>
   <signal name="response" handler="on_quit_dialog_response" last_modification_time="Wed, 04 May 2005 14:32:33 GMT"/>
   <signal name="delete_event" handler="gtk_true" last_modification_time="Wed, 04 May 2005 15:23:34 GMT"/>
@@ -1206,10 +1202,6 @@ zestawow edycyjnych.
 			  <property name="yalign">0.5</property>
 			  <property name="xpad">0</property>
 			  <property name="ypad">0</property>
-			  <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
-			  <property name="width_chars">-1</property>
-			  <property name="single_line_mode">False</property>
-			  <property name="angle">0</property>
 			</widget>
 			<packing>
 			  <property name="padding">0</property>
@@ -1281,10 +1273,6 @@ zestawow edycyjnych.
 			  <property name="yalign">0.5</property>
 			  <property name="xpad">0</property>
 			  <property name="ypad">0</property>
-			  <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
-			  <property name="width_chars">-1</property>
-			  <property name="single_line_mode">False</property>
-			  <property name="angle">0</property>
 			</widget>
 			<packing>
 			  <property name="padding">0</property>
@@ -1356,10 +1344,6 @@ zestawow edycyjnych.
 			  <property name="yalign">0.5</property>
 			  <property name="xpad">0</property>
 			  <property name="ypad">0</property>
-			  <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
-			  <property name="width_chars">-1</property>
-			  <property name="single_line_mode">False</property>
-			  <property name="angle">0</property>
 			</widget>
 			<packing>
 			  <property name="padding">0</property>
@@ -1418,10 +1402,6 @@ zestawow edycyjnych.
 	      <property name="yalign">0.5</property>
 	      <property name="xpad">4</property>
 	      <property name="ypad">4</property>
-	      <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
-	      <property name="width_chars">-1</property>
-	      <property name="single_line_mode">False</property>
-	      <property name="angle">0</property>
 	    </widget>
 	    <packing>
 	      <property name="padding">0</property>
@@ -1453,7 +1433,6 @@ zestawow edycyjnych.
   <property name="skip_pager_hint">False</property>
   <property name="type_hint">GDK_WINDOW_TYPE_HINT_DIALOG</property>
   <property name="gravity">GDK_GRAVITY_NORTH_WEST</property>
-  <property name="focus_on_map">True</property>
   <property name="has_separator">True</property>
   <signal name="response" handler="on_new_dialog_response" last_modification_time="Sat, 10 Sep 2005 12:21:28 GMT"/>
   <signal name="delete_event" handler="gtk_true" last_modification_time="Sat, 10 Sep 2005 12:23:49 GMT"/>
@@ -1527,10 +1506,6 @@ zestawow edycyjnych.
 			  <property name="yalign">0.5</property>
 			  <property name="xpad">0</property>
 			  <property name="ypad">0</property>
-			  <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
-			  <property name="width_chars">-1</property>
-			  <property name="single_line_mode">False</property>
-			  <property name="angle">0</property>
 			</widget>
 			<packing>
 			  <property name="padding">0</property>
@@ -1602,10 +1577,6 @@ zestawow edycyjnych.
 			  <property name="yalign">0.5</property>
 			  <property name="xpad">0</property>
 			  <property name="ypad">0</property>
-			  <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
-			  <property name="width_chars">-1</property>
-			  <property name="single_line_mode">False</property>
-			  <property name="angle">0</property>
 			</widget>
 			<packing>
 			  <property name="padding">0</property>
@@ -1677,10 +1648,6 @@ zestawow edycyjnych.
 			  <property name="yalign">0.5</property>
 			  <property name="xpad">0</property>
 			  <property name="ypad">0</property>
-			  <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
-			  <property name="width_chars">-1</property>
-			  <property name="single_line_mode">False</property>
-			  <property name="angle">0</property>
 			</widget>
 			<packing>
 			  <property name="padding">0</property>
@@ -1739,10 +1706,6 @@ zestawow edycyjnych.
 	      <property name="yalign">0.5</property>
 	      <property name="xpad">0</property>
 	      <property name="ypad">0</property>
-	      <property name="ellipsize">PANGO_ELLIPSIZE_NONE</property>
-	      <property name="width_chars">-1</property>
-	      <property name="single_line_mode">False</property>
-	      <property name="angle">0</property>
 	    </widget>
 	    <packing>
 	      <property name="padding">0</property>
