@@ -1,7 +1,9 @@
-random 0.005
-4
-0 1000 #model tree008.ive
-0 1000 #model tree009.ive
-0 1000 #model tree010.ive
-0 1000 #model tree011.ive
+random 0.001
+6
+0 1000 #model conifer1.ive
+0 1000 #model conifer2.ive
+0 1000 #model conifer3.ive
+0 1000 #model conifer4.ive
+0 1000 #model conifer5.ive
+0 1000 #model conifer6.ive
 
