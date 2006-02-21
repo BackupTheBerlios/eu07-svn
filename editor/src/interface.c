@@ -64,7 +64,6 @@ create_main_window (void)
   GtkWidget *n1_separatortoolitem;
   GtkWidget *undo_toolbutton;
   GtkWidget *record_toolbutton;
-  GtkWidget *redo_toolbutton;
   GtkWidget *separatortoolitem3;
   GtkWidget *tmp_image;
   GtkWidget *settings_toolbutton;
@@ -234,13 +233,10 @@ create_main_window (void)
   gtk_widget_set_sensitive (undo_toolbutton, FALSE);
 
   record_toolbutton = (GtkWidget*) gtk_tool_button_new_from_stock ("gtk-media-record");
+  gtk_widget_show (record_toolbutton);
   gtk_container_add (GTK_CONTAINER (main_toolbar), record_toolbutton);
   gtk_widget_set_sensitive (record_toolbutton, FALSE);
   gtk_tool_item_set_tooltip (GTK_TOOL_ITEM (record_toolbutton), tooltips, _("Store current version for 'undo'"), NULL);
-
-  redo_toolbutton = (GtkWidget*) gtk_tool_button_new_from_stock ("gtk-redo");
-  gtk_widget_show (redo_toolbutton);
-  gtk_container_add (GTK_CONTAINER (main_toolbar), redo_toolbutton);
 
   separatortoolitem3 = (GtkWidget*) gtk_separator_tool_item_new ();
   gtk_widget_show (separatortoolitem3);
@@ -498,9 +494,6 @@ create_main_window (void)
   g_signal_connect ((gpointer) record_toolbutton, "clicked",
                     G_CALLBACK (on_record_toolbutton_clicked),
                     NULL);
-  g_signal_connect ((gpointer) redo_toolbutton, "clicked",
-                    G_CALLBACK (on_redo_toolbutton_clicked),
-                    NULL);
   g_signal_connect ((gpointer) quit_toolbutton, "clicked",
                     G_CALLBACK (on_quit_toolbutton_clicked),
                     NULL);
@@ -583,7 +576,6 @@ create_main_window (void)
   GLADE_HOOKUP_OBJECT (main_window, n1_separatortoolitem, "n1_separatortoolitem");
   GLADE_HOOKUP_OBJECT (main_window, undo_toolbutton, "undo_toolbutton");
   GLADE_HOOKUP_OBJECT (main_window, record_toolbutton, "record_toolbutton");
-  GLADE_HOOKUP_OBJECT (main_window, redo_toolbutton, "redo_toolbutton");
   GLADE_HOOKUP_OBJECT (main_window, separatortoolitem3, "separatortoolitem3");
   GLADE_HOOKUP_OBJECT (main_window, settings_toolbutton, "settings_toolbutton");
   GLADE_HOOKUP_OBJECT (main_window, quit_toolbutton, "quit_toolbutton");
