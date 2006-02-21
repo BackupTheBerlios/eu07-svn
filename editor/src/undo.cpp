@@ -20,34 +20,34 @@
 #include "core/options.h"
 #endif
 
-/*
+
 const char *LOCK_NAME="editor.lock";
 const char *TMP_DIR_NAME="editor_tmp";
 const int MAX_FILES=15;
 
 int najstarszy=0;
 int najmlodszy=-1;
-*/
-GtkWidget *button_undo=NULL, *button_redo=NULL;
 
-void Undo::init(GtkWidget *undo, GtkWidget *redo)
+GtkWidget *button_undo=NULL, *button_record=NULL;
+
+void Undo::init(GtkWidget *undo, GtkWidget *record)
 {
    // 0) sprawdzic button
 
-      if (button_undo || button_redo)
+      if (button_undo || button_record)
       {
           Publisher::warn("Code bug:\nmultiple calls of Undo::init");
           return;
       }
 
-      if ( ! ( undo && redo ) )
+      if ( ! ( undo && record ) )
       {
           Publisher::warn("Code bug:\nNULL button given to Undo::init");
           return;
       }
 
    // 1) zalozyc blokade
-/*
+
       std::string name=TMP_DIR_NAME;
       name+=G_DIR_SEPARATOR_S;
       name+=LOCK_NAME;
@@ -71,7 +71,7 @@ void Undo::init(GtkWidget *undo, GtkWidget *redo)
                 return;
             }
          else
-             break; // OK
+             break; /* OK */
       }
 
       while (1)
@@ -97,14 +97,13 @@ void Undo::init(GtkWidget *undo, GtkWidget *redo)
               remove ( (std::string(TMP_DIR_NAME)+G_DIR_SEPARATOR_S+p).c_str() );
 
       g_dir_close(tmp_dir);
-*/
-   // 3) wylaczyc buttony
-   
-       gtk_widget_set_sensitive(button_redo=redo,FALSE);
+
+   // 3) wlaczyc button record
+
+       gtk_widget_set_sensitive(button_record=record,TRUE);
        gtk_widget_set_sensitive(button_undo=undo,FALSE);
 }
 
-/*
 std::string tmp_name(int n)
 {
     char buf[sizeof(n)*5+9];
@@ -113,14 +112,12 @@ std::string tmp_name(int n)
     name=name+G_DIR_SEPARATOR_S+"tmp"+buf+".bscn";
     return name;
 }
-*/
 
-/*
 void Undo::perform()
 {
      if ( ! ( button_undo && button_record ) )
      {
-          Publisher::warn("Code bug:\nUndo button enabled before init call");
+          Publisher::warn("Code bud:\nUndo button enabled before init call");
           return;
      }
 
@@ -148,8 +145,7 @@ void Undo::perform()
     if ( najmlodszy - najstarszy < 0 )
        gtk_widget_set_sensitive(button_undo,FALSE);
 }
-*/
-/*
+
 void Undo::store()
 {
      if ( ! ( button_undo && button_record ) )
@@ -176,8 +172,7 @@ void Undo::store()
      else
         Publisher::warn("Store failed,\ncould not save temporary file (undo),\ncheck the log for details");
 }
-*/
-/*
+
 void Undo::clear_lock()
 {
     if ( ! ( button_undo && button_record ) )
@@ -186,36 +181,4 @@ void Undo::clear_lock()
     button_undo = button_record = NULL;
 
     remove ( (std::string(TMP_DIR_NAME)+G_DIR_SEPARATOR_S+LOCK_NAME).c_str() );
-}
-*/
-
-void Undo::set_status ( UndoBtStat s )
-{
-     if ( ! ( button_undo && button_redo ) )
-     {
-          Publisher::warn("Code bug:\nUndo buttons set status call before init");
-          return;
-     }
-     
-     switch (s)
-     {
-       case UNDO_NONE:
-            gtk_widget_set_sensitive(button_redo,FALSE);
-            gtk_widget_set_sensitive(button_undo,FALSE);
-            break;
-       case UNDO_BOTH:
-            gtk_widget_set_sensitive(button_redo,TRUE);
-            gtk_widget_set_sensitive(button_undo,TRUE);
-            break;
-       case UNDO_ONLY_U:
-            gtk_widget_set_sensitive(button_redo,FALSE);
-            gtk_widget_set_sensitive(button_undo,TRUE);
-            break;
-       case UNDO_ONLY_R:
-            gtk_widget_set_sensitive(button_redo,TRUE);
-            gtk_widget_set_sensitive(button_undo,FALSE);
-            break;
-       default:
-            Publisher::warn("Code bug:\nUnknown arg for Undo::set_status");
-     }
 }
