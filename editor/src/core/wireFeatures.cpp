@@ -12,8 +12,6 @@ void edWireFeature::load(std::istream &stream, int version, CollectNodes *cn)
 	read(stream,numWires);
 	read(stream,thickness);
 	read(stream,dh);
-	if (version>=4)
-		read(stream,overrideParams);
 	applyFeature();
 }
 
@@ -24,7 +22,6 @@ void edWireFeature::save(std::ostream &stream)
 	write(stream,numWires);
 	write(stream,thickness);
 	write(stream,dh);
-	write(stream,overrideParams);
 }
 
 bool edWireFeature::loadParams()
@@ -142,12 +139,6 @@ void edWireFeature::applyFeature()
 	if (n<=0)
 		return;
 
-	if (overrideParams)
-	{
-		dh= osg::maximum(pf1->dh,pf2->dh);
-		numWires= osg::minimum(pf1->numWires,pf2->numWires);
-	}
-
 	if (hasVisuals())
 		clearFeature();
 
@@ -196,15 +187,11 @@ void edWireFeature::applyFeature()
 		osg::Geode *geode= new osg::Geode();
 		osg::Geometry *geom = new osg::Geometry();
 
-// 181205 ShaXbee: poprawka wyswietlania trakcji (znikajaca zupelnie przy odleglosci ~70m) namieszane z LOD
-// <StaryKod>
 //		a= 1.0-1.0/double(l+1);
-//		a= 1.0/double(lods-l+1)-1.0/double(lods+1);
-// </StaryKod>
-
+		a= 1.0/double(lods-l+1)-1.0/double(lods+1);
 		ms= ( l==1 || l==2 ? 1.0 : l );//1-(1.0/double(lods-l+1)-1.0/double(lods));
-		a= lods;
-		a/= l;
+//		a= lods;
+//		a/= l;
 
 			osg::Vec3Array *v;
 			osg::Vec3Array *norm;
