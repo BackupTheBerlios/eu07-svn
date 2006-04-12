@@ -1,0 +1,25 @@
+/*!
+
+\mainpage
+
+\section intro_sec Example
+
+\code
+	DeviceGroup* group = new DeviceGroup("group01");
+
+	DeviceGroup* group2 = new DeviceGroup("group02");
+
+	group2->addDevice(new InputDevice("a"));
+	group2->addDevice(new InputDevice("b"));
+
+	group->addDevice(new SumDevice("sum"));
+	group->addDevice(group2);
+
+	group->connect("group02.a.value", "sum.left");
+	group->connect("group02.b.value", "sum.right");
+
+
+	group->update();
+\endcode
+
+ */
