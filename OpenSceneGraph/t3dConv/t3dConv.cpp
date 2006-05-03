@@ -88,7 +88,7 @@ int __fastcall SeekFaceNormal(DWORD *Masks, int f, DWORD dwMask, osg::Vec3f pt, 
 
 #define MY_ASSERT(exp) if (!exp) { MessageBox(0,#exp,"Assertion failed",MB_OK); exit(1); };
 
-bool loadSubModel(cParser &p, osg::Group *root)
+bool loadSubModel(cParser &p, osg::Group *root, std::string path)
 {
 	std::string str;
 	p.getTokens();
@@ -205,12 +205,14 @@ bool loadSubModel(cParser &p, osg::Group *root)
 			unsigned int n= str.find("textures/", 0); // sprawdz czy sciezka zawiera na poczatku textures/
 			if(n != str.npos && n == 0) str = str.substr(str.find_first_of('/'));
 
-			n= str.find_last_of('.');
+			str = str.substr(0, str.find_last_of('.')); // usun rozszerzenie
+
 			if (n<str.length() && ret==0)
 			{
+
 				osg::Texture2D *tex= new osg::Texture2D;
 				tex->setDataVariance(osg::Object::STATIC);
-				tex->setImage(osgDB::readImageFile("images/"+str.substr(0,n)+".dds"));
+				tex->setImage(osgDB::readImageFile(path + "images/" + str.substr(0,n) + ".dds"));
 				tex->setWrap(osg::Texture::WRAP_S, osg::Texture::REPEAT);
 				tex->setWrap(osg::Texture::WRAP_T, osg::Texture::REPEAT);
 				if (str[0]=='#')
@@ -377,11 +379,15 @@ bool loadSubModel(cParser &p, osg::Group *root)
 osg::Group *loadModel(const char *fileName)
 {
 	cParser p(fileName, cParser::buffer_FILE);
+
 	osg::Group *root= new osg::Group;
 	root->setName("MAIN");
 
 //	getToken(p);
-	while (loadSubModel(p,root)) { };
+
+	std::string path(fileName);
+	path.substr(0, path.find_last_of('/'));
+	while (loadSubModel(p, root, path)) { };
 
 	return root;
 }
@@ -422,7 +428,7 @@ int _tmain(int argc, _TCHAR* argv[])
 
 			fileName= ap[i];
 			unsigned int n= fileName.find_last_of('.');
-			if (n<fileName.length())
+			if (n<fileName.npos)
 			{
 				osgDB::writeNodeFile(*mdl.get(),fileName.substr(0,n)+".ive");
 				osgDB::writeNodeFile(*mdl.get(),fileName.substr(0,n)+".osg");
