@@ -200,8 +200,12 @@ bool loadSubModel(cParser &p, osg::Group *root)
 
 
 
-			int ret= 0;//spawnlp(_P_WAIT,"nvdxt.exe","nvdxt.exe","-file",str.c_str(),"-dxt3","-alpha_threshold","254",NULL);
-			unsigned int n= str.find_last_of('.');
+ 			int ret= 0;//spawnlp(_P_WAIT,"nvdxt.exe","nvdxt.exe","-file",str.c_str(),"-dxt3","-alpha_threshold","254",NULL);
+
+			unsigned int n= str.find("textures/", 0); // sprawdz czy sciezka zawiera na poczatku textures/
+			if(n != str.npos && n == 0) str = str.substr(str.find_first_of('/'));
+
+			n= str.find_last_of('.');
 			if (n<str.length() && ret==0)
 			{
 				osg::Texture2D *tex= new osg::Texture2D;
