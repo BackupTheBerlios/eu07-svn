@@ -3,6 +3,11 @@
 #include <iostream>
 #include <osg/MatrixTransform>
 
+#include "fileio/ReadWrite.h"
+
+namespace spt
+{
+
 bool PathFollower::move(double distance)
 {
 
@@ -71,7 +76,15 @@ bool PathFollower::move(double distance)
 
 }
 
-bool CoupledPathFollower::update()
+bool PathFollower::update(double time)
+{
+
+	move(time * m_speed);
+	return m_valid;
+
+}
+
+bool CoupledPathFollower::update(double m_time)
 {
 
 	return m_valid;
@@ -97,7 +110,7 @@ void CoupledPathFollower::init()
 			if(m_iter != m_cpMap.end())
 			{
                 
-				update();
+				update(0.0);
 				m_valid = true;
 
 			};
@@ -140,6 +153,33 @@ bool CoupledPathFollower::incIter()
 
 };
 
+void PathFollower::read(DataInputStream* in)
+{
+
+	m_movementPath = in->pathList.getOrCreateObject(in->readUInt());
+	m_cp.read(in);
+
+	m_speed = in->readDouble();
+	m_distance = in->readDouble();
+
+	m_dir = in->readBool();
+	m_valid = in->readBool();
+
+};
+
+void PathFollower::write(DataOutputStream* out)
+{
+
+	out->writeUInt(out->pathList.getOrCreateId(m_movementPath));
+	m_cp.write(out);
+
+	out->writeDouble(m_speed);
+	out->writeDouble(m_distance);
+
+	out->writeBool(m_dir);
+	out->writeBool(m_valid);
+
+};
 
 void PathFollowerCallback::operator()(osg::Node* node, osg::NodeVisitor* nv)
 {
@@ -152,8 +192,7 @@ void PathFollowerCallback::operator()(osg::Node* node, osg::NodeVisitor* nv)
 		if(m_latestTime != DBL_MAX)
 		{
 
-			m_pathFollower->move(m_speed * (time - m_latestTime));
-			m_pathFollower->update();
+			m_pathFollower->update(time - m_latestTime);
 
 			osg::Matrix matrix;
 
@@ -166,9 +205,9 @@ void PathFollowerCallback::operator()(osg::Node* node, osg::NodeVisitor* nv)
 
     };
 
-//	std::cout << "update" << std::endl;
-    
     // must call any nested node callbacks and continue subgraph traversal.
     NodeCallback::traverse(node,nv);
 
 };
+
+}

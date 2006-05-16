@@ -10,35 +10,10 @@
 #include <osg/Matrix>
 #include <osg/Quat>
 
-bool MovementPath::getPosition(double distance, osg::Vec3d& position) const
+#include "fileio/ReadWrite.h"
+
+namespace spt
 {
-
-	ControlPoint cp;
-    if (!getInterpolatedControlPoint(distance, cp)) return false;
-	cp.getPosition(position);
-	return true;
-
-}
-
-bool MovementPath::getMatrix(double distance, osg::Matrix& matrix) const
-{
-
-	ControlPoint cp;
-    if (!getInterpolatedControlPoint(distance, cp)) return false;
-    cp.getMatrix(matrix);
-    return true;
-
-}
-
-bool MovementPath::getInverse(double distance, osg::Matrix& matrix) const
-{
-
-	ControlPoint cp;
-    if (!getInterpolatedControlPoint(distance, cp)) return false;
-    cp.getInverse(matrix);
-    return true;
-
-}
 
 void MovementPath::insert(const osg::Vec3d position)
 {
@@ -68,14 +43,6 @@ void MovementPath::insert(const osg::Vec3d position)
 
 }
 
-void MovementPath::insert(double distance, ControlPoint controlPoint) 
-{ 
-	
-	m_lastCPIter = m_controlPointMap.insert(ControlPointPair(distance, controlPoint)).first;
-	m_length = distance;
-
-}
-
 void MovementPath::insert(osg::Vec3Array* points)
 {
 
@@ -96,8 +63,6 @@ void MovementPath::insert(osg::Vec3Array* points)
 		delta = cpIter->second.getPosition() - *inIter; // position difference between current and last control point
 
 		rotation = osg::Quat(); // reset rotation
-		getOrientation(rotation, delta);
-//		rotation = osg::Quat(M_PI / 4.0, 0.0, 1.0, 0.0) * osg::Quat(M_PI / 4.0, 1.0, 0.0, 0.0) * rotation;
 		rotation.makeRotate(osg::Vec3d(0.0, -1.0, 0.0), delta); // get MovementPath segment orientation
 
 		cpIter->second.setRotation(rotation); // set rotation of ControlPoint
@@ -157,48 +122,6 @@ bool MovementPath::getInterpolatedControlPoint(double distance, ControlPoint& co
     return true;
 }
 
-void MovementPath::sinCosHalfAngle(double &s, double &c, double a, double b)
-{
-
-	if(a == 0)
-	{
-
-		s = 0.0;
-		c = 1.0;
-
-	} else {
-
-		double z = a / sqrt(a*a + b*b);
-
-//		std::cout << "a: " << a << " b: " << b << " z: " << z << std::endl;
-		s = sqrt((1.0-z) / 2.0);
-		c = sqrt((1.0+z) / 2.0);
-
-		if(b < 0) { c = -c; s = -s; };
-
-	};
-
-}
-
-void MovementPath::getOrientation(osg::Quat& quat, osg::Vec3 delta)
-{
-
-	double sp, cp, sy, cy;
-
-	sinCosHalfAngle(sp, cp, delta.z(), delta.x());
-	sinCosHalfAngle(sy, cy, delta.y(), delta.x());
-
-//	std::cout << "sy: " << sy << " cy: " << cy << std::endl;
-
-	quat.set(
-		 -sp *  sy,
-		  sp *  cy,
-		  cp *  sy,
-		  cp *  cy
-	);
-
-}
-
 void MovementPath::setFrontTip(MovementPath::Tip* tip)
 {
 
@@ -228,6 +151,74 @@ void MovementPath::setBackTip(MovementPath::Tip* tip)
 	m_backTip = tip;
 
 }
+
+void MovementPath::read(DataInputStream* in)
+{
+
+	unsigned int pointCount = in->readUInt(); // read control points count
+//	std::cout << "pointCount: " << pointCount << std::endl;
+
+	while(pointCount--)
+	{
+
+		double distance = in->readDouble(); // read distance
+		ControlPoint cp; cp.read(in); // read control point
+
+		m_lastCPIter = m_controlPointMap.insert(ControlPointPair(distance, cp)).first; // insert to control points map
+
+	};
+
+	m_length = in->readDouble(); // read length
+
+	m_backTip = in->tipList.getOrCreateObject(in->readUInt()); // read back tip ptr
+	m_frontTip = in->tipList.getOrCreateObject(in->readUInt()); // read front tip ptr
+
+};
+
+void MovementPath::write(DataOutputStream* out)
+{
+
+	out->writeUInt(m_controlPointMap.size()); // write control points count
+
+//	std::cout << "pointsCount: " << m_controlPointMap.size() << std::endl;
+
+	int i = 0;
+
+	ControlPointMap::iterator iter = m_controlPointMap.begin();
+	while(iter != m_controlPointMap.end())
+	{
+
+		out->writeDouble(iter->first);
+		iter->second.write(out); // write control point
+		iter++;
+		i++;
+
+	};
+
+	out->writeDouble(m_length); // write length
+
+	out->writeUInt(out->tipList.getOrCreateId(m_backTip)); // write back tip id
+	out->writeUInt(out->tipList.getOrCreateId(m_frontTip)); // write front tip id
+
+};
+
+void MovementPath::ControlPoint::read(DataInputStream* in)
+{
+
+	m_position = in->readVec3d();
+	m_rotation = in->readQuat();
+	m_length = in->readDouble();
+
+};
+
+void MovementPath::ControlPoint::write(DataOutputStream* out)
+{
+
+	out->writeVec3d(m_position);
+	out->writeQuat(m_rotation);
+	out->writeDouble(m_length);
+
+};
 
 void MovementPath::Tip::connect(Connection first, Connection second)
 {
@@ -305,3 +296,72 @@ void MovementPath::Tip::disconnect(MovementPath* path)
 	m_valid = (m_first.path == NULL && m_second.path == NULL);
 
 };
+
+void MovementPath::Tip::read(DataInputStream* in)
+{
+
+	m_first.connType = readConnType(in->readChar());
+	m_first.path = in->pathList.getOrCreateObject(in->readUInt());
+
+	m_second.connType = readConnType(in->readChar());
+	m_second.path = in->pathList.getOrCreateObject(in->readUInt());
+
+	m_opposite = in->readBool();
+	m_valid = in->readBool();
+
+};
+
+void MovementPath::Tip::write(DataOutputStream* out)
+{
+
+	out->writeChar(writeConnType(m_first.connType));
+	out->writeUInt(out->pathList.getOrCreateId(m_first.path));
+
+	out->writeChar(writeConnType(m_second.connType));
+	out->writeUInt(out->pathList.getOrCreateId(m_second.path));
+
+	out->writeBool(m_opposite);
+	out->writeBool(m_valid);
+
+};
+
+void MovementPath::Tip::debug()
+{
+
+	std::cout << "MovementPath::Tip" << std::endl;
+	std::cout << " " << (int) writeConnType(m_first.connType) << " " <<  m_first.path << std::endl;
+	std::cout << " " << (int) writeConnType(m_second.connType) << " " <<  m_second.path << std::endl;
+
+};
+
+MovementPath::Tip::ConnType MovementPath::Tip::readConnType(char ch)
+{
+
+	switch((unsigned int) ch)
+	{
+
+	case 0: return UNDEF;
+	case 1: return FRONT;
+	case 2: return BACK;
+	default: return UNDEF;
+
+	};
+
+};
+
+char MovementPath::Tip::writeConnType(ConnType ct)
+{
+
+	switch(ct)
+	{
+
+	case UNDEF: return (char) 0;
+	case FRONT: return (char) 1;
+	case BACK: return (char) 2;
+	default: return 0;
+
+	};
+
+};
+
+}

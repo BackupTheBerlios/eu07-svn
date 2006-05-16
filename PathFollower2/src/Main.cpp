@@ -13,89 +13,21 @@
 
 #include "Skydome.h"
 
-//#include "Serialization.h"
+using namespace spt;
 
-void makeTrack(osg::Group* root, osg::Vec3Array* points)
-{
-
-	osg::Vec3Array::iterator iter = points->begin();
-
-	Bezier* bezier;
-	MovementPath* mp;
-	MovementPath* firstMp = NULL;
-	MovementPath* lastMp = NULL;
-	MovementPath::Tip* tip;
-
-	while(iter != points->end())
-	{
-
-        bezier = new Bezier(iter, 64);
-		mp = new MovementPath(bezier->getPoints());
-
-		if(lastMp)
-			tip = new MovementPath::Tip(lastMp, MovementPath::Tip::FRONT, mp, MovementPath::Tip::BACK);
-		else
-			firstMp = mp;
-
-		lastMp = mp;
-
-		root->addChild(bezier->getNode());
-
-	};
-
-	tip = new MovementPath::Tip(lastMp, MovementPath::Tip::FRONT, firstMp, MovementPath::Tip::BACK);
-
-	PathFollower* pf = new PathFollower(firstMp);
-
-	osg::MatrixTransform* mover = new osg::MatrixTransform();
-	osg::Node* model = osgDB::readNodeFile("dynamic/pkp/sm42/sm42.IVE");
-	if(!model)
-		std::cout << "error loading model" << std::endl;
-	else
-		mover->addChild(model);
-	mover->setUpdateCallback(new PathFollowerCallback(pf, 50.0f));
-
-	root->addChild(mover);
-
-};
-
+#include "../TestPrepareFile.h"
 
 int main()
 {
 
-	osg::Vec3Array* points = new osg::Vec3Array(16);
-	osg::Vec3Array::iterator ptIter = points->begin();
-
-	// bezier 1
-	points->push_back(osg::Vec3(-100, -100,   0));
-	points->push_back(osg::Vec3(   0, -100,   0));
-	points->push_back(osg::Vec3(   0,    0,   0));
-	points->push_back(osg::Vec3(   0, -100,   0));
-
-	// bezier 2
-	points->push_back(osg::Vec3(   0,    0,   0));
-	points->push_back(osg::Vec3(   0,  100,   0));
-	points->push_back(osg::Vec3( 200,    0,   0));
-	points->push_back(osg::Vec3( 200,  100,   0));
-
-	// bezier 3
-	points->push_back(osg::Vec3( 200,    0,   0));
-	points->push_back(osg::Vec3( 200, -200,   0));
-	points->push_back(osg::Vec3(-100, -200,   0));
-	points->push_back(osg::Vec3( 200, -200,   0));
-
-	// bezier 4
-	points->push_back(osg::Vec3(-100, -200,   0));
-	points->push_back(osg::Vec3(-200, -200,   0));
-	points->push_back(osg::Vec3(-100, -100,   0));
-	points->push_back(osg::Vec3(-200, -100,   0));
+	TestLoadFile();
 
 	osg::Group* rootNode = new osg::Group();
-	osg::Group* sceneNode = new osg::Group();
+	osg::Group* sceneNode = Scenery::getInstance()->getNode();
 
 	Skydome* skydome = new Skydome(rootNode);
 
-    rootNode->addChild(sceneNode);
+	if(sceneNode) rootNode->addChild(sceneNode);
 
 	osg::Fog* fog = new osg::Fog();
 
@@ -105,8 +37,8 @@ int main()
 	fog->setEnd(1600);
 	fog->setDensity(0.1);
 
-//	sceneNode->getOrCreateStateSet()->setAttributeAndModes(fog);
-	makeTrack(sceneNode, points);
+	sceneNode->getOrCreateStateSet()->setAttributeAndModes(fog); // do zdebugowania - mg³a siê dziwnie zachowuje
+//	makeTrack(sceneNode, points);
 
 	osgProducer::Viewer viewer;
 	viewer.setUpViewer(osgProducer::Viewer::STANDARD_SETTINGS);

@@ -9,8 +9,6 @@
 #include <osg/Quat>
 #include <osg/NodeCallback>
 
-//#include "Serialization.h"
-
 /*!
 *
 * \class MovementPath
@@ -22,6 +20,12 @@
 * \todo Events that being trigerred at entering movement path, passing over some distance, changing connections
 *
 */
+
+namespace spt
+{
+
+class DataInputStream;
+class DataOutputStream;
 
 class MovementPath
 {
@@ -79,29 +83,8 @@ public:
 			matrix.preMult(osg::Matrix::translate(-m_position));
 		}
 
-	/*
-		virtual Archive& operator>>(Archive& ar)
-		{
-
-			ar >> m_position;
-			ar >> m_rotation;
-			ar >> m_length;
-
-			return ar;
-
-		};
-
-		virtual Archive& operator<<(Archive& ar)
-		{
-
-			ar << m_position;
-			ar << m_rotation;
-			ar << m_length;
-
-			return ar;
-
-		};
-	*/
+		void read(DataInputStream* in);
+		void write(DataOutputStream* out);
 
 	protected:
 
@@ -121,11 +104,11 @@ public:
 	*
 	*/
 
-	class Tip// : public Serializable
+	class Tip
 	{
 
 	public:
-		typedef enum {UNDEF, FRONT, BACK} ConnType;
+		typedef enum {UNDEF = 0, FRONT = 1, BACK = 2} ConnType;
 		typedef struct {MovementPath* path; ConnType connType;} Connection;
 
 		Tip() : m_opposite(false), m_valid(false) { };
@@ -142,37 +125,15 @@ public:
 		const bool isOpposite() const { return m_opposite; };
 		const bool isValid() const { return m_valid; };
 
-		/*
+		void read(DataInputStream* in);
+		void write(DataOutputStream* out);
 
-		Archive& operator>>(Archive& ar, Connection& con)
-		{
+		void debug();
 
-			char c;
-			ar >> c;
+	protected:
 
-			switch((int) c)
-			{
-
-			case 0:	con.connType = UNDEF;
-			case 1: con.connType = FRONT;
-			case 2: con.connType = BACK;
-			default: throw Exception("Unknown connection type");
-
-			};
-
-			Archive::MovementPathList::iterator iter = ar.m_movementPathList.find(path);
-			if(iter != ar.m_movementPathList.end())
-
-		};
-
-		virtual Archive& operator>>(Archive& ar)
-		{
-
-		virtual Archive& operator<<(Archive& ar);
-
-		*/
-
-	protected:		
+		inline ConnType readConnType(char ch);
+		inline char writeConnType(ConnType ct);
 
 		Connection m_first;
 		Connection m_second;
@@ -180,18 +141,10 @@ public:
 		bool m_opposite;
 		bool m_valid;
 
-	};
+	}; // MovementPath::Tip
 
 	MovementPath() : m_frontTip(NULL), m_backTip(NULL), m_length(0) { }
 	MovementPath(osg::Vec3Array* points) : m_frontTip(NULL), m_backTip(NULL), m_length(0) { insert(points); };
-
-	bool getPosition(double distance, osg::Vec3d& position) const;
-
-	//! Given a specific distance, return the transformation matrix for a point.
-	bool getMatrix(double distance, osg::Matrix& matrix) const;
-
-	//! Given a specific time, return the inverse transformation matrix for a point.
-	bool getInverse(double distance, osg::Matrix& matrix) const;
 
 	//! Given a specific distance, return the local ControlPoint frame for a point.
 	virtual bool getInterpolatedControlPoint(double distance, ControlPoint& controlPoint) const;
@@ -221,20 +174,22 @@ public:
 
 	void debug();
 
+	void read(DataInputStream* in);
+	void write(DataOutputStream* out);
+
 protected:
 
 	virtual ~MovementPath() {}
 
-	inline void sinCosHalfAngle(double &s, double &c, double a, double b);
-	inline void getOrientation(osg::Quat& quat, osg::Vec3 delta);
-
 	ControlPointMap m_controlPointMap;
 	ControlPointMap::iterator m_lastCPIter;
 
-	Tip* m_frontTip;
-	Tip* m_backTip;
-
 	double m_length;
+
+	Tip* m_backTip;
+	Tip* m_frontTip;
+
+}; // class MovementPath
 
 };
 

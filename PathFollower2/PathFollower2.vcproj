@@ -126,8 +126,24 @@
 				RelativePath=".\src\PathFollower.cpp">
 			</File>
 			<File
+				RelativePath=".\src\Scenery.cpp">
+			</File>
+			<File
 				RelativePath=".\src\Skydome.cpp">
 			</File>
+			<Filter
+				Name="FileIO"
+				Filter="">
+				<File
+					RelativePath=".\src\fileio\DataInputStream.cpp">
+				</File>
+				<File
+					RelativePath=".\src\fileio\DataOutputStream.cpp">
+				</File>
+				<File
+					RelativePath=".\src\fileio\Exception.cpp">
+				</File>
+			</Filter>
 		</Filter>
 		<Filter
 			Name="Header Files"
@@ -143,11 +159,42 @@
 				RelativePath=".\src\PathFollower.h">
 			</File>
 			<File
+				RelativePath=".\src\Scenery.h">
+			</File>
+			<File
 				RelativePath=".\src\SkyDome.h">
+			</File>
+			<File
+				RelativePath=".\TestPrepareFile.h">
 			</File>
 			<File
 				RelativePath=".\src\Tracks.h">
 			</File>
+			<Filter
+				Name="FileIO"
+				Filter="">
+				<File
+					RelativePath=".\src\fileio\DataInputStream.h">
+				</File>
+				<File
+					RelativePath=".\src\fileio\DataOutputStream.h">
+				</File>
+				<File
+					RelativePath=".\src\fileio\DataTypes.h">
+				</File>
+				<File
+					RelativePath=".\src\fileio\DataTypeSize.h">
+				</File>
+				<File
+					RelativePath=".\src\fileio\Exception.h">
+				</File>
+				<File
+					RelativePath=".\src\fileio\ReadWrite.h">
+				</File>
+				<File
+					RelativePath=".\src\fileio\SptVersion.h">
+				</File>
+			</Filter>
 		</Filter>
 		<Filter
 			Name="Resource Files"

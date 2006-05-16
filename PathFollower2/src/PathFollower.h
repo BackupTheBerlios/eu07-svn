@@ -5,6 +5,12 @@
 
 #include "MovementPath.h"
 
+namespace spt
+{
+
+class DataInputStream;
+class DataOutputStream;
+
 /*!
  *
  * \class PathFollower
@@ -24,7 +30,7 @@ public:
 	PathFollower(MovementPath* movementPath, double distance, bool dir = true) : m_movementPath(movementPath), m_dir(dir) { move(distance); }
 
 	virtual bool move(double distance);
-	virtual bool update() { return m_valid; }
+	virtual bool update(double time);
 
 	void getPosition(osg::Vec3d& position) { if(m_valid) m_cp.getPosition(position); }
 	void getMatrix(osg::Matrix& matrix) { if(m_valid) m_cp.getMatrix(matrix); }
@@ -33,6 +39,9 @@ public:
 	double getDistance() { return m_distance; };
 
 	const bool isValid() const { return m_valid; }
+
+	void read(DataInputStream* in);
+	void write(DataOutputStream* out);
 
 protected:
 	MovementPath*	m_movementPath;
@@ -68,7 +77,7 @@ public:
 	virtual bool move(double distance) { }
 
 	//! Update position according to position of parent and distance between followers
-	virtual bool update();
+	virtual bool update(double time);
 
 protected:
 	inline void init();
@@ -104,6 +113,8 @@ private:
 	PathFollower*	m_pathFollower;
 	double			m_latestTime;
 	double			m_speed;
+
+};
 
 };
 
