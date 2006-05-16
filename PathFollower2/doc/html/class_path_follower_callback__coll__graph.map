@@ -1,6 +1,0 @@
-base referer
-rect $class_path_follower.html 67,100 166,127
-rect $class_movement_path_1_1_control_point.html 7,7 202,34
-rect $class_movement_path.html 254,7 366,34
-rect $struct_movement_path_1_1_tip_1_1_connection.html 196,100 410,127
-rect $class_movement_path_1_1_tip.html 347,210 486,236

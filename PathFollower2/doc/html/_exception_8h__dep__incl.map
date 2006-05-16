@@ -1,0 +1,5 @@
+base referer
+rect $_data_input_stream_8h.html 443,7 864,33
+rect $_data_output_stream_8h.html 437,57 869,84
+rect $_data_output_stream_8cpp.html 920,83 1365,109
+rect $_exception_8cpp.html 456,159 851,185
