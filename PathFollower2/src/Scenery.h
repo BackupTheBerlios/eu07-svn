@@ -15,6 +15,17 @@ namespace spt
 class DataInputStream;
 class DataOutputStream;
 
+/*!
+ *
+ * \class Scenery
+ * \brief Singleton responsible for managing scenery data structures - tracks, roads, movers, signals etc.
+ *        Class is also responsible for reading/writing scenery data.
+ *
+ * \date 20-05-2006
+ * \author Zbyszek "ShaXbee" Mandziejewicz
+ *
+ */
+
 class Scenery
 {
 

@@ -8,7 +8,10 @@
 #include <osgDB/ReadFile>
 #include <osgUtil/CullVisitor>
 
-void Skydome::init()
+namespace spt
+{
+
+void SkyDome::init()
 {
 
 	osg::Node* model = osgDB::readNodeFile("models/skydome.ive");
@@ -28,7 +31,7 @@ void Skydome::init()
     m_node->setRequiresClear(false); // we've got base and sky to do it.
 
     // use a transform to make the sky and base around with the eye point.
-	m_transform = new Skydome::Transform;
+	m_transform = new SkyDome::Transform;
 
     // transform's value isn't knowm until in the cull traversal so its bounding
     // volume is can't be determined, therefore culling will be invalid,
@@ -45,7 +48,7 @@ void Skydome::init()
 
 }
 
-Skydome::~Skydome()
+SkyDome::~SkyDome()
 {
 
 	if(!m_node) return;
@@ -53,7 +56,7 @@ Skydome::~Skydome()
 
 }
 
-bool Skydome::Transform::computeLocalToWorldMatrix(osg::Matrix& matrix,osg::NodeVisitor* nv) const 
+bool SkyDome::Transform::computeLocalToWorldMatrix(osg::Matrix& matrix,osg::NodeVisitor* nv) const 
 {
 	osgUtil::CullVisitor* cv = dynamic_cast<osgUtil::CullVisitor*>(nv);
 	if (cv)
@@ -64,7 +67,7 @@ bool Skydome::Transform::computeLocalToWorldMatrix(osg::Matrix& matrix,osg::Node
 	return true;
 }
 
-bool Skydome::Transform::computeWorldToLocalMatrix(osg::Matrix& matrix,osg::NodeVisitor* nv) const
+bool SkyDome::Transform::computeWorldToLocalMatrix(osg::Matrix& matrix,osg::NodeVisitor* nv) const
 {
 
 	osgUtil::CullVisitor* cv = dynamic_cast<osgUtil::CullVisitor*>(nv);
@@ -75,3 +78,5 @@ bool Skydome::Transform::computeWorldToLocalMatrix(osg::Matrix& matrix,osg::Node
 	}
 	return true;
 }
+
+};

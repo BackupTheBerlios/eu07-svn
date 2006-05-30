@@ -8,6 +8,7 @@
 #include <osg/Group>
 #include <osg/Geode>
 #include <osg/Geometry>
+#include <osg/Notify>
 
 class Bezier
 {
@@ -34,10 +35,10 @@ public:
 		m_p1 = *(iter++); m_cp1 = *(iter++);
 		m_p2 = *(iter++); m_cp2 = *(iter++);
 
-		std::cout << "m_p1: " << m_p1.x() << " " << m_p1.y() << " " << m_p1.z() << " ";
-		std::cout << "m_cp1: " << m_cp1.x() << " " << m_cp1.y() << " " << m_cp1.z() << " ";
-		std::cout << "m_p2: " << m_p2.x() << " " << m_p2.y() << " " << m_p2.z() << " ";
-		std::cout << "m_cp2: " << m_cp2.x() << " " << m_cp2.y() << " " << m_cp2.z() << std::endl;
+//		osg::notify(osg::NOTICE) << "m_p1: " << m_p1.x() << " " << m_p1.y() << " " << m_p1.z() << " ";
+//		osg::notify(osg::NOTICE) << "m_cp1: " << m_cp1.x() << " " << m_cp1.y() << " " << m_cp1.z() << " ";
+//		std::cout << "m_p2: " << m_p2.x() << " " << m_p2.y() << " " << m_p2.z() << " ";
+//		std::cout << "m_cp2: " << m_cp2.x() << " " << m_cp2.y() << " " << m_cp2.z() << std::endl;
 
 		getPoints();
 

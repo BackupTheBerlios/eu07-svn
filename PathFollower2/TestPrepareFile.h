@@ -66,7 +66,7 @@ void TestPrepareFile()
 
 	tip = new MovementPath::Tip(lastMp, MovementPath::Tip::FRONT, firstMp, MovementPath::Tip::BACK);
 
-	Scenery::getInstance()->write("test.scn");
+	Scenery::getInstance()->write("shxtest1");
 
 };
 
@@ -75,6 +75,6 @@ void TestLoadFile()
 
 	if(!Scenery::getInstance()) new Scenery();
 
-	Scenery::getInstance()->read("test.scn");
+	Scenery::getInstance()->read("shxtest1");
 
 };

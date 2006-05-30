@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <osg/LineWidth>
+#include <osg/Notify>
 
 osg::Vec3Array* Bezier::getPoints()
 {

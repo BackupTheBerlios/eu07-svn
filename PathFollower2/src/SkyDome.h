@@ -7,14 +7,29 @@
 
 #include <osg/NodeCallback>
 
-class Skydome
+/*!
+ *
+ * \class SkyDome
+ * \brief Skydome covering scene
+ *
+ * \date 20-06-2006
+ * \author Zbyszek "ShaXbee" Mandziejewicz
+ *
+ * \todo osgEmpheresis integration
+ *
+ */
+
+namespace spt
+{
+
+class SkyDome
 {
 
 public:
-	Skydome() : m_root(NULL) { init(); };
-	Skydome(osg::Group* root) : m_root(root) { init(); };
+	SkyDome() : m_root(NULL) { init(); };
+	SkyDome(osg::Group* root) : m_root(root) { init(); };
 
-	~Skydome();
+	~SkyDome();
 
 	void setRoot(osg::Group* root);
 
@@ -45,5 +60,6 @@ private:
 
 };
 
-#endif
+};
 
+#endif
