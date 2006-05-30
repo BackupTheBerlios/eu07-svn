@@ -38,7 +38,7 @@ int main()
 	fog->setEnd(1600);
 	fog->setDensity(0.1);
 
-	sceneNode->getOrCreateStateSet()->setAttributeAndModes(fog); // do zdebugowania - mg³a siê dziwnie zachowuje
+//	sceneNode->getOrCreateStateSet()->setAttributeAndModes(fog); // do zdebugowania - mg³a siê dziwnie zachowuje
 //	makeTrack(sceneNode, points);
 
 	osgProducer::Viewer viewer;

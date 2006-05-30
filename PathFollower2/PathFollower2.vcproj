@@ -156,6 +156,9 @@
 				RelativePath=".\src\MovementPath.h">
 			</File>
 			<File
+				RelativePath=".\src\Mover.h">
+			</File>
+			<File
 				RelativePath=".\src\PathFollower.h">
 			</File>
 			<File
