@@ -5,7 +5,9 @@
 #ifndef WIN32
 	#define OPENTHREAD_EXPORT_DIRECTIVE
 #else
-	#ifdef OPENTHREADS_EXPORTS
+	#if defined( _LIB ) || defined( USE_STATIC )
+		#define OPENTHREAD_EXPORT_DIRECTIVE
+	#elif defined( OPENTHREADS_EXPORTS )
 		#define OPENTHREAD_EXPORT_DIRECTIVE __declspec(dllexport)
 	#else
 		#define OPENTHREAD_EXPORT_DIRECTIVE __declspec(dllimport)
