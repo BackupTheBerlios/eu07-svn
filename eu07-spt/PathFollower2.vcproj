@@ -2,7 +2,7 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="7.10"
-	Name="PathFollower2"
+	Name="eu07-spt"
 	ProjectGUID="{1CA1A5FD-87A6-437B-B0C5-F5F25D697C3C}"
 	RootNamespace="PathFollower2"
 	Keyword="ManagedCProj">
@@ -34,7 +34,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				IgnoreImportLibrary="TRUE"
-				AdditionalDependencies="osgd.lib osgDBd.lib osgParticled.lib osgProducerd.lib osgUtild.lib Producerd.lib lib\libboost_serialization-vc71-mt-gd-1_33_1.lib"
+				AdditionalDependencies="osgd.lib osgDBd.lib osgParticled.lib osgProducerd.lib osgUtild.lib Producerd.lib"
 				OutputFile="$(OutDir)\$(ProjectName).exe"
 				LinkIncremental="2"
 				IgnoreDefaultLibraryNames="MSVCRTD.lib"
@@ -63,7 +63,7 @@
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
-			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
+			OutputDirectory="$(SolutionDir)"
 			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="1"
 			CharacterSet="2"
