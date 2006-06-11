@@ -31,7 +31,7 @@ int main()
 
 	osg::Fog* fog = new osg::Fog();
 
-//300 1600 0.6 0.7 0.8
+	//atmo: 300 1600 0.6 0.7 0.8
 	fog->setMode(osg::Fog::EXP2);
 	fog->setColor(osg::Vec4(0.6, 0.7, 0.8, 0.2));
 	fog->setStart(300);
