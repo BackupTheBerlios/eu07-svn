@@ -26,8 +26,8 @@ class PathFollower
 
 public:
 	PathFollower() : m_movementPath(NULL), m_valid(false) { };
-	PathFollower(MovementPath* movementPath);
 	PathFollower(MovementPath* movementPath, double distance, bool dir = true);
+	PathFollower(PathFollower* master);
 
 	virtual bool move(double distance);
 	virtual bool update(double time);
@@ -37,63 +37,20 @@ public:
 
 	MovementPath* getMovementPath() { return m_movementPath; };
 
+	const bool isMaster() const { return m_isMaster; }
 	const bool isValid() const { return m_valid; }
-
-	void read(DataInputStream* in);
-	void write(DataOutputStream* out);
 
 protected:
 	MovementPath* m_movementPath;
 	MovementPath::ControlPoint m_cp;
 	MovementPath::SmartIterator m_iter;
+
+	PathFollower* m_master;
+
+	bool m_isMaster;
 	bool m_valid;
 
 };
-
-/*!
- *
- * \class CoupledPathFollower
- * \brief Object following another PathFollower (or it's child)
- *
- * \date 06-05-2006
- *
- * \todo Implementation of update and checkDir methods
- *
- */
-
-class CoupledPathFollower : public PathFollower
-{
-
-public:
-	CoupledPathFollower() : m_parent(NULL) { PathFollower::PathFollower(); }
-	CoupledPathFollower(PathFollower* parent, float follDistance) : m_parent(parent), m_follDistance(follDistance) { init(); }
-
-	//! This method is unused - does nothing
-	virtual bool move(double distance) { }
-
-	//! Update position according to position of parent and distance between followers
-	virtual bool update(double time);
-
-protected:
-	inline void init();
-	inline void checkDir();
-
-	//! \warning Method don't check that initial values of m_movementPath, m_cpMap and m_iter are correct,
-	//! check m_valid flag before and after using this method
-	inline bool incIter();
-
-	//! \warning Method don't check that initial values of m_movementPath, m_cpMap and m_iter are correct,
-	//! check m_valid flag before and after using this method
-	inline bool decIter();
-
-	PathFollower*   m_parent;
-	float m_follDistance;
-	MovementPath::ControlPoint m_cp1, m_cp2;
-	MovementPath::ControlPointMap m_cpMap;
-	MovementPath::ControlPointMap::const_iterator m_iter, m_lastIter;
-
-};
-
 
 class PathFollowerCallback : public osg::NodeCallback
 {

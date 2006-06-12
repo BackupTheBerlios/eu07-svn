@@ -9,6 +9,7 @@
 
 #include "../tinyxml/tinyxml.h"
 #include "../core/MovementPath.h"
+#include "../core/EventReceiver.h"
 
 #include "Boogey.h"
 
@@ -25,7 +26,7 @@ namespace spt
  *
  */
 
-class Mover
+class Mover : public EventReceiver
 {
 
 public:
@@ -74,7 +75,6 @@ protected:
 	double m_speed;
 	double m_distance;
 
-	bool m_valid;
 	bool m_sleep;
 
 	osg::Node* m_model;

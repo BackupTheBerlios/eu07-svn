@@ -85,9 +85,6 @@ public:
 			matrix.preMult(osg::Matrix::translate(-m_position));
 		}
 
-		void read(DataInputStream* in);
-		void write(DataOutputStream* out);
-
 	protected:
 
 		osg::Vec3d	m_position;
@@ -129,11 +126,6 @@ public:
 
 		const bool isOpposite() const { return m_opposite; };
 		const bool isValid() const { return m_valid; };
-
-		void read(DataInputStream* in);
-		void write(DataOutputStream* out);
-
-		void debug();
 
 	protected:
 
@@ -228,11 +220,6 @@ public:
 	const ControlPointMap& getControlPointMap() const { return m_controlPointMap; }
 
 	bool empty() const { return m_controlPointMap.empty(); }
-
-	void debug();
-
-	void read(DataInputStream* in);
-	void write(DataOutputStream* out);
 
 protected:
 

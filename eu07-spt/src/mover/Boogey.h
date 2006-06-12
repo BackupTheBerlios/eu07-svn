@@ -6,6 +6,8 @@
 #include "../core/MovementPath.h"
 #include "../core/PathFollower.h"
 
+#include "Axle.h"
+
 namespace spt
 {
 
@@ -37,7 +39,7 @@ protected:
 	typedef std::vector< std::pair<osg::Node*, double> > AxlesVec;
 
 	//! Boogey node
-    osg::Node* m_node;
+	osg::Node* m_node;
 	//! Internal PathFollower
 	PathFollower* m_pathFollower;
 	//! Parent PathFollower
