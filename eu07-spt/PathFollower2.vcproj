@@ -21,6 +21,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
+				AdditionalIncludeDirectories="..\Producer\include;..\OpenThreads\include;..\OpenSceneGraph\include"
 				PreprocessorDefinitions="WIN32;_DEBUG"
 				MinimalRebuild="FALSE"
 				BasicRuntimeChecks="0"
@@ -37,6 +38,7 @@
 				AdditionalDependencies="osgd.lib osgDBd.lib osgParticled.lib osgProducerd.lib osgUtild.lib Producerd.lib"
 				OutputFile="$(OutDir)\$(ProjectName).exe"
 				LinkIncremental="2"
+				AdditionalLibraryDirectories="..\Producer\lib;..\OpenThreads\lib\win32;..\OpenSceneGraph\lib"
 				IgnoreDefaultLibraryNames="MSVCRTD.lib"
 				GenerateDebugInformation="TRUE"
 				AssemblyDebug="1"/>
