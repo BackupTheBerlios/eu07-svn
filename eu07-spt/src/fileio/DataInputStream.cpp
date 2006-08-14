@@ -23,6 +23,7 @@
 #include <osgDB/ReadFile>
 
 using namespace std;
+using namespace sptCommon;
 
 namespace sptFileIO {
 

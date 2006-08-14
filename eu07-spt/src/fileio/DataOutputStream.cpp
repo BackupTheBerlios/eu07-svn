@@ -15,10 +15,12 @@
  **********************************************************************/
 
 #include "DataOutputStream.h"
-#include "Exception.h"
 
 #include <osg/Notify>
 #include <osg/io_utils>
+
+using namespace std;
+using namespace sptCommon;
 
 namespace sptFileIO {
 

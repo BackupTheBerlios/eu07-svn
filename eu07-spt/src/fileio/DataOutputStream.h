@@ -13,10 +13,8 @@
 
 #include "SptVersion.h"
 #include "DataTypeSize.h"
-#include "Exception.h"
 
-#include "../core/MovementPath.h"
-#include "../core/PathFollower.h"
+#include "../common/Exception.h"
 
 #include <osg/ref_ptr>
 
@@ -99,11 +97,6 @@ public:
 		RefMap m_data;
 
 	};
-
-	WriteObjectsList<MovementPath> pathList;
-	WriteObjectsList<MovementPath::Tip> tipList;
-
-	WriteObjectsList<PathFollower> pathFollowerList;
 
 private:
 

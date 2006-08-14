@@ -21,10 +21,7 @@
 
 #include "SptVersion.h"
 #include "DataTypeSize.h"    
-#include "Exception.h"
-
-#include "../core/MovementPath.h"
-#include "../core/PathFollower.h"
+#include "../common/Exception.h"
 
 namespace sptFileIO {
 
@@ -103,11 +100,6 @@ public:
 		RefMap m_data;
 
 	};
-
-	ReadObjectsList<MovementPath> pathList;
-	ReadObjectsList<MovementPath::Tip> tipList;
-
-	ReadObjectsList<PathFollower> pathFollowerList;
 
 private:
 
