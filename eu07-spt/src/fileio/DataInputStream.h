@@ -26,8 +26,7 @@
 #include "../core/MovementPath.h"
 #include "../core/PathFollower.h"
 
-namespace spt
-{
+namespace sptFileIO {
 
 class DataInputStream
 {
@@ -92,12 +91,15 @@ public:
 	{
 
 	public:
-		void getPtrSet(std::set<Ty*>& set);
+		typedef std::set<Ty*> RefSet;
+
+		void getPtrSet(RefSet& set);
 		void read(DataInputStream* in);
 		Ty* getOrCreateObject(unsigned int id);
 
 	private:
 		typedef std::map<unsigned int, Ty*> RefMap;
+
 		RefMap m_data;
 
 	};
@@ -118,10 +120,10 @@ private:
 };
 
 template<class Ty>
-void DataInputStream::ReadObjectsList<Ty>::getPtrSet(std::set<Ty*>& set)
+void DataInputStream::ReadObjectsList<Ty>::getPtrSet(RefSet& set)
 {
 
-	RefMap::iterator iter = m_data.begin();
+	typename RefMap::iterator iter = m_data.begin();
 	while(iter != m_data.end())
 		set.insert((iter++)->second);
 
@@ -132,7 +134,7 @@ void DataInputStream::ReadObjectsList<Ty>::read(DataInputStream* in)
 {
 
 	unsigned int count = in->readUInt();
-	RefMap::iterator iter = m_data.begin();
+	typename RefMap::iterator iter = m_data.begin();
 
 	std::cout << "count: " << count << std::endl;
 
@@ -165,7 +167,7 @@ Ty* DataInputStream::ReadObjectsList<Ty>::getOrCreateObject(unsigned int id)
 
 	Ty* result = NULL;
 
-	RefMap::iterator iter = m_data.find(id);
+	typename RefMap::iterator iter = m_data.find(id);
 	if(iter != m_data.end())
 	{
 
@@ -180,8 +182,8 @@ Ty* DataInputStream::ReadObjectsList<Ty>::getOrCreateObject(unsigned int id)
 
 	return result;
 
-};
+}; // class DataInputStream
 
-}; // namespace spt
+}; // namespace sptFileIO
 
 #endif // SPT_DATAINPUTSTREAM

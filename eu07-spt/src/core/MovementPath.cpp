@@ -10,8 +10,6 @@
 #include <osg/Matrix>
 #include <osg/Quat>
 
-#include "../fileio/ReadWrite.h"
-
 namespace spt
 {
 
@@ -398,7 +396,7 @@ void MovementPath::SmartIterator::move(double distance)
 
 	cp = (m_dir ? m_fIter->second : m_rIter->second);
 
-	while(m_valid && (abs(distance) > cp.getLength()))
+	while(m_valid && (fabs(distance) > cp.getLength()))
 	{
 
 		if( ( m_dir && (distance > 0) ) || ( !m_dir && (distance < 0) ))

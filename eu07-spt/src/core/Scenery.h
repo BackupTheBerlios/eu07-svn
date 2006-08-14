@@ -12,9 +12,6 @@
 namespace spt
 {
 
-class DataInputStream;
-class DataOutputStream;
-
 /*!
  *
  * \class Scenery
@@ -41,9 +38,6 @@ public:
 	void addMovementPath(MovementPath* path);
 	void addPathFollower(PathFollower* follower);
 
-	void read(std::string filename);
-	void write(std::string filename);
-
 private:
 
 	static Scenery* m_instance;
@@ -56,9 +50,8 @@ private:
 	MovementPathList m_movementPathList;
 	PathFollowerList m_pathFollowerList;
 
-};
+}; // class Scenery
 
-
-};
+} // namespace spt
 
 #endif

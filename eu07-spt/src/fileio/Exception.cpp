@@ -14,8 +14,7 @@
 
 #include "Exception.h"
 
-namespace spt
-{
+namespace sptFileIO {
 
 Exception::Exception(std::string error){
     _error = error;
@@ -23,4 +22,4 @@ Exception::Exception(std::string error){
 
 Exception::~Exception(){}
 
-};
+} // namespace sptFileIO

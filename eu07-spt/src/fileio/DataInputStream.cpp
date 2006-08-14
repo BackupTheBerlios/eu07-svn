@@ -24,8 +24,7 @@
 
 using namespace std;
 
-namespace spt
-{
+namespace sptFileIO {
 
 void DataInputStream::setOptions(const osgDB::ReaderWriter::Options* options) 
 { 
@@ -655,4 +654,4 @@ osg::Matrixd DataInputStream::readMatrixd()
     return mat;
 };
 
-};
+} // namespace sptFileIO

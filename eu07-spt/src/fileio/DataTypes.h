@@ -1,7 +1,7 @@
 #ifndef SPT_READWRITE
 #define SPT_READWRITE 1
 
-namespace spt {
+namespace sptFileIO {
 
 // Size of datatypes
 #define BOOLSIZE	1

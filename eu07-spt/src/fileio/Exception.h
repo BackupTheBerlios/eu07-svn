@@ -3,8 +3,7 @@
 
 #include <string>
 
-namespace spt
-{
+namespace sptFileIO {
 
 class Exception{
 public:
@@ -15,6 +14,6 @@ private:
 	std::string _error;
 };
 
-}
+} // namespace sptFileIO
 
 #endif

@@ -21,14 +21,10 @@
 *
 */
 
-namespace spt
-{
+namespace spt {
 
-class DataInputStream;
-class DataOutputStream;
+class MovementPath {
 
-class MovementPath
-{
 public:
 
 	/*!
@@ -147,6 +143,8 @@ public:
 		SmartIterator() : m_movementPath(NULL), m_valid(false), m_dir(true) { }
 		SmartIterator(MovementPath* movementPath): m_dir(true) { setMovementPath(movementPath); }
 
+		virtual ~SmartIterator() { }
+
 		bool isValid() { return m_valid; }
 
 		MovementPath* getMovementPath() { return m_movementPath; }
@@ -163,9 +161,9 @@ public:
 		void move(double distance);
 
 	protected:
-		inline void getTipPath(MovementPath::Tip* tip);
-		inline void getNextPath() { getTipPath(m_movementPath->getFrontTip()); }
-		inline void getPrevPath() { getTipPath(m_movementPath->getBackTip()); }
+		void getTipPath(MovementPath::Tip* tip);
+		void getNextPath() { getTipPath(m_movementPath->getFrontTip()); }
+		void getPrevPath() { getTipPath(m_movementPath->getBackTip()); }
 
 		inline void incIter();
 		inline void decIter();
@@ -195,8 +193,10 @@ public:
 
 	}; // MovementPath::SmartIterator
 
-	MovementPath() : m_frontTip(NULL), m_backTip(NULL), m_length(0) { }
-	MovementPath(osg::Vec3Array* points) : m_frontTip(NULL), m_backTip(NULL), m_length(0) { insert(points); };
+	MovementPath() : m_length(0.0f), m_backTip(NULL), m_frontTip(NULL) { }
+	MovementPath(osg::Vec3Array* points) : m_length(0.0f), m_backTip(NULL), m_frontTip(NULL) { insert(points); }
+
+	virtual ~MovementPath() { }
 
 	//! Given a specific distance, return the local ControlPoint frame for a point.
 	virtual bool getInterpolatedControlPoint(double distance, ControlPoint& controlPoint) const;
@@ -223,8 +223,6 @@ public:
 
 protected:
 
-	virtual ~MovementPath() {}
-
 	ControlPointMap m_controlPointMap;
 	ControlPointMap::iterator m_lastCPIter;
 
@@ -235,6 +233,6 @@ protected:
 
 }; // class MovementPath
 
-};
+}
 
 #endif

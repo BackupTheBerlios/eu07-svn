@@ -20,8 +20,7 @@
 #include <osg/Notify>
 #include <osg/io_utils>
 
-namespace spt
-{
+namespace sptFileIO {
 
 void DataOutputStream::setOptions(const osgDB::ReaderWriter::Options* options) 
 { 
@@ -484,4 +483,4 @@ void DataOutputStream::writeMatrixd(const osg::Matrixd& mat)
 
 }
 
-};
+} // namespace sptFileIO

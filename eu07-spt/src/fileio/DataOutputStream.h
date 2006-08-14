@@ -20,8 +20,7 @@
 
 #include <osg/ref_ptr>
 
-namespace spt
-{
+namespace sptFileIO {
 
 class DataOutputStream
 {
@@ -85,8 +84,9 @@ public:
 	{
 
 	public:
+		typedef std::set<Ty*> RefSet;
 
-		void setPtrSet(std::set<Ty*>& set);
+		void setPtrSet(RefSet& set);
 		void write(DataOutputStream* out);
 		unsigned int getOrCreateId(Ty* ptr);
 		void registerObject(Ty* ptr);
@@ -95,6 +95,7 @@ public:
 
 	private:
 		typedef std::map<Ty*, unsigned int> RefMap;
+
 		RefMap m_data;
 
 	};
@@ -112,14 +113,14 @@ private:
 };
 
 template<class Ty>
-void DataOutputStream::WriteObjectsList<Ty>::setPtrSet(std::set<Ty*>& set)
+void DataOutputStream::WriteObjectsList<Ty>::setPtrSet(RefSet& set)
 {
 
 	unsigned int id = 0;
 
 	m_data.clear();
 
-	std::set<Ty*>::iterator iter = set.begin();
+	typename RefSet::iterator iter = set.begin();
 	while(iter != set.end())
 		m_data.insert(std::pair<Ty*, unsigned int>(*(iter++), id++));
 
@@ -136,7 +137,7 @@ void DataOutputStream::WriteObjectsList<Ty>::write(DataOutputStream* out)
 
 	std::cout << "count: " << count << std::endl;
 
-	RefMap::iterator iter = m_data.begin();
+	typename RefMap::iterator iter = m_data.begin();
 	while(iter != m_data.end())
 	{
 
@@ -155,7 +156,7 @@ unsigned int DataOutputStream::WriteObjectsList<Ty>::getOrCreateId(Ty* ptr)
 
 	unsigned int result;
 
-	RefMap::iterator iter = m_data.find(ptr);
+	typename RefMap::iterator iter = m_data.find(ptr);
 	if(iter != m_data.end())
 	{
 
@@ -176,8 +177,8 @@ template<class Ty>
 void DataOutputStream::WriteObjectsList<Ty>::registerObject(Ty* ptr)
 {
 
-	RefMap::iterator iter = m_data.find(ptr);
-	if(iter == m_data.end()) m_data[ptr] = result;
+	typename RefMap::iterator iter = m_data.find(ptr);
+	if(iter == m_data.end()) m_data[ptr] = getOrCreateId(ptr);
 
 };
 
@@ -185,13 +186,13 @@ template<class Ty>
 void DataOutputStream::WriteObjectsList<Ty>::debug()
 {
 
-	RefMap::iterator iter = m_data.begin();
+	typename RefMap::iterator iter = m_data.begin();
 	while(iter != m_data.end())
 		std::cout << iter->first << " " << (iter++)->second << std::endl;
 //		(iter++)->first->debug();
 
 };
 
-}; // namespace spt
+}; // namespace sptFileIO
 
 #endif // SPT_DATAOUTPUTSTREAM
