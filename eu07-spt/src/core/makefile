@@ -2,7 +2,7 @@ COMPILER=g++
 CCFLAGS=-g -Wall
 
 LIBS=
-OBJS=MovementPath.o PathFollower.o SkyDome.o Scenery.o 
+OBJS=MovementPath.o PathFollower.o SkyDome.o ObjectsList.o Scenery.o 
 
 core: ${OBJS}
 	cd events && make

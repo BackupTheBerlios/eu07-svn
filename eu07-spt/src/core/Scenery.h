@@ -9,6 +9,8 @@
 #include "MovementPath.h"
 #include "PathFollower.h"
 
+#include "ObjectsList.h"
+
 namespace spt
 {
 
@@ -44,9 +46,9 @@ protected:
 
 	osg::Group* m_root;
 
-	typedef std::set<MovementPath::Tip*> TipList;
-	typedef std::set<MovementPath*> MovementPathList;
-	typedef std::set<PathFollower*> PathFollowerList;
+	typedef ObjectsList<MovementPath::Tip> TipList;
+	typedef ObjectsList<MovementPath> MovementPathList;
+	typedef ObjectsList<PathFollower> PathFollowerList;
 
 	TipList* m_tipList;
 	MovementPathList* m_movementPathList;

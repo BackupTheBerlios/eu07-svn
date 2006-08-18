@@ -19,6 +19,9 @@ public:
 	virtual osg::Referenced* getById(unsigned int id);
 	virtual osg::Referenced* getOrCreateById(unsigned int id);
 
+	osg::Referenced* insert(unsigned int id, osg::Referenced* obj);
+	osg::Referenced* insert(osg::Referenced* obj);
+
 	virtual unsigned int getIdByPtr(osg::Referenced* obj);
 
 	virtual void read() = 0;
@@ -37,103 +40,79 @@ protected:
 	sptFileIO::DataInputStream* m_input;
 	sptFileIO::DataOutputStream* m_output;
 
-
-};
-
-osg::Referenced* BaseObjectsList::insert(unsigned int id, osg::Referenced* obj) {
-
-	m_idPtrMap.insert(IdPtrPair(id, obj));
-	m_ptrIdMap.insert(PtrIdPair(obj, id));
-
-};
-
-
-osg::Referenced* BaseObjectsList::getById(unsigned int id) {
-
-	IdPtrMap::iterator iter = m_idPtrMap.find(id);
-	return (iter != m_idPtrMap.end() ? iter->second : NULL);
-
-};
-
-osg::Referenced* BaseObjectsList::getOrCreateById(unsigned int id) {
-
-	osg::Referenced* obj;
-
-	IdPtrMap::iterator iter = m_idPtrMap.find(id);
-	return (iter != m_idPtrMap.end() ? iter->second : create());
-
-};
-
-unsigned int BaseObjectsList::getIdByPtr(osg::Referenced* obj) {
-
-	PtrIdMap::iterator iter = m_ptrIdMap.find(obj);
-	return (iter != m_ptrIdMap.end() ? iter->second : 0);
-
 };
 
 template <class Ty>
 class ObjectsList: public BaseObjectsList {
 
 public:
-	ObjectsList() { };
-	ObjectsList(sptFileIO::DataInputStream* input) : m_input(input) { };
-	ObjectsList(sptFileIO::DataInputStream* input, sptFileIO::DataOutputStream* output) : m_output(output) { };
+	ObjectsList() : BaseObjectsList(), m_maxId(0) { };
+	ObjectsList(sptFileIO::DataInputStream* input) : BaseObjectsList(input), m_maxId(0) {  };
+	ObjectsList(sptFileIO::DataInputStream* input, sptFileIO::DataOutputStream* output) : BaseObjectsList(input), m_maxId(0) { };
 
-	virtual osg::Referenced* create() {
-
-		osg::Referenced* obj = new Ty();
-		if(read) Ty->read(m_input);
-
-		insert(++m_maxId, obj);
-
-		return Ty*;
-
-	};
-
-	virtual void read() {
-
-		unsigned int count = input->readUInt();
-		
-		while(--count) {
-
-			Ty* obj;
-			unsigned int id = m_input->readUInt();
-
-			IdPtrMap::iterator iter = m_idPtrMap->find(id);
-
-
-			if(iter != m_idPtrMap.end()) {
-
-				obj = static_cast<Ty*>(iter->second);
-
-			} else {
-	
-				obj = new Ty();	
-				if(m_maxId < id) m_maxId = id;			
-				insert(id, obj);
-
-			};
-
-			obj->read(m_input);
-
-		};
-
-	};
+	virtual osg::Referenced* create(bool read);
+	virtual void read();
 
 	virtual void write() {
 
-		m_output->write(m_idPtrMap.size());
+		m_output->writeUInt(m_idPtrMap.size());
 		
-		for(IdPtrMap::iterator iter = m_idPtrMap->begin(); iter != m_idPtrMap->end(); iter++) {
+		for(IdPtrMap::iterator iter = m_idPtrMap.begin(); iter != m_idPtrMap.end(); iter++) {
 
 			m_output->writeUInt(iter->first);
-			static_cast<Ty*>(iter->second->write)->write(m_output);
+			static_cast<Ty*>(iter->second)->write(m_output);
 
 		};
 		
 	};
 
+protected:
+	unsigned int m_maxId;
+
 }; // class ObjectsList
+
+template <class Ty>
+osg::Referenced* ObjectsList<Ty>::create(bool read = false) {
+
+	Ty* obj = new Ty();
+	if(read) obj->read(m_input);
+
+        insert(++m_maxId, obj);
+
+        return obj;
+
+};
+
+template <class Ty>
+void ObjectsList<Ty>::read() {
+
+	unsigned int count = m_input->readUInt();
+
+        while(--count) {
+
+        	Ty* obj;
+                unsigned int id = m_input->readUInt();
+
+                IdPtrMap::iterator iter = m_idPtrMap.find(id);
+
+
+                if(iter != m_idPtrMap.end()) {
+
+                	obj = static_cast<Ty*>(iter->second);
+
+                } else {
+
+                	obj = new Ty();
+                	if(m_maxId < id) m_maxId = id;
+                	insert(id, obj);
+
+                };
+
+                obj->read(m_input);
+
+        };
+
+};
 
 } // namespace spt
 

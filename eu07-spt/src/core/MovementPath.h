@@ -8,6 +8,7 @@
 #include <osg/Matrix>
 #include <osg/Quat>
 #include <osg/NodeCallback>
+#include <osg/Referenced>
 
 /*!
 *
@@ -23,7 +24,7 @@
 
 namespace spt {
 
-class MovementPath {
+class MovementPath : public osg::Referenced {
 
 public:
 
@@ -102,8 +103,7 @@ public:
 	*
 	*/
 
-	class Tip
-	{
+	class Tip : public osg::Referenced {
 
 	public:
 		typedef enum {UNDEF = 0, FRONT = 1, BACK = 2} ConnType;

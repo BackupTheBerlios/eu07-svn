@@ -42,6 +42,8 @@ void Scenery::addMovementPath(MovementPath* path)
 void Scenery::addPathFollower(PathFollower* follower)
 {
 
+	m_pathFollowerList.
+
 	PathFollowerList::iterator iter = m_pathFollowerList.find(follower);
 	if(iter == m_pathFollowerList.end()) m_pathFollowerList.insert(follower);
 

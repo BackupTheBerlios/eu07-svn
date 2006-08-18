@@ -3,6 +3,7 @@
 
 #include <cfloat>
 #include <osg/NodeCallback>
+#include <osg/Referenced>
 
 #include "MovementPath.h"
 
@@ -18,7 +19,7 @@ namespace spt {
  *
  */
 
-class PathFollower {
+class PathFollower : public osg::Referenced {
 
 public:
 	PathFollower() : m_movementPath(NULL), m_master(NULL), m_valid(false) { }
