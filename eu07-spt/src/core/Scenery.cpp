@@ -15,6 +15,10 @@ Scenery::Scenery()
 	m_instance = this;
 	m_root = new osg::Group();
 
+	MovementPathList = new ObjectsList<MovementPath>();
+	TipList = new ObjectsList<MovementPath::Tip>();
+	
+
 };
 
 Scenery::~Scenery()
@@ -31,21 +35,16 @@ void Scenery::addNode(osg::Node* node)
 
 };
 
-void Scenery::addMovementPath(MovementPath* path)
-{
+void Scenery::addMovementPath(MovementPath* path) {
 
-	MovementPathList::iterator iter = m_movementPathList.find(path);
-	if(iter == m_movementPathList.end()) m_movementPathList.insert(path);
+	m_movementPathList.insert(path);
 
 };
 
 void Scenery::addPathFollower(PathFollower* follower)
 {
 
-	m_pathFollowerList.
-
-	PathFollowerList::iterator iter = m_pathFollowerList.find(follower);
-	if(iter == m_pathFollowerList.end()) m_pathFollowerList.insert(follower);
+	m_pathFollowerList.insert(follower);
 
 };
 

@@ -33,26 +33,16 @@ public:
 	~Scenery();
 
 	static Scenery* getInstance() { return m_instance; };
-	
 	osg::Group* getNode() { return m_root; };
 
-	void addNode(osg::Node* node);
-	void addMovementPath(MovementPath* path);
-	void addPathFollower(PathFollower* follower);
+	ObjectsList TipList;
+	ObjectsList MovementPathList;
+	ObjectsList PathFollowerList; 
 
 protected:
 
 	static Scenery* m_instance;
-
 	osg::Group* m_root;
-
-	typedef ObjectsList<MovementPath::Tip> TipList;
-	typedef ObjectsList<MovementPath> MovementPathList;
-	typedef ObjectsList<PathFollower> PathFollowerList;
-
-	TipList* m_tipList;
-	MovementPathList* m_movementPathList;
-	PathFollowerList* m_pathFollowerList;
 
 }; // class Scenery
 

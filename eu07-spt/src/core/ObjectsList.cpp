@@ -2,13 +2,19 @@
 
 namespace spt {
 
-osg::Referenced* BaseObjectsList::insert(unsigned int id, osg::Referenced* obj) {
+void BaseObjectsList::insert(unsigned int id, osg::Referenced* obj) {
 
         m_idPtrMap.insert(IdPtrPair(id, obj));
         m_ptrIdMap.insert(PtrIdPair(obj, id));
 
 };
 
+void BaseObjectsList::insert(osg::Referenced* obj) {
+
+        PtrIdMap::iterator iter = m_ptrIdMap.find(obj);
+        if(iter == m_ptrIdMap.end()) insert(++m_maxId, obj);
+
+};
 
 osg::Referenced* BaseObjectsList::getById(unsigned int id) {
 
