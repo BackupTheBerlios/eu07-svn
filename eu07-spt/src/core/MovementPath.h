@@ -1,5 +1,5 @@
-#ifndef OSG_MOVEMENTPATH
-#define OSG_MOVEMENTPATH 1
+#ifndef SPT_MOVEMENTPATH
+#define SPT_MOVEMENTPATH 1
 
 #include <map>
 

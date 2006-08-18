@@ -38,17 +38,19 @@ public:
 	void addMovementPath(MovementPath* path);
 	void addPathFollower(PathFollower* follower);
 
-private:
+protected:
 
 	static Scenery* m_instance;
 
 	osg::Group* m_root;
 
+	typedef std::set<MovementPath::Tip*> TipList;
 	typedef std::set<MovementPath*> MovementPathList;
 	typedef std::set<PathFollower*> PathFollowerList;
 
-	MovementPathList m_movementPathList;
-	PathFollowerList m_pathFollowerList;
+	TipList* m_tipList;
+	MovementPathList* m_movementPathList;
+	PathFollowerList* m_pathFollowerList;
 
 }; // class Scenery
 
