@@ -6,7 +6,6 @@ LIBS=-losg -losgDB -losgProducer core.a common.a fileio.a
 eu07-spt: ${OBJS}
 	cd core && ${MAKE}
 	cd common && ${MAKE}
-	cd fileio && ${MAKE}
 	cd fileio-bin && ${MAKE}
 	${COMPILER} ${LIBS} -o eu07-spt
 	chmod 777 eu07-spt
@@ -14,6 +13,5 @@ eu07-spt: ${OBJS}
 clean:
 	cd core && ${MAKE} clean
 	cd common && ${MAKE} clean
-	cd fileio && ${MAKE} clean
 	cd fileio-bin && ${MAKE} clean
 	rm eu07-spt

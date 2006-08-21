@@ -15,9 +15,9 @@ Scenery::Scenery()
 	m_instance = this;
 	m_root = new osg::Group();
 
-	MovementPathList = new ObjectsList<MovementPath>();
-	TipList = new ObjectsList<MovementPath::Tip>();
-	
+	MovementPathList = new BaseObjectsList<MovementPath>();
+	TipList = new BaseObjectsList<MovementPath::Tip>();
+		
 
 };
 
@@ -28,8 +28,8 @@ Scenery::~Scenery()
 
 };
 
-void Scenery::addNode(osg::Node* node)
-{
+/*
+void Scenery::addNode(osg::Node* node) {
 
 	m_root->addChild(node);
 
@@ -47,5 +47,6 @@ void Scenery::addPathFollower(PathFollower* follower)
 	m_pathFollowerList.insert(follower);
 
 };
+*/
 
 } // namespace spt

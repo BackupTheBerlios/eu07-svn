@@ -35,9 +35,13 @@ public:
 	static Scenery* getInstance() { return m_instance; };
 	osg::Group* getNode() { return m_root; };
 
-	ObjectsList TipList;
-	ObjectsList MovementPathList;
-	ObjectsList PathFollowerList; 
+	BaseObjectsList<MovementPath::Tip>* TipList;
+	BaseObjectsList<MovementPath>* MovementPathList;
+
+	void read(DataInputStream* input);
+	void write(DataOutputStream* output);
+
+//	ObjectsList* PathFollowerList; 
 
 protected:
 

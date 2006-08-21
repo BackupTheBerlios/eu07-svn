@@ -24,6 +24,9 @@
 
 namespace spt {
 
+class DataInputStream;
+class DataOutputStream;
+
 class MovementPath : public osg::Referenced {
 
 public:
@@ -82,6 +85,9 @@ public:
 			matrix.preMult(osg::Matrix::translate(-m_position));
 		}
 
+		void read(DataInputStream* input);
+		void write(DataOutputStream* output);
+
 	protected:
 
 		osg::Vec3d	m_position;
@@ -122,6 +128,9 @@ public:
 
 		const bool isOpposite() const { return m_opposite; };
 		const bool isValid() const { return m_valid; };
+
+		void read(DataInputStream* input);
+		void write(DataOutputStream* output);
 
 	protected:
 
@@ -220,6 +229,9 @@ public:
 	const ControlPointMap& getControlPointMap() const { return m_controlPointMap; }
 
 	bool empty() const { return m_controlPointMap.empty(); }
+
+	void read(DataInputStream* input);
+	void write(DataOutputStream* output);
 
 protected:
 

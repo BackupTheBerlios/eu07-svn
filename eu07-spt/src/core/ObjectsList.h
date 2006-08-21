@@ -1,31 +1,30 @@
 #ifndef SPT_OBJECTSLIST
 #define SPT_OBJECTSLIST 1
 
+#include <map>
 #include <osg/Referenced>
 
-#include "../fileio/ReadWrite.h"
+#include "ReadWrite.h"
 
 namespace spt {
 
-class BaseObjectsList {
+class ObjectsList {
 
 public:
 
-	BaseObjectsList() : m_maxId(0) { };
-	BaseObjectsList(sptFileIO::DataInputStream* input) : m_input(input), m_maxId(0) { };
-	BaseObjectsList(sptFileIO::DataInputStream* input, sptFileIO::DataOutputStream* output) : m_output(output), m_maxId(0) { };
+	ObjectsList() : m_maxId(0) { };
 
-	osg::Referenced* getById(unsigned int id);
-	osg::Referenced* getOrCreateById(unsigned int id);
-	unsigned int getIdByPtr(osg::Referenced* obj);
+	osg::Referenced* get(const unsigned int& id);
+	osg::Referenced* getOrCreate(const unsigned int& id);
+	unsigned int getPtrId(osg::Referenced* obj);
 
 	void insert(unsigned int id, osg::Referenced* obj);
 	void insert(osg::Referenced* obj);
 
-	virtual osg::Referenced* create(bool read = false) = 0;
+	virtual osg::Referenced* create(DataInputStream* input = NULL) = 0;
 
-	virtual void read() = 0;
-	virtual void write() = 0;
+	virtual void read(DataInputStream* input) = 0;
+	virtual void write(DataOutputStream* output) = 0;
 
 protected:
 	typedef std::map<unsigned int, osg::Referenced*> IdPtrMap;
@@ -37,33 +36,45 @@ protected:
 	IdPtrMap m_idPtrMap;
 	PtrIdMap m_ptrIdMap;
 
-	sptFileIO::DataInputStream* m_input;
-	sptFileIO::DataOutputStream* m_output;
-
 	unsigned int m_maxId;
-
-};
-
-template <class Ty>
-class ObjectsList: public BaseObjectsList {
-
-public:
-	ObjectsList() : BaseObjectsList() { };
-	ObjectsList(sptFileIO::DataInputStream* input) : BaseObjectsList(input) {  };
-	ObjectsList(sptFileIO::DataInputStream* input, sptFileIO::DataOutputStream* output) : BaseObjectsList(input) { };
-
-	virtual osg::Referenced* create(bool read);
-
-	virtual void read();
-	virtual void write();
 
 }; // class ObjectsList
 
 template <class Ty>
-osg::Referenced* ObjectsList<Ty>::create(bool read = false) {
+class BaseObjectsList: public ObjectsList {
+
+public:
+	BaseObjectsList() : ObjectsList() { };
+
+	Ty* get(const unsigned int& id);
+	Ty* getOrCreate(const unsigned int& id);
+
+	virtual osg::Referenced* create(DataInputStream* stream);
+
+	virtual void read(DataInputStream* input);
+	virtual void write(DataOutputStream* output);
+
+}; // class BaseObjectsList
+
+template <class Ty>
+inline Ty* get(const unsigned int& id) {
+
+	return static_cast<Ty*>(ObjectsList::get(id));
+
+}
+
+template <class Ty>
+inline Ty* getOrCreate(const unsigned int& id) {
+
+	return static_cast<Ty*>(ObjectsList::get(id));
+
+}
+
+template <class Ty>
+osg::Referenced* BaseObjectsList<Ty>::create(DataInputStream* input) {
 
 	Ty* obj = new Ty();
-	if(read) obj->read(m_input);
+	if(input) obj->read(input);
 
         insert(++m_maxId, obj);
 
@@ -72,17 +83,16 @@ osg::Referenced* ObjectsList<Ty>::create(bool read = false) {
 };
 
 template <class Ty>
-void ObjectsList<Ty>::read() {
+void BaseObjectsList<Ty>::read(DataInputStream* input) {
 
-	unsigned int count = m_input->readUInt();
+	unsigned int count = input->readUInt();
 
         while(--count) {
 
         	Ty* obj;
-                unsigned int id = m_input->readUInt();
+                unsigned int id = input->readUInt();
 
                 IdPtrMap::iterator iter = m_idPtrMap.find(id);
-
 
                 if(iter != m_idPtrMap.end()) {
 
@@ -96,21 +106,21 @@ void ObjectsList<Ty>::read() {
 
                 };
 
-                obj->read(m_input);
+                obj->read(input);
 
         };
 
 };
 
 template <class Ty>
-void ObjectsList<Ty>::write() {
+void BaseObjectsList<Ty>::write(DataOutputStream* output) {
 
-	m_output->writeUInt(m_idPtrMap.size());
+	output->writeUInt(m_idPtrMap.size());
 		
 	for(IdPtrMap::iterator iter = m_idPtrMap.begin(); iter != m_idPtrMap.end(); iter++) {
 
-		m_output->writeUInt(iter->first);
-		static_cast<Ty*>(iter->second)->write(m_output);
+		output->writeUInt(iter->first);
+		static_cast<Ty*>(iter->second)->write(output);
 
 	};
 		

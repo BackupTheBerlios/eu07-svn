@@ -10,6 +10,9 @@
 #include <osg/Matrix>
 #include <osg/Quat>
 
+#include "ReadWrite.h"
+#include "Scenery.h"
+
 namespace spt
 {
 
@@ -432,9 +435,99 @@ void MovementPath::SmartIterator::getControlPoint()
 
 };
 
+void MovementPath::read(DataInputStream* in)
+{
+
+        unsigned int pointCount = in->readUInt(); // read control points count
+
+        while(pointCount--)
+        {
+
+                float distance = in->readFloat(); // read distance
+                ControlPoint cp; cp.read(in); // read control point
+
+                m_lastCPIter = m_controlPointMap.insert(ControlPointPair(distance, cp)).first; // insert to control points map
+
+        };
+
+        m_length = in->readFloat(); // read length
+
+        m_backTip = in->getScenery()->TipList->getOrCreate(in->readUInt()); // read back tip ptr
+        m_frontTip = in->getScenery()->TipList->getOrCreate(in->readUInt()); // read front tip ptr
+
+}; // MovementPath::read
+
+void MovementPath::write(DataOutputStream* out)
+{
+
+        out->writeUInt(m_controlPointMap.size()); // write control points count
+
+        ControlPointMap::iterator iter = m_controlPointMap.begin();
+        while(iter != m_controlPointMap.end())
+        {
+
+                out->writeFloat(iter->first);
+                iter->second.write(out); // write control point
+                iter++;
+
+        };
+
+        out->writeFloat(m_length); // write length
+
+        out->writeUInt(out->getScenery()->TipList->getPtrId(m_backTip)); // write back tip id
+        out->writeUInt(out->getScenery()->TipList->getPtrId(m_frontTip)); // write front tip id
+
+}; // MovementPath::write
+
 MovementPath::SmartIterator& MovementPath::SmartIterator::operator ++() { incIter(); return *this; }
 MovementPath::SmartIterator& MovementPath::SmartIterator::operator --() { decIter(); return *this; }
 MovementPath::ControlPoint& MovementPath::SmartIterator::operator ->() { getControlPoint(); return m_cp; }
 MovementPath::ControlPoint& MovementPath::SmartIterator::operator *() { getControlPoint(); return m_cp; }
+
+void MovementPath::ControlPoint::read(DataInputStream* in)
+{
+
+        m_position = in->readVec3();
+        m_rotation = in->readQuat();
+        m_length = in->readFloat();
+
+}; // MovementPath::ControlPoint::read
+
+void MovementPath::ControlPoint::write(DataOutputStream* out)
+{
+
+        out->writeVec3(m_position);
+        out->writeQuat(m_rotation);
+        out->writeFloat(m_length);
+
+} // MovementPath::ControlPoint::write
+
+void MovementPath::Tip::read(DataInputStream* in)
+{
+
+        m_first.connType = readConnType(in->readChar());
+        m_first.path = in->getScenery()->MovementPathList->getOrCreate(in->readUInt());
+
+        m_second.connType = readConnType(in->readChar());
+        m_second.path = in->getScenery()->MovementPathList->getOrCreate(in->readUInt());
+
+        m_opposite = in->readBool();
+        m_valid = in->readBool();
+
+}; // MovementPath::Tip::read
+
+void MovementPath::Tip::write(DataOutputStream* out)
+{
+
+        out->writeChar(writeConnType(m_first.connType));
+        out->writeUInt(out->getScenery()->MovementPathList->getPtrId(m_first.path));
+
+        out->writeChar(writeConnType(m_second.connType));
+        out->writeUInt(out->getScenery()->MovementPathList->getPtrId(m_second.path));
+
+        out->writeBool(m_opposite);
+        out->writeBool(m_valid);
+
+}; // MovementPath::Tip::write
 
 }; // namespace spt
