@@ -4,13 +4,13 @@
 #include <osgDB/WriteFile>
 
 #include "Scenery.h"
+#include "ReadWrite.h"
 
 namespace spt {
 
 Scenery* Scenery::m_instance = NULL;
 
-Scenery::Scenery()
-{
+Scenery::Scenery() {
 
 	m_instance = this;
 	m_root = new osg::Group();
@@ -21,10 +21,23 @@ Scenery::Scenery()
 
 };
 
-Scenery::~Scenery()
-{
+Scenery::~Scenery() {
 
 	m_instance = NULL;
+
+};
+
+void Scenery::read(DataInputStream* input) {
+
+	MovementPathList->read(input);
+	TipList->read(input);
+
+};
+
+void Scenery::write(DataOutputStream* output) {
+
+	MovementPathList->write(output);
+	TipList->write(output);
 
 };
 
