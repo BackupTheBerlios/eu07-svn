@@ -1,4 +1,4 @@
-#include "PathFollower.h"
+#include "core/PathFollower.h"
 
 #include <iostream>
 #include <osg/MatrixTransform>
@@ -22,7 +22,7 @@ PathFollower::PathFollower(MovementPath* movementPath)
 
 	};
 
-};
+}
 
 PathFollower::PathFollower(MovementPath* movementPath, double distance, bool dir)
 {
@@ -42,7 +42,7 @@ PathFollower::PathFollower(MovementPath* movementPath, double distance, bool dir
 
 	};
 
-};
+}
 
 
 bool PathFollower::move(double distance)
@@ -60,7 +60,7 @@ bool PathFollower::move(double distance)
 
 	return m_valid;
 
-};
+}
 
 bool PathFollower::update(double time)
 {
@@ -97,6 +97,6 @@ void PathFollowerCallback::operator()(osg::Node* node, osg::NodeVisitor* nv)
     // must call any nested node callbacks and continue subgraph traversal.
     NodeCallback::traverse(node,nv);
 
-};
+}
 
 } // namespace spt

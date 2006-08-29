@@ -12,9 +12,9 @@
  **********************************************************************/
 
 
-#include "Exception.h"
+#include "common/Exception.h"
 
-namespace sptCommon {
+namespace spt {
 
 Exception::Exception(std::string error){
     _error = error;

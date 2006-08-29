@@ -1,4 +1,4 @@
-#include "SkyDome.h"
+#include "core/SkyDome.h"
 
 #include <osg/Depth>
 #include <osg/ClearNode>
@@ -79,4 +79,4 @@ bool SkyDome::Transform::computeWorldToLocalMatrix(osg::Matrix& matrix,osg::Node
 	return true;
 }
 
-};
+}

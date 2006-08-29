@@ -2,7 +2,7 @@
 #include <cmath>
 #include <exception>
 
-#include "MovementPath.h"
+#include "core/MovementPath.h"
 
 #include <iostream>
 
@@ -10,8 +10,8 @@
 #include <osg/Matrix>
 #include <osg/Quat>
 
-#include "ReadWrite.h"
-#include "Scenery.h"
+#include "core/ReadWrite.h"
+#include "core/Scenery.h"
 
 namespace spt
 {
@@ -77,7 +77,7 @@ void MovementPath::insert(osg::Vec3Array* points)
 	if(cpIter != m_controlPointMap.end()) cpIter->second.setRotation(rotation);
 	m_lastCPIter = cpIter;
 
-};
+}
 
 bool MovementPath::getInterpolatedControlPoint(double distance, ControlPoint& controlPoint) const
 {
@@ -208,7 +208,7 @@ MovementPath* MovementPath::Tip::getNext(MovementPath* path)
 	else
 		return NULL;
 
-};
+}
 
 void MovementPath::Tip::disconnect(MovementPath* path)
 {
@@ -228,7 +228,7 @@ void MovementPath::Tip::disconnect(MovementPath* path)
 
 	m_valid = (m_first.path == NULL && m_second.path == NULL);
 
-};
+}
 
 MovementPath::Tip::ConnType MovementPath::Tip::readConnType(char ch)
 {
@@ -243,7 +243,7 @@ MovementPath::Tip::ConnType MovementPath::Tip::readConnType(char ch)
 
 	};
 
-};
+}
 
 char MovementPath::Tip::writeConnType(ConnType ct)
 {
@@ -258,7 +258,7 @@ char MovementPath::Tip::writeConnType(ConnType ct)
 
 	};
 
-};
+}
 
 void MovementPath::SmartIterator::setMovementPath(MovementPath* movementPath, bool dir)
 {
@@ -296,7 +296,7 @@ void MovementPath::SmartIterator::setMovementPath(MovementPath* movementPath, bo
 
 	};
 
-};
+}
 
 void MovementPath::SmartIterator::getTipPath(MovementPath::Tip* tip)
 {
@@ -322,7 +322,7 @@ void MovementPath::SmartIterator::getTipPath(MovementPath::Tip* tip)
 
 	};
 
-};
+}
 
 void MovementPath::SmartIterator::incIter()
 {
@@ -356,7 +356,7 @@ void MovementPath::SmartIterator::incIter()
 
 	};
 
-};
+}
 
 void MovementPath::SmartIterator::decIter()
 {
@@ -390,7 +390,7 @@ void MovementPath::SmartIterator::decIter()
 
 	};
 
-};
+}
 
 void MovementPath::SmartIterator::move(double distance)
 {
@@ -422,7 +422,7 @@ void MovementPath::SmartIterator::move(double distance)
 
 	m_distance = distance;
 
-};
+}
 
 void MovementPath::SmartIterator::getControlPoint()
 {
@@ -433,7 +433,7 @@ void MovementPath::SmartIterator::getControlPoint()
 		else
 			m_cp.interpolate(m_distance / m_rIter->second.getLength(), m_rIter->second, m_rNextIter->second);
 
-};
+}
 
 void MovementPath::read(DataInputStream* in)
 {
@@ -455,7 +455,7 @@ void MovementPath::read(DataInputStream* in)
         m_backTip = in->getScenery()->TipList->getOrCreate(in->readUInt()); // read back tip ptr
         m_frontTip = in->getScenery()->TipList->getOrCreate(in->readUInt()); // read front tip ptr
 
-}; // MovementPath::read
+} // MovementPath::read
 
 void MovementPath::write(DataOutputStream* out)
 {
@@ -477,7 +477,7 @@ void MovementPath::write(DataOutputStream* out)
         out->writeUInt(out->getScenery()->TipList->getPtrId(m_backTip)); // write back tip id
         out->writeUInt(out->getScenery()->TipList->getPtrId(m_frontTip)); // write front tip id
 
-}; // MovementPath::write
+} // MovementPath::write
 
 MovementPath::SmartIterator& MovementPath::SmartIterator::operator ++() { incIter(); return *this; }
 MovementPath::SmartIterator& MovementPath::SmartIterator::operator --() { decIter(); return *this; }
@@ -491,7 +491,7 @@ void MovementPath::ControlPoint::read(DataInputStream* in)
         m_rotation = in->readQuat();
         m_length = in->readFloat();
 
-}; // MovementPath::ControlPoint::read
+} // MovementPath::ControlPoint::read
 
 void MovementPath::ControlPoint::write(DataOutputStream* out)
 {
@@ -514,7 +514,7 @@ void MovementPath::Tip::read(DataInputStream* in)
         m_opposite = in->readBool();
         m_valid = in->readBool();
 
-}; // MovementPath::Tip::read
+} // MovementPath::Tip::read
 
 void MovementPath::Tip::write(DataOutputStream* out)
 {
@@ -528,6 +528,6 @@ void MovementPath::Tip::write(DataOutputStream* out)
         out->writeBool(m_opposite);
         out->writeBool(m_valid);
 
-}; // MovementPath::Tip::write
+} // MovementPath::Tip::write
 
-}; // namespace spt
+} // namespace spt

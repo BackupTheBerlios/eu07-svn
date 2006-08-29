@@ -3,8 +3,8 @@
 #include <osgDB/ReadFile>
 #include <osgDB/WriteFile>
 
-#include "Scenery.h"
-#include "ReadWrite.h"
+#include "core/Scenery.h"
+#include "core/ReadWrite.h"
 
 namespace spt {
 
@@ -19,27 +19,27 @@ Scenery::Scenery() {
 	TipList = new BaseObjectsList<MovementPath::Tip>();
 		
 
-};
+}
 
 Scenery::~Scenery() {
 
 	m_instance = NULL;
 
-};
+}
 
 void Scenery::read(DataInputStream* input) {
 
 	MovementPathList->read(input);
 	TipList->read(input);
 
-};
+}
 
 void Scenery::write(DataOutputStream* output) {
 
 	MovementPathList->write(output);
 	TipList->write(output);
 
-};
+}
 
 /*
 void Scenery::addNode(osg::Node* node) {

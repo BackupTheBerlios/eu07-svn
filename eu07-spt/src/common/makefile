@@ -1,17 +1,14 @@
 COMPILER=g++
-CCFLAGS=-g -Wall
+CCFLAGS=-g -Wall -iquote../../include
 
 LIBS=
 OBJS=Exception.o FindNodeVisitor.o 
 
-fileio: ${OBJS}
-	ar cr ../common.a ${OBJS} ${LIBS}
+core: ${OBJS}
+	ar cr ../common.a ${OBJS}
 
-Exception.o: Exception.cpp
-	${COMPILER} ${CCFLAGS} -c Exception.cpp
-
-FindNodeVisitor.o: FindNodeVisitor.cpp
-	${COMPILER} ${CCFLAGS} -c FindNodeVisitor.cpp
+${OBJS}: %.o: %.cpp
+	${COMPILER} -c ${CCFLAGS} $< -o $@
 
 clean:
 	rm -f *.o ../common.a 
