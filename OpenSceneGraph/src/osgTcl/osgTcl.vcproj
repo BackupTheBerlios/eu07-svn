@@ -71,6 +71,7 @@
 			CharacterSet="2">
 			<Tool
 				Name="VCCLCompilerTool"
+				AdditionalIncludeDirectories="../../include;../../../OpenThreads/include;../../../Tcl/include"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;OSGTCL_EXPORTS"
 				RuntimeLibrary="2"
 				RuntimeTypeInfo="TRUE"
@@ -83,13 +84,15 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="osg.lib osgDB.lib osgIntrospection.lib tcl84.lib"
-				OutputFile="$(OutDir)/osgTcl.dll"
+				OutputFile="../../bin/osgTcl.dll"
 				LinkIncremental="1"
+				AdditionalLibraryDirectories="../../lib;../../../Tcl/lib"
 				GenerateDebugInformation="TRUE"
+				ProgramDatabaseFile="../../bin/osgTcl.pdb"
 				SubSystem="2"
 				OptimizeReferences="2"
 				EnableCOMDATFolding="2"
-				ImportLibrary="../lib/osgTcl.lib"
+				ImportLibrary="../../lib/osgTcl.lib"
 				TargetMachine="1"/>
 			<Tool
 				Name="VCMIDLTool"/>
