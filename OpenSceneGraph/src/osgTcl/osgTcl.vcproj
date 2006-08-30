@@ -19,6 +19,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
+				AdditionalIncludeDirectories="../../include;../../../OpenThreads/include;../../../Tcl/include"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;OSGTCL_EXPORTS"
 				MinimalRebuild="TRUE"
 				BasicRuntimeChecks="3"
@@ -33,12 +34,13 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="osgd.lib osgDBd.lib osgIntrospectiond.lib tcl84.lib"
-				OutputFile="$(OutDir)/osgTcld.dll"
+				OutputFile="../../bin/osgTcld.dll"
 				LinkIncremental="2"
+				AdditionalLibraryDirectories="../../lib;../../../Tcl/lib"
 				GenerateDebugInformation="TRUE"
-				ProgramDatabaseFile="$(OutDir)/osgTcl.pdb"
+				ProgramDatabaseFile="../../bin/osgTcl.pdb"
 				SubSystem="2"
-				ImportLibrary="../lib/osgTcld.lib"
+				ImportLibrary="../../lib/osgTcld.lib"
 				TargetMachine="1"/>
 			<Tool
 				Name="VCMIDLTool"/>
@@ -130,7 +132,7 @@
 			Filter="h;hpp;hxx;hm;inl;inc;xsd"
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}">
 			<File
-				RelativePath=".\Interpreter.h">
+				RelativePath="..\..\include\osgTcl\Interpreter">
 			</File>
 		</Filter>
 		<Filter

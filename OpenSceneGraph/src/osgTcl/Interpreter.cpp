@@ -5,7 +5,7 @@
 //   This is free software
 // --------------------------------------------------------------------------
 
-#include "Interpreter.h"
+#include <osgTcl/Interpreter>
 
 #include <osgIntrospection/Type>
 #include <osgIntrospection/Value>
