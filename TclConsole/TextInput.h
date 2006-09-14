@@ -2,70 +2,96 @@
 #define SPT_TEXTINPUT 1
 
 #include <osg/ref_ptr>
+#include <osg/NodeVisitor>
 
 #include <osgText/Text>
 #include <osgText/Font>
 
 #include <osgGA/GUIEventHandler>
-
 #include <osgProducer/Viewer>
 
 #include "Rectangle.h"
 
 namespace sptConsole {
 
-class TextInput : public Rectangle {
+class TextInput : public osg::Node {
 
 public:
 	TextInput();
-	TextInput(osg::Geode* geode);
+	TextInput(osgProducer::Viewer* viewer);
 
-	void setPositionAndSize(int x, int y, int width, int height);
+	TextInput(const TextInput& obj, const osg::CopyOp& copyop);
 
-	void setMargin(int size);
+	META_Node(spt, TextInput);
+
+	virtual void traverse (osg::NodeVisitor &nv);
+
+	void setPositionAndSize(const osg::Vec2f& position, const osg::Vec2f& size);
+	void setMargin(const unsigned int size);
 
 	void setFontName(std::string name);
-	void setFontSize(int size);
+	void setFontSize(const unsigned int size);
 
-	void setText(std::string text);
+	void setValue(const std::string& value);
+	void setCursorPos(const unsigned int cursorPos);
 
-	void build();
+	void clear();
 
-	friend class TextInputEventHandler;
+	void focus();
+	void blur();
 
 protected:
-	void updateText();
+	void setValue();
+	void setCursorPos();
 
-	osgText::Font* m_font;
-	osgText::Text* m_text;
+	void onChar(const char ch);
 
-	osgText::Text* m_cursor;
+	void onHome();
+	void onEnd();
+	void onLeft();
+	void onRight();
+
+	void onDelete();
+	void onBackspace();
+
+	class EventHandler : public osgGA::GUIEventHandler {
+
+	public:
+        	EventHandler(TextInput* input);
+
+	        virtual bool handle(const osgGA::GUIEventAdapter& ea, osgGA::GUIActionAdapter& aa);
+        	virtual void accept(osgGA::GUIEventHandlerVisitor& v);
+
+	protected:
+        	TextInput* m_input;
+
+	}; // class TextInput::EventHandler
+
+	osgProducer::Viewer* m_viewer;
+	osg::ref_ptr<EventHandler> m_handler;
+
+	osg::ref_ptr<osgText::Font> m_font;
+	osg::ref_ptr<osgText::Text> m_text;
+	osg::ref_ptr<osgText::Text> m_cursor;
+
+	osg::ref_ptr<osg::Geode> m_cursorNode;
+	osg::ref_ptr<osg::Geode> m_inputNode;
+	osg::ref_ptr<Rectangle> m_rectangle;
+
+	osg::Vec2f m_position;
+	osg::Vec2f m_size;
+
+	double m_lastTime;
+
 	unsigned int m_cursorPos;
+	unsigned int m_margin;
 
-	int m_margin;
-
-	std::string m_fontName;
-	int m_fontSize;
-
-	std::string m_inputText;
+	std::string m_value;
+	std::vector<std::string> m_history;
 
 }; // class TextInput
-
-class TextInputEventHandler : public osgGA::GUIEventHandler {
-
-public:
-	TextInputEventHandler(TextInput* input);
-
-	virtual bool handle(const osgGA::GUIEventAdapter& ea, osgGA::GUIActionAdapter& aa);
-	virtual void accept(osgGA::GUIEventHandlerVisitor& v);
-
-protected:
-	TextInput* m_input;
-
-}; // class TextInputEventHandler
-
-void registerTextInput(TextInput* input, osgProducer::Viewer& viewer);
 
 } // namespace sptConsole
 
 #endif
+

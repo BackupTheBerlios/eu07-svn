@@ -1,6 +1,8 @@
 #ifndef SPT_RECTANGLE
 #define SPT_RECTANGLE 1
 
+#include <osg/ref_ptr>
+
 #include <osg/Geode>
 #include <osg/Geometry>
 
@@ -12,9 +14,9 @@ public:
 	Rectangle();
 	Rectangle(osg::Geode* geode);
 
-	void setPosition(int x, int y);
-	void setSize(int width, int height);
-	void setPositionAndSize(int x, int y, int width, int height);
+	void setPosition(const osg::Vec2f& position);
+	void setSize(const osg::Vec2f& size);
+	void setPositionAndSize(const osg::Vec2f& position, const osg::Vec2f& size);
 
 	void setFillColor(osg::Vec4 color);
 	void setFillColor(osg::Vec4Array* colors);
@@ -27,19 +29,21 @@ public:
 	void build();
 
 protected:
-	osg::Geode* m_geode;
+	osg::ref_ptr<osg::Geode> m_geode;
 
-	osg::Vec3 m_position;
-	osg::Vec2 m_size;
+	osg::Vec2f m_position;
+	osg::Vec2f m_size;
 
 	osg::Vec3Array* m_verts;
 
-	osg::Geometry* m_fill;
+	osg::ref_ptr<osg::Geometry> m_fill;
 	osg::Vec4Array* m_fillColors;
 
-	osg::Geometry* m_frame;
+	osg::ref_ptr<osg::Geometry> m_frame;
 	osg::Vec4Array* m_frameColors;
-	double m_frameWidth;
+
+	float m_zIndex;
+	float m_frameWidth;
 	bool m_frameSeparate;
 
 	osg::Vec3Array* m_normals;
@@ -52,3 +56,4 @@ protected:
 } // namespace spt Console
 
 #endif
+

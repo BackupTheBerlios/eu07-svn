@@ -4,109 +4,205 @@
 
 namespace sptConsole {
 
-TextInput::TextInput() : Rectangle(), m_font(NULL), m_text(NULL), m_margin(2), m_fontName("arial.ttf"), m_fontSize(12) {
+TextInput::TextInput() : m_viewer(NULL) { }
+
+TextInput::TextInput(osgProducer::Viewer* viewer) : m_viewer(viewer), m_lastTime(0.0f), m_cursorPos(0), m_margin(2) {
+
+	m_font = new osgText::Font;
+
+	m_text = new osgText::Text;
+	m_text->setAlignment(osgText::Text::LEFT_TOP);
+	m_text->setPosition(osg::Vec3f(0.0f, 0.0f, -0.1f));
+
+	m_cursor = new osgText::Text;
+	m_cursor->setAlignment(osgText::Text::LEFT_TOP);
+	m_cursor->setPosition(osg::Vec3f(0.0f, 0.0f, 0.0f));
+
+	m_cursorNode = new osg::Geode;
+	m_cursorNode->addDrawable(m_cursor.get());
+
+	m_inputNode = new osg::Geode;
+
+	m_rectangle = new Rectangle(m_inputNode.get());
+	m_inputNode->addDrawable(m_text.get());
+
+	m_handler = new EventHandler(this);
 
 } // TextInput::TextInput
 
-TextInput::TextInput(osg::Geode* geode) : Rectangle(geode), m_text(NULL), m_margin(2), m_fontName("arial.ttf"), m_fontSize(12) {
+TextInput::TextInput(sptConsole::TextInput const&, osg::CopyOp const&) {
 
-} // TextInput::TextInput(geode)
+}
 
-void TextInput::setPositionAndSize(int x, int y, int width, int height) {
+void TextInput::traverse(osg::NodeVisitor& nv) {
 
-	Rectangle::setPositionAndSize(x, y, width, height);
-	if(m_fontSize + m_margin * 2 > height) {
+	const osg::FrameStamp* framestamp = nv.getFrameStamp();
 
-		if(m_margin * 2 >= height)
-			osg::notify(osg::WARN) << "TextInput height is too small to fit text" << std::endl;
-		else
-			m_fontSize = height - 2 * m_margin;
+	if(framestamp) {
+
+		double time = framestamp->getReferenceTime();
+		osg::notify(osg::WARN) << "traverse " << time << " " << m_lastTime << " " << (m_lastTime < time - 1.0f) << std::endl;
+
+
+		if(m_lastTime < time - 1.0f)
+			m_lastTime = time;
+		else if(m_lastTime < time - 0.5f)
+			m_cursorNode->accept(nv);
+
+		m_inputNode->accept(nv);
 
 	};
+
+}
+
+void TextInput::setPositionAndSize(const osg::Vec2f& position, const osg::Vec2f& size) {
+
+	m_position = position;
+	m_size = size;
+
+	if(m_margin * 2 >= m_size.y())
+		osg::notify(osg::WARN) << "TextInput height is too small to fit text" << std::endl;
+	else {
+
+		m_text->setCharacterSize(m_size.y() - m_margin * 2);
+		m_cursor->setCharacterSize(m_size.y() - m_margin * 2);
+
+	};
+
+	osg::Vec2f textPos = osg::Vec2f(m_position.x() + m_margin, m_position.y() - m_margin);
+
+	m_text->setPosition(osg::Vec3f(textPos, -0.1f));
+	m_cursor->setPosition(osg::Vec3f(textPos, 0.0f));
+
+	m_rectangle->setPositionAndSize(m_position, m_size);
+	m_rectangle->build();
 
 } // TextInput::setPositionAndSize
 
-void TextInput::setText(std::string text) {
+void TextInput::setValue() {
 
-	m_inputText = text;
-	updateText();
+	m_text->setText(m_value);
+	setCursorPos();
 
 } // TextInput::setText
 
-void TextInput::updateText() {
+void TextInput::setValue(const std::string& value) {
 
-	m_text->setText(m_inputText);
+	m_value = value;
+	setValue();
 
-	if(m_cursorPos > m_inputText.size())
-		m_cursorPos = m_inputText.size();
-	std::string str(' ', m_cursorPos);
-	str.append('_');
+} // TextInput::setText
+
+void TextInput::setCursorPos() {
+
+	if(m_cursorPos > m_value.length() - 1)
+		m_cursorPos = m_value.length();
+
+	std::string str(m_cursorPos, ' ');
+	str.append("_");
 
 	m_cursor->setText(str);
 
-} // TextInput::updateText
+} // TextInput::setCursorPos
 
-void TextInput::build() {
+void TextInput::setCursorPos(unsigned int cursorPos) {
 
-	m_inputText = "loadwrapper osg";
+	m_cursorPos = cursorPos;
+	setCursorPos();
 
-	if(m_geode) {
+} // TextInput::setCursorPos
 
-		if(!m_text) {
+void TextInput::focus() {
 
-			m_font = new osgText::Font(0);
+	m_viewer->getEventHandlerList().push_front(m_handler.get());
 
-			m_text = new osgText::Text;
-			m_text->setAlignment(osgText::Text::LEFT_TOP);
+}
 
-			m_cursor = new osgText::Text;
-			m_cursor->setFont(m_font);
-			m_cursor->setText("_");
+void TextInput::blur() {
 
-		};
+	m_viewer->getEventHandlerList().remove(m_handler.get());
 
-		m_text->setPosition(m_position + osg::Vec3((double) m_margin, (double) -m_margin, m_geode->getNumDrawables() ? m_geode->getBoundingBox().zMin() - 0.1f : 0.0f));
-		m_text->setCharacterSize(m_fontSize);
-		m_text->setText(m_inputText);
+}
 
-		if(!m_geode->containsDrawable(m_text))
-			m_geode->addDrawable(m_text);
+void TextInput::onHome() { setCursorPos(0); }
+void TextInput::onEnd() { setCursorPos(m_value.length()); }
+void TextInput::onLeft() { m_cursorPos--; setCursorPos(); }
+void TextInput::onRight() { m_cursorPos++; setCursorPos(); }
+
+void TextInput::onDelete() {
+
+	if(m_cursorPos < m_value.length()) {
+
+		m_value.erase(m_cursorPos, 1);
+		setValue();
 
 	};
 
-	Rectangle::build();
+}
 
-} // TextInput::build
+void TextInput::onBackspace() {
 
-TextInputEventHandler::TextInputEventHandler(TextInput* input) : m_input(input) {
+	if(m_cursorPos > 0 && m_cursorPos <= m_value.length()) {
+
+		m_cursorPos--;
+		m_value.erase(m_cursorPos, 1);
+		setValue();
+
+	};
+
+}
+
+void TextInput::onChar(const char ch) {
+
+	if(m_value.length() && m_cursorPos < m_value.length() - 1) {
+
+ 		m_value.insert(m_cursorPos, 1, ch);
+		m_cursorPos++;
+
+	} else {
+
+		m_value.append(1, ch);
+		m_cursorPos++;
+
+	};
+
+	setValue();
+
+}
+
+TextInput::EventHandler::EventHandler(TextInput* input) : m_input(input) {
 
 } // TextInputEventHandler::TextInputEventHandler
 
-bool TextInputEventHandler::handle(const osgGA::GUIEventAdapter& ea, osgGA::GUIActionAdapter& aa) {
+bool TextInput::EventHandler::handle(const osgGA::GUIEventAdapter& ea, osgGA::GUIActionAdapter& aa) {
 
 	if(ea.getEventType() == osgGA::GUIEventAdapter::KEYUP) {
 
 		int key = ea.getKey();
 		if(key != -1) {
 
-			std::string& str = m_input->m_inputText;
-
 			if(key & 0xFF00) {
 
 				switch(key) {
 
-					case(osgGA::GUIEventAdapter::KEY_Return): str.clear(); break;
-					case(osgGA::GUIEventAdapter::KEY_BackSpace): if(str.size()) str = str.substr(0, str.length() - 1); break;
+//					case(osgGA::GUIEventAdapter::KEY_Return): str.clear(); break;
+					case(osgGA::GUIEventAdapter::KEY_BackSpace): m_input->onBackspace(); break;
+					case(osgGA::GUIEventAdapter::KEY_Delete) : m_input->onDelete(); break;
+					case(osgGA::GUIEventAdapter::KEY_Left) : m_input->onLeft(); break;
+					case(osgGA::GUIEventAdapter::KEY_Right) : m_input->onRight(); break;
+					case(osgGA::GUIEventAdapter::KEY_Home) : m_input->onHome(); break;
+					case(osgGA::GUIEventAdapter::KEY_End) : m_input->onEnd(); break;
+					default: return false;
 
 				};
 				
 			} else {
 
-					str.append(1, (char) key & 0xFF);
+					m_input->onChar((char) key & 0xFF);
 					
 			};
 
-			m_input->updateText();
+			return true;
 
 		} else {
 
@@ -114,23 +210,16 @@ bool TextInputEventHandler::handle(const osgGA::GUIEventAdapter& ea, osgGA::GUIA
 
 		}
 
-	}	
+	};	
 
-	return true;
+	return false;
 
-}// TextInputEventHandler::handle
+} // TextInputEventHandler::handle
 
-void TextInputEventHandler::accept(osgGA::GUIEventHandlerVisitor& v) {
+void TextInput::EventHandler::accept(osgGA::GUIEventHandlerVisitor& v) {
 
 	v.visit(*this);
 
 } // TextInputEventHandler::accept
-
-void registerTextInput(TextInput* input, osgProducer::Viewer& viewer) {
-
-	TextInputEventHandler* handler = new TextInputEventHandler(input);
-	viewer.getEventHandlerList().push_front(handler);
-
-}
 
 } // namespace sptConsole

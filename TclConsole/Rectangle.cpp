@@ -19,54 +19,83 @@ Rectangle::Rectangle(osg::Geode* geode) : m_geode(geode), m_verts(NULL), m_fill(
 
 }
 
-void Rectangle::setPosition(int x, int y) {
+void Rectangle::setPosition(const osg::Vec2f& position) {
 
-	m_position = osg::Vec3((double) x, (double) y, 0.0f);
+	m_position = position;
 
 	if(m_verts) {
 
 		osg::Vec3Array::iterator iter = m_verts->begin();
-		osg::Vec3 delta = m_position - *iter;
+		osg::Vec3f delta = osg::Vec3f(m_position, m_zIndex) - *iter;
 
 		while(iter != m_verts->end())
 			*(iter++) += delta;
+
+	} else {
+
+		m_zIndex = (m_geode->getNumDrawables() ? m_geode->getBoundingBox().zMin() - 0.1f : 0.0f);
+
+		osg::Vec3f vert(m_position, m_zIndex);
+	
+		m_verts = new osg::Vec3Array(4);
+
+		m_verts->push_back(vert);
+		m_verts->push_back(vert);
+		m_verts->push_back(vert);
+		m_verts->push_back(vert);
 
 	};
 
 } // Rectangle::setPosition
 
-void Rectangle::setSize(int width, int height) {
+void Rectangle::setSize(const osg::Vec2f& size) {
 
-	m_size = osg::Vec2((double) width, (double) height);
+	m_size = size;
 
 	if(m_verts) {
 
 		osg::Vec3Array::iterator iter = m_verts->begin();
 		osg::Vec3 topLeft = *iter;
 
-		*(++iter) = osg::Vec3(topLeft.x() + width, topLeft.y(), topLeft.z());
-		*(++iter) = osg::Vec3(topLeft.x() + width, topLeft.y() - height, topLeft.z());
+		*(++iter) = osg::Vec3(topLeft.x() + m_size.x(), topLeft.y(), topLeft.z());
+		*(++iter) = osg::Vec3(topLeft.x() + m_size.x(), topLeft.y() - m_size.y(), topLeft.z());
+
+	} else {
+
+		m_zIndex = (m_geode->getNumDrawables() ? m_geode->getBoundingBox().zMin() - 0.1f : 0.0f);
+		m_verts = new osg::Vec3Array(4);
+
+		m_verts->push_back(osg::Vec3f(0.0f, 0.0f, m_zIndex));
+		m_verts->push_back(osg::Vec3f(m_size.x(), 0.0f, m_zIndex));
+		m_verts->push_back(osg::Vec3f(m_size.x(), -m_size.y(), m_zIndex));
+		m_verts->push_back(osg::Vec3f(0.0f, -m_size.y(), m_zIndex));
 
 	};
 
 } // Rectangle::setSize
 
-void Rectangle::setPositionAndSize(int x, int y, int width, int height) {
+void Rectangle::setPositionAndSize(const osg::Vec2f& position, const osg::Vec2f& size) {
 
-	m_position = osg::Vec3((double) x, (double) y, 0.0f);
-	m_size = osg::Vec2((double) width, (double) height);
+	m_position = position;
+	m_size = size;
 
 	if(m_verts) {
 
-		double z = m_verts->front().z();
-
+		m_zIndex = m_verts->front().z();
 		m_verts->clear();
-		m_verts->push_back(osg::Vec3((double) x, (double) (y - height), z));
-		m_verts->push_back(osg::Vec3((double) (x + width), (double) (y - height), z));
-		m_verts->push_back(osg::Vec3((double) (x + width), (double) y, z));
-		m_verts->push_back(osg::Vec3((double) x, (double) y, z));
+
+	} else {
+
+		m_zIndex = (m_geode->getNumDrawables() ? m_geode->getBoundingBox().zMin() - 0.1f : 0.0f);
+		osg::notify(osg::WARN) << m_zIndex << " " << m_position.x() << " " << m_position.y() << std::endl;
+		m_verts = new osg::Vec3Array(4);
 
 	};
+
+	m_verts->push_back(osg::Vec3f(m_position.x(), m_position.y() - m_size.y(), m_zIndex));
+	m_verts->push_back(osg::Vec3f(m_position.x() + m_size.x(), m_position.y() - m_size.y(), m_zIndex));
+	m_verts->push_back(osg::Vec3f(m_position.x() + m_size.x(), m_position.y(), m_zIndex));
+	m_verts->push_back(osg::Vec3f(m_position, m_zIndex));
 
 }
 
@@ -105,19 +134,7 @@ void Rectangle::setFrameWidth(double width) {
 
 void Rectangle::build() {
 
-	if(m_geode) {
-
-		if(!m_verts) {
-
-			osg::Vec3 pos = m_position + osg::Vec3(0.0f, 0.0f, m_geode->getNumDrawables() ? m_geode->getBoundingBox().zMin() - 0.1f : 0.0f);
-
-			m_verts = new osg::Vec3Array;
-			m_verts->push_back(osg::Vec3(pos.x(), pos.y(), pos.z()));
-			m_verts->push_back(osg::Vec3(pos.x() + m_size.x(), pos.y(), pos.z()));
-			m_verts->push_back(osg::Vec3(pos.x() + m_size.x(), pos.y() - m_size.y(), pos.z()));
-			m_verts->push_back(osg::Vec3(pos.x(), pos.y() - m_size.y(), pos.z()));
-
-		};
+	if(m_geode.valid() && m_verts) {
 
 		if(m_frameColors) buildFrame();
 		if(m_fillColors) buildFill();
@@ -128,7 +145,9 @@ void Rectangle::build() {
 
 void Rectangle::buildFrame() {
 
-	if(m_frame)
+	osg::notify(osg::WARN) << "buildFrame" << std::endl;
+
+	if(m_frame.valid())
 		m_frame->dirtyDisplayList();
 	else
 		m_frame = new osg::Geometry;
@@ -176,14 +195,18 @@ void Rectangle::buildFrame() {
 	osg::StateSet* stateSet = m_frame->getOrCreateStateSet();
 	stateSet->setAttribute(new osg::LineWidth(m_frameWidth), osg::StateAttribute::ON);
 
-	if(!m_geode->containsDrawable(m_frame))
-		m_geode->addDrawable(m_frame);
+	if(!m_geode->containsDrawable(m_frame.get())) {
+
+		osg::notify(osg::WARN) << "addDrawable" << std::endl;
+		m_geode->addDrawable(m_frame.get());
+
+	};
 
 }; // Rectangle::buildFrame
 
 void Rectangle::buildFill() {
 
-	if(m_fill)
+	if(m_fill.valid())
 		m_fill->dirtyDisplayList();
 	else 
 		m_fill = new osg::Geometry;
@@ -196,8 +219,8 @@ void Rectangle::buildFill() {
 
 	m_fill->addPrimitiveSet(new osg::DrawArrays(osg::PrimitiveSet::QUADS, 0, 4));
 
-	if(!m_geode->containsDrawable(m_fill))
-		m_geode->addDrawable(m_fill);
+	if(!m_geode->containsDrawable(m_fill.get()))
+		m_geode->addDrawable(m_fill.get());
 
 }; // Rectangle::buildFill
 

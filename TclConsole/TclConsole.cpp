@@ -2,6 +2,8 @@
 #include <osg/Geode>
 #include <osg/CameraNode>
 
+#include <osgDB/ReadFile>
+
 #include <osgProducer/Viewer>
 
 #include "Rectangle.h"
@@ -39,19 +41,21 @@ int main() {
 	osg::Geode* hud = new osg::Geode;
 
 	{
-		sptConsole::TextInput* input;
-		input = new sptConsole::TextInput(hud);
-		input->setPositionAndSize(10, 1024 - 400 + 20, 1280 - 20, 20);
-		input->setFillColor(osg::Vec4(1.0f, 1.0f, 1.0f, 0.5f));
-		input->build();
 
-		registerTextInput(input, viewer);
+		sptConsole::TextInput* input;
+		input = new sptConsole::TextInput(&viewer);
+		input->setPositionAndSize(osg::Vec2f(10, 1024 - 400 + 20), osg::Vec2f(1280 - 20, 20));
+//		input->setFillColor(osg::Vec4(1.0f, 1.0f, 1.0f, 0.5f));
+		input->focus();
+
+//		camera->addChild(input);
+
 	};
 	
 	{
 		sptConsole::Rectangle* rect;
 		rect = new sptConsole::Rectangle(hud);
-		rect->setPositionAndSize(5, 1024 - 5, 1280 - 10, 400);
+		rect->setPositionAndSize(osg::Vec2f(5, 1024 - 5), osg::Vec2f(1280 - 10, 400));
 		rect->setFrameColor(osg::Vec4(1.0f, 1.0f, 1.0f, 0.5f));
 		rect->setFrameWidth(2.0f);
 		rect->setFillColor(osg::Vec4(0.5f, 0.5f, 1.0f, 0.5f));
@@ -60,6 +64,7 @@ int main() {
 	
 
 	camera->addChild(hud);
+	root->addChild(osgDB::readNodeFile("dumptruck.osg"));
 	root->addChild(camera);
 
     // add model to viewer.
