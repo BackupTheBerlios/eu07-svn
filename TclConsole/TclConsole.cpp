@@ -51,10 +51,13 @@ int main() {
 		camera->addChild(input);
 
 	};
+
+//	osg::MatrixTransform* xform = new osg::MatrixTransform(osg::Vec3f(0.0f, 0.0f, -1.0f));
 	
 	{
 		sptConsole::Rectangle* rect;
 		rect = new sptConsole::Rectangle(hud);
+		rect->setZIndex(-0.5f);
 		rect->setPositionAndSize(osg::Vec2f(5, 1024 - 5), osg::Vec2f(1280 - 10, 400));
 		rect->setFrameColor(osg::Vec4(1.0f, 1.0f, 1.0f, 0.5f));
 		rect->setFrameWidth(2.0f);
@@ -64,7 +67,7 @@ int main() {
 	
 
 	camera->addChild(hud);
-//	root->addChild(osgDB::readNodeFile("dumptruck.osg"));
+	root->addChild(osgDB::readNodeFile("dumptruck.osg"));
 	root->addChild(camera);
 
     // add model to viewer.

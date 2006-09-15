@@ -6,26 +6,31 @@ namespace sptConsole {
 
 TextInput::TextInput() : m_viewer(NULL) { }
 
-TextInput::TextInput(osgProducer::Viewer* viewer) : m_viewer(viewer), m_lastTime(0.0f), m_cursorPos(0), m_margin(2) {
+TextInput::TextInput(osgProducer::Viewer* viewer) : m_viewer(viewer), m_lastTime(0.0f), m_cursorPos(0), m_margin(3	) {
 
 	m_font = new osgText::Font;
 
 	m_text = new osgText::Text;
 	m_text->setAlignment(osgText::Text::LEFT_TOP);
-	m_text->setPosition(osg::Vec3f(0.0f, 0.0f, -0.1f));
+	m_text->setPosition(osg::Vec3f(0.0f, 0.0f, 0.0f));
 
 	m_cursor = new osgText::Text;
 	m_cursor->setAlignment(osgText::Text::LEFT_TOP);
-	m_cursor->setPosition(osg::Vec3f(0.0f, 0.0f, 0.0f));
+	m_cursor->setPosition(osg::Vec3f(0.0f, 0.0f, -0.1f));
 
 	m_cursorNode = new osg::Geode;
 	m_cursorNode->addDrawable(m_cursor.get());
 
 	m_inputNode = new osg::Geode;
 
-	m_rectangle = new Rectangle(m_inputNode.get());
 	m_inputNode->addDrawable(m_text.get());
 
+	m_rectangle = new Rectangle(m_inputNode.get());
+	m_rectangle->setZIndex(-0.2f);
+	m_rectangle->setFrameColor(osg::Vec4f(1.0f, 1.0f, 1.0f, 0.5f));
+	m_rectangle->setFillColor(osg::Vec4f(0.3f, 0.3f, 0.3f, 0.2f));
+	m_rectangle->setFrameWidth(2.0f);	
+	
 	m_handler = new EventHandler(this);
 
 	m_history.push_back(std::string(""));
@@ -72,7 +77,7 @@ void TextInput::setPositionAndSize(const osg::Vec2f& position, const osg::Vec2f&
 
 	};
 
-	osg::Vec2f textPos = osg::Vec2f(m_position.x() + m_margin, m_position.y() - m_margin);
+	osg::Vec2f textPos = osg::Vec2f(m_position.x() + m_margin * 2, m_position.y() - m_margin);
 
 	m_text->setPosition(osg::Vec3f(textPos, -0.1f));
 	m_cursor->setPosition(osg::Vec3f(textPos, 0.0f));

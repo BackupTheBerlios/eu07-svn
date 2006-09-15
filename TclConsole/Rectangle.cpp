@@ -5,7 +5,7 @@
 
 namespace sptConsole {
 
-Rectangle::Rectangle() : m_geode(NULL), m_verts(NULL), m_fill(NULL), m_fillColors(NULL), m_frame(NULL), m_frameColors(NULL), m_frameWidth(1.0f), m_frameSeparate(false) {
+Rectangle::Rectangle() : m_geode(NULL), m_verts(NULL), m_fill(NULL), m_fillColors(NULL), m_frame(NULL), m_frameColors(NULL), m_zIndex(0.0f), m_frameWidth(1.0f), m_frameSeparate(false) {
 
 	m_normals = new osg::Vec3Array;
 	m_normals->push_back(osg::Vec3(0.0f, -1.0f, 0.0f));
@@ -16,6 +16,20 @@ Rectangle::Rectangle(osg::Geode* geode) : m_geode(geode), m_verts(NULL), m_fill(
 
 	m_normals = new osg::Vec3Array;
 	m_normals->push_back(osg::Vec3(0.0f, -1.0f, 0.0f));
+
+}
+
+void Rectangle::setZIndex(const float zIndex) {
+
+	m_zIndex = zIndex;
+	setZIndex();
+
+}
+
+void Rectangle::setZIndex() {
+
+	if(m_geode->getNumDrawables() && (m_geode->getBoundingBox().zMin() < m_zIndex))
+		m_zIndex = m_geode->getBoundingBox().zMin();
 
 }
 
@@ -33,7 +47,7 @@ void Rectangle::setPosition(const osg::Vec2f& position) {
 
 	} else {
 
-		m_zIndex = (m_geode->getNumDrawables() ? m_geode->getBoundingBox().zMin() - 0.1f : 0.0f);
+		setZIndex();
 
 		osg::Vec3f vert(m_position, m_zIndex);
 	
@@ -62,7 +76,7 @@ void Rectangle::setSize(const osg::Vec2f& size) {
 
 	} else {
 
-		m_zIndex = (m_geode->getNumDrawables() ? m_geode->getBoundingBox().zMin() - 0.1f : 0.0f);
+		setZIndex();
 		m_verts = new osg::Vec3Array;
 
 		m_verts->push_back(osg::Vec3f(0.0f, 0.0f, m_zIndex));
@@ -81,12 +95,11 @@ void Rectangle::setPositionAndSize(const osg::Vec2f& position, const osg::Vec2f&
 
 	if(m_verts) {
 
-		m_zIndex = m_verts->front().z();
 		m_verts->clear();
 
 	} else {
 
-		m_zIndex = (m_geode->getNumDrawables() ? m_geode->getBoundingBox().zMin() - 0.1f : 0.0f);
+		setZIndex();
 		osg::notify(osg::WARN) << m_zIndex << " " << m_position.x() << " " << m_position.y() << std::endl;
 		m_verts = new osg::Vec3Array;
 

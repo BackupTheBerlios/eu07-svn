@@ -14,6 +14,8 @@ public:
 	Rectangle();
 	Rectangle(osg::Geode* geode);
 
+	void setZIndex(float zIndex);
+
 	void setPosition(const osg::Vec2f& position);
 	void setSize(const osg::Vec2f& size);
 	void setPositionAndSize(const osg::Vec2f& position, const osg::Vec2f& size);
@@ -47,6 +49,8 @@ protected:
 	bool m_frameSeparate;
 
 	osg::Vec3Array* m_normals;
+
+	void setZIndex();
 
 	void buildFrame();
 	void buildFill();
