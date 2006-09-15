@@ -48,7 +48,7 @@ int main() {
 //		input->setFillColor(osg::Vec4(1.0f, 1.0f, 1.0f, 0.5f));
 		input->focus();
 
-//		camera->addChild(input);
+		camera->addChild(input);
 
 	};
 	
@@ -64,7 +64,7 @@ int main() {
 	
 
 	camera->addChild(hud);
-	root->addChild(osgDB::readNodeFile("dumptruck.osg"));
+//	root->addChild(osgDB::readNodeFile("dumptruck.osg"));
 	root->addChild(camera);
 
     // add model to viewer.

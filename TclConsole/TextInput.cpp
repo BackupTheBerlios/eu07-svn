@@ -28,6 +28,9 @@ TextInput::TextInput(osgProducer::Viewer* viewer) : m_viewer(viewer), m_lastTime
 
 	m_handler = new EventHandler(this);
 
+	m_history.push_back(std::string(""));
+	m_historyIter = m_history.begin();
+
 } // TextInput::TextInput
 
 TextInput::TextInput(sptConsole::TextInput const&, osg::CopyOp const&) {
@@ -41,7 +44,7 @@ void TextInput::traverse(osg::NodeVisitor& nv) {
 	if(framestamp) {
 
 		double time = framestamp->getReferenceTime();
-		osg::notify(osg::WARN) << "traverse " << time << " " << m_lastTime << " " << (m_lastTime < time - 1.0f) << std::endl;
+//		osg::notify(osg::WARN) << "traverse " << time << " " << m_lastTime << " " << (m_lastTime < time - 1.0f) << std::endl;
 
 
 		if(m_lastTime < time - 1.0f)
@@ -114,7 +117,7 @@ void TextInput::setCursorPos(unsigned int cursorPos) {
 
 void TextInput::focus() {
 
-	m_viewer->getEventHandlerList().push_front(m_handler.get());
+	m_viewer->getEventHandlerList().push_back(m_handler.get());
 
 }
 
@@ -152,6 +155,59 @@ void TextInput::onBackspace() {
 
 }
 
+void TextInput::onEnter() {
+
+	m_history.push_back(m_value);
+	m_historyIter = m_history.begin();
+
+	m_value.clear();
+
+	setValue();
+	onHome();
+
+}
+
+void TextInput::onEscape() { 
+
+	m_value.clear();
+	setValue();
+
+	onHome();
+
+}
+
+void TextInput::onUp() {
+
+	if(m_historyIter == m_history.begin())
+		m_historyIter++;
+
+	if(m_historyIter != m_history.end()) {
+
+		m_value = *(m_historyIter++);
+
+		setValue();
+		onEnd();
+
+	}
+
+}
+
+void TextInput::onDown() {
+
+	if(m_historyIter == m_history.begin()) {
+
+		m_value.clear();
+
+	} else {
+
+		m_historyIter--;
+
+		if(m_historyIter != m_history.end()) m_value = *m_historyIter;
+
+	}
+
+}
+
 void TextInput::onChar(const char ch) {
 
 	if(m_value.length() && m_cursorPos < m_value.length() - 1) {
@@ -185,11 +241,14 @@ bool TextInput::EventHandler::handle(const osgGA::GUIEventAdapter& ea, osgGA::GU
 
 				switch(key) {
 
-//					case(osgGA::GUIEventAdapter::KEY_Return): str.clear(); break;
+					case(osgGA::GUIEventAdapter::KEY_Return): m_input->onEnter(); break;
+					case(osgGA::GUIEventAdapter::KEY_Escape): m_input->onEscape(); break;
 					case(osgGA::GUIEventAdapter::KEY_BackSpace): m_input->onBackspace(); break;
 					case(osgGA::GUIEventAdapter::KEY_Delete) : m_input->onDelete(); break;
 					case(osgGA::GUIEventAdapter::KEY_Left) : m_input->onLeft(); break;
 					case(osgGA::GUIEventAdapter::KEY_Right) : m_input->onRight(); break;
+					case(osgGA::GUIEventAdapter::KEY_Up) : m_input->onUp(); break;
+					case(osgGA::GUIEventAdapter::KEY_Down) : m_input->onDown(); break;
 					case(osgGA::GUIEventAdapter::KEY_Home) : m_input->onHome(); break;
 					case(osgGA::GUIEventAdapter::KEY_End) : m_input->onEnd(); break;
 					default: return false;

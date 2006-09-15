@@ -63,12 +63,12 @@ void Rectangle::setSize(const osg::Vec2f& size) {
 	} else {
 
 		m_zIndex = (m_geode->getNumDrawables() ? m_geode->getBoundingBox().zMin() - 0.1f : 0.0f);
-		m_verts = new osg::Vec3Array(4);
+		m_verts = new osg::Vec3Array;
 
 		m_verts->push_back(osg::Vec3f(0.0f, 0.0f, m_zIndex));
-		m_verts->push_back(osg::Vec3f(m_size.x(), 0.0f, m_zIndex));
-		m_verts->push_back(osg::Vec3f(m_size.x(), -m_size.y(), m_zIndex));
 		m_verts->push_back(osg::Vec3f(0.0f, -m_size.y(), m_zIndex));
+		m_verts->push_back(osg::Vec3f(m_size.x(), -m_size.y(), m_zIndex));
+		m_verts->push_back(osg::Vec3f(m_size.x(), 0.0f, m_zIndex));
 
 	};
 
@@ -88,14 +88,14 @@ void Rectangle::setPositionAndSize(const osg::Vec2f& position, const osg::Vec2f&
 
 		m_zIndex = (m_geode->getNumDrawables() ? m_geode->getBoundingBox().zMin() - 0.1f : 0.0f);
 		osg::notify(osg::WARN) << m_zIndex << " " << m_position.x() << " " << m_position.y() << std::endl;
-		m_verts = new osg::Vec3Array(4);
+		m_verts = new osg::Vec3Array;
 
 	};
 
+	m_verts->push_back(osg::Vec3f(m_position, m_zIndex));
 	m_verts->push_back(osg::Vec3f(m_position.x(), m_position.y() - m_size.y(), m_zIndex));
 	m_verts->push_back(osg::Vec3f(m_position.x() + m_size.x(), m_position.y() - m_size.y(), m_zIndex));
 	m_verts->push_back(osg::Vec3f(m_position.x() + m_size.x(), m_position.y(), m_zIndex));
-	m_verts->push_back(osg::Vec3f(m_position, m_zIndex));
 
 }
 

@@ -46,6 +46,12 @@ protected:
 
 	void onChar(const char ch);
 
+	void onEnter();
+	void onEscape();
+
+	void onUp();
+	void onDown();
+
 	void onHome();
 	void onEnd();
 	void onLeft();
@@ -87,7 +93,8 @@ protected:
 	unsigned int m_margin;
 
 	std::string m_value;
-	std::vector<std::string> m_history;
+	std::list<std::string> m_history;
+	std::list<std::string>::iterator m_historyIter;
 
 }; // class TextInput
 
