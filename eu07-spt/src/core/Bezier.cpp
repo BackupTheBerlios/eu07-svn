@@ -1,4 +1,4 @@
-#include "Bezier.h"
+#include "core/Bezier.h"
 
 #include <iostream>
 #include <osg/LineWidth>
@@ -81,7 +81,7 @@ osg::Group* Bezier::getNode()
 		geom->setNormalArray(normals);
 		geom->setNormalBinding(osg::Geometry::BIND_OVERALL);
 
-		// This time we simply use primitive, and hardwire the number of coords to use 
+		// This time we simply use primitive, and hardwire the number of coords to use
 		// since we know up front,
 		geom->addPrimitiveSet(new osg::DrawArrays(osg::PrimitiveSet::LINE_STRIP, 0, m_steps+1));
 

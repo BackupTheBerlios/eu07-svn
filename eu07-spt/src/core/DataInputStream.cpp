@@ -15,7 +15,7 @@
  *    Copyright 2003 VR-C
  **********************************************************************/
 
-#include "DataInputStream.h"
+#include "core/DataInputStream.h"
 
 #include <osg/Endian>
 #include <osg/Notify>
@@ -23,13 +23,12 @@
 #include <osgDB/ReadFile>
 
 using namespace std;
-using namespace sptCommon;
 
 namespace spt {
 
-void DataInputStream::setOptions(const osgDB::ReaderWriter::Options* options) 
-{ 
-    _options = options; 
+void DataInputStream::setOptions(const osgDB::ReaderWriter::Options* options)
+{
+    _options = options;
 
 }
 
@@ -45,11 +44,11 @@ DataInputStream::DataInputStream(std::istream* istream)
     _byteswap = 0;
 
     if(!istream){
-        throw Exception("DataInputStream::DataInputStream(): null pointer exception in argument.");    
+        throw Exception("DataInputStream::DataInputStream(): null pointer exception in argument.");
     }
 
     endianType = readUInt() ;
-    
+
     if ( endianType != ENDIAN_TYPE) {
       // Make sure the file is simply swapped
       if ( endianType != OPPOSITE_ENDIAN_TYPE ) {
@@ -58,14 +57,14 @@ DataInputStream::DataInputStream(std::istream* istream)
       osg::notify(osg::INFO)<<"DataInputStream::DataInputStream: Reading a byteswapped file" << std::endl ;
       _byteswap = 1 ;
    }
-    
+
     _version = readUInt();
-        
+
     // Are we trying to open a binary .ive file which version are newer than this library.
     if(_version>VERSION){
         throw Exception("DataInputStream::DataInputStream(): The version found in the file is newer than this library can handle.");
     }
-        
+
 }
 
 DataInputStream::~DataInputStream(){}
@@ -73,12 +72,12 @@ DataInputStream::~DataInputStream(){}
 bool DataInputStream::readBool(){
     char c;
     _istream->read(&c, CHARSIZE);
-    
+
     if (_istream->rdstate() & _istream->failbit)
         throw Exception("DataInputStream::readBool(): Failed to read boolean value.");
 
     if (_verboseOutput) std::cout<<"read/writeBool() ["<<(int)c<<"]"<<std::endl;
-    
+
     return c!=0;
 }
 
@@ -95,7 +94,7 @@ char DataInputStream::readChar(){
         throw Exception("DataInputStream::readChar(): Failed to read char value.");
 
     if (_verboseOutput) std::cout<<"read/writeChar() ["<<(int)c<<"]"<<std::endl;
-    
+
     return c;
 }
 
@@ -107,7 +106,7 @@ unsigned char DataInputStream::readUChar(){
         throw Exception("DataInputStream::readUChar(): Failed to read unsigned char value.");
 
     if (_verboseOutput) std::cout<<"read/writeUChar() ["<<(int)c<<"]"<<std::endl;
-    
+
     return c;
 }
 
@@ -118,9 +117,9 @@ unsigned short DataInputStream::readUShort(){
         throw Exception("DataInputStream::readUShort(): Failed to read unsigned short value.");
 
     if (_verboseOutput) std::cout<<"read/writeUShort() ["<<s<<"]"<<std::endl;
-    
+
     if (_byteswap) osg::swapBytes((char *)&s,SHORTSIZE);
-    
+
     return s;
 }
 
@@ -132,9 +131,9 @@ unsigned int DataInputStream::readUInt(){
         throw Exception("DataInputStream::readUInt(): Failed to read unsigned int value.");
 
     if (_verboseOutput) std::cout<<"read/writeUInt() ["<<s<<"]"<<std::endl;
-    
+
     if (_byteswap) osg::swapBytes((char *)&s,INTSIZE) ;
-    
+
     return s;
 }
 
@@ -153,7 +152,7 @@ int DataInputStream::readInt(){
     //    throw Exception("DataInputStream::readInt(): Failed to read int value.");
 
     if (_verboseOutput) std::cout<<"read/writeInt() ["<<i<<"]"<<std::endl;
-    
+
     if (_byteswap) osg::swapBytes((char *)&i,INTSIZE) ;
 
     return i;
@@ -180,7 +179,7 @@ float DataInputStream::readFloat(){
         throw Exception("DataInputStream::readFloat(): Failed to read float value.");
 
     if (_verboseOutput) std::cout<<"read/writeFloat() ["<<f<<"]"<<std::endl;
-    
+
     if (_byteswap) osg::swapBytes((char *)&f,FLOATSIZE) ;
     return f;
 }
@@ -192,7 +191,7 @@ long DataInputStream::readLong(){
         throw Exception("DataInputStream::readLong(): Failed to read long value.");
 
     if (_verboseOutput) std::cout<<"read/writeLong() ["<<l<<"]"<<std::endl;
-    
+
     if (_byteswap) osg::swapBytes((char *)&l,LONGSIZE) ;
     return l;
 }
@@ -204,7 +203,7 @@ unsigned long DataInputStream::readULong(){
         throw Exception("DataInputStream::readULong(): Failed to read unsigned long value.");
 
     if (_verboseOutput) std::cout<<"read/writeULong() ["<<l<<"]"<<std::endl;
-    
+
     return l;
 }
 
@@ -215,7 +214,7 @@ double DataInputStream::readDouble(){
         throw Exception("DataInputStream::readDouble(): Failed to read double value.");
 
     if (_verboseOutput) std::cout<<"read/writeDouble() ["<<d<<"]"<<std::endl;
-    
+
     if (_byteswap) osg::swapBytes((char *)&d,DOUBLESIZE) ;
     return d;
 }
@@ -229,7 +228,7 @@ std::string DataInputStream::readString(){
     //   throw Exception("DataInputStream::readString(): Failed to read string value.");
 
     if (_verboseOutput) std::cout<<"read/writeString() ["<<s<<"]"<<std::endl;
-    
+
     return s;
 }
 
@@ -248,7 +247,7 @@ osg::Vec2 DataInputStream::readVec2()
     v.y()=readFloat();
 
     if (_verboseOutput) std::cout<<"read/writeVec2() ["<<v<<"]"<<std::endl;
-    
+
     return v;
 }
 
@@ -271,7 +270,7 @@ osg::Vec4 DataInputStream::readVec4(){
     v.w()=readFloat();
 
     if (_verboseOutput) std::cout<<"read/writeVec4() ["<<v<<"]"<<std::endl;
-    
+
     return v;
 }
 osg::Vec2d DataInputStream::readVec2d()
@@ -281,7 +280,7 @@ osg::Vec2d DataInputStream::readVec2d()
     v.y()=readDouble();
 
     if (_verboseOutput) std::cout<<"read/writeVec2d() ["<<v<<"]"<<std::endl;
-    
+
     return v;
 }
 
@@ -304,7 +303,7 @@ osg::Vec4d DataInputStream::readVec4d(){
     v.w()=readDouble();
 
     if (_verboseOutput) std::cout<<"read/writeVec4d() ["<<v<<"]"<<std::endl;
-    
+
     return v;
 }
 
@@ -316,7 +315,7 @@ osg::Vec4ub DataInputStream::readVec4ub(){
     v.a()=readChar();
 
     if (_verboseOutput) std::cout<<"read/writeVec4ub() ["<<v<<"]"<<std::endl;
-    
+
     return v;
 }
 
@@ -328,7 +327,7 @@ osg::Quat DataInputStream::readQuat(){
     q.w()=readFloat();
 
     if (_verboseOutput) std::cout<<"read/writeQuat() ["<<q<<"]"<<std::endl;
-    
+
     return q;
 }
 
@@ -348,9 +347,9 @@ osg::Array* DataInputStream::readArray(){
         case 9:    return readVec2sArray();
         case 10:   return readVec3sArray();
         case 11:   return readVec4sArray();
-        case 12:   return readVec2bArray();        
-        case 13:   return readVec3bArray();        
-        case 14:   return readVec4bArray();        
+        case 12:   return readVec2bArray();
+        case 13:   return readVec3bArray();
+        case 14:   return readVec4bArray();
         default: throw Exception("Unknown array type in DataInputStream::readArray()");
     }
 }
@@ -358,18 +357,18 @@ osg::Array* DataInputStream::readArray(){
 osg::IntArray* DataInputStream::readIntArray(){
     int size = readInt();
     osg::IntArray* a = new osg::IntArray(size);
-    
+
     _istream->read((char*)&((*a)[0]), INTSIZE*size);
 
     if (_istream->rdstate() & _istream->failbit)
         throw Exception("DataInputStream::readIntArray(): Failed to read Int array.");
 
-    if (_verboseOutput) std::cout<<"read/writeIntArray() ["<<size<<"]"<<std::endl;  
+    if (_verboseOutput) std::cout<<"read/writeIntArray() ["<<size<<"]"<<std::endl;
 
     if (_byteswap) {
        for (int  i = 0 ; i < size ; i++ ) osg::swapBytes((char *)&(a[i]),INTSIZE) ;
     }
-       
+
     return a;
 }
 
@@ -383,7 +382,7 @@ osg::UByteArray* DataInputStream::readUByteArray(){
         throw Exception("DataInputStream::readUByteArray(): Failed to read UByte array.");
 
     if (_verboseOutput) std::cout<<"read/writeUByteArray() ["<<size<<"]"<<std::endl;
-    
+
     return a;
 }
 
@@ -397,7 +396,7 @@ osg::UShortArray* DataInputStream::readUShortArray(){
         throw Exception("DataInputStream::readUShortArray(): Failed to read UShort array.");
 
     if (_verboseOutput) std::cout<<"read/writeUShortArray() ["<<size<<"]"<<std::endl;
-    
+
     if (_byteswap)
     {
        for (int i = 0 ; i < size ; i++ ) osg::swapBytes((char *)&(a[i]),SHORTSIZE) ;
@@ -416,7 +415,7 @@ osg::UIntArray* DataInputStream::readUIntArray()
         throw Exception("DataInputStream::readUIntArray(): Failed to read UInt array.");
 
     if (_verboseOutput) std::cout<<"read/writeUIntArray() ["<<size<<"]"<<std::endl;
-    
+
     if (_byteswap)
     {
        for (int i = 0 ; i < size ; i++ ) osg::swapBytes((char *)&(a[i]),INTSIZE) ;
@@ -435,23 +434,23 @@ osg::Vec4ubArray* DataInputStream::readVec4ubArray()
         throw Exception("DataInputStream::readVec4ubArray(): Failed to read Vec4ub array.");
 
     if (_verboseOutput) std::cout<<"read/writeVec4ubArray() ["<<size<<"]"<<std::endl;
-    
+
     return a;
 }
 
 osg::FloatArray* DataInputStream::readFloatArray()
 {
     int size = readInt();
-    
+
     osg::FloatArray* a = new osg::FloatArray(size);
-    
+
     _istream->read((char*)&((*a)[0]), FLOATSIZE*size);
 
     if (_istream->rdstate() & _istream->failbit)
         throw Exception("DataInputStream::readFloatArray(): Failed to read float array.");
 
     if (_verboseOutput) std::cout<<"read/writeFloatArray() ["<<size<<"]"<<std::endl;
-    
+
     if (_byteswap)
     {
        for (int i = 0 ; i < size ; i++ ) osg::swapBytes((char *)&(a[i]),FLOATSIZE) ;
@@ -463,14 +462,14 @@ osg::Vec2Array* DataInputStream::readVec2Array()
 {
     int size = readInt();
     osg::Vec2Array* a = new osg::Vec2Array(size);
-    
+
     _istream->read((char*)&((*a)[0]), FLOATSIZE*2*size);
 
     if (_istream->rdstate() & _istream->failbit)
         throw Exception("DataInputStream::readVec2Array(): Failed to read Vec2 array.");
 
     if (_verboseOutput) std::cout<<"read/writeVec2Array() ["<<size<<"]"<<std::endl;
-    
+
     if (_byteswap)
     {
        float *ptr = (float*)&((*a)[0]) ;
@@ -488,12 +487,12 @@ osg::Vec3Array* DataInputStream::readVec3Array()
     osg::Vec3Array* a = new osg::Vec3Array(size);
 
     _istream->read((char*)&((*a)[0]), FLOATSIZE*3*size);
-    
+
     if (_istream->rdstate() & _istream->failbit)
         throw Exception("DataInputStream::readVec3Array(): Failed to read Vec3 array.");
 
     if (_verboseOutput) std::cout<<"read/writeVec3Array() ["<<size<<"]"<<std::endl;
-    
+
 
     if (_byteswap)
     {
@@ -515,7 +514,7 @@ osg::Vec4Array* DataInputStream::readVec4Array(){
         throw Exception("DataInputStream::readVec4Array(): Failed to read Vec4 array.");
 
     if (_verboseOutput) std::cout<<"read/writeVec4Array() ["<<size<<"]"<<std::endl;
-    
+
     if (_byteswap) {
        float *ptr = (float*)&((*a)[0]) ;
        for (int i = 0 ; i < size*4 ; i++ ) {
@@ -630,7 +629,7 @@ osg::Matrixf DataInputStream::readMatrixf()
         throw Exception("DataInputStream::readMatrix(): Failed to read Matrix array.");
 
     if (_verboseOutput) std::cout<<"read/writeMatrix() ["<<mat<<"]"<<std::endl;
-    
+
 
     return mat;
 }
@@ -650,7 +649,7 @@ osg::Matrixd DataInputStream::readMatrixd()
         throw Exception("DataInputStream::readMatrix(): Failed to read Matrix array.");
 
     if (_verboseOutput) std::cout<<"read/writeMatrix() ["<<mat<<"]"<<std::endl;
-    
+
 
     return mat;
 };

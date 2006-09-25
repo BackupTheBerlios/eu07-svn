@@ -8,6 +8,9 @@
 
 namespace spt {
 
+template class BaseObjectsList<MovementPath>;
+template class BaseObjectsList<MovementPath::Tip>;
+
 Scenery* Scenery::m_instance = NULL;
 
 Scenery::Scenery() {
@@ -17,7 +20,7 @@ Scenery::Scenery() {
 
 	MovementPathList = new BaseObjectsList<MovementPath>();
 	TipList = new BaseObjectsList<MovementPath::Tip>();
-		
+
 
 }
 
