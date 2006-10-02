@@ -70,11 +70,11 @@ void EventQueue::add(Event* event, osg::ref_ptr<EventReceiver> sender, osg::ref_
 	if(event && receiver.valid())
 	{
 
-		event->setSender(sender);
-		event->setReceiver(receiver);
+		event->m_sender = sender;
+		event->m_receiver = receiver;
 
-		event->setSent(m_time);
-		event->setDelivery(m_time + delay);
+		event->m_sent = m_time;
+		event->m_delivery = m_time + delay;
 
 		add(event);
 

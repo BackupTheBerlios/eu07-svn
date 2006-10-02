@@ -21,7 +21,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\Producer\include;..\OpenThreads\include;..\OpenSceneGraph\include"
+				AdditionalIncludeDirectories="..\Producer\include;..\OpenThreads\include;..\OpenSceneGraph\include;include"
 				PreprocessorDefinitions="WIN32;_DEBUG"
 				MinimalRebuild="FALSE"
 				BasicRuntimeChecks="0"
@@ -72,6 +72,7 @@
 			ManagedExtensions="TRUE">
 			<Tool
 				Name="VCCLCompilerTool"
+				AdditionalIncludeDirectories="../Producer/include;../OpenThreads/include;../OpenSceneGraph/include"
 				PreprocessorDefinitions="WIN32;NDEBUG"
 				MinimalRebuild="FALSE"
 				RuntimeLibrary="2"
@@ -85,6 +86,7 @@
 				AdditionalDependencies="osg.lib osgDB.lib osgUtil.lib osgProducer.lib Producer.lib"
 				OutputFile="$(OutDir)\$(ProjectName).exe"
 				LinkIncremental="1"
+				AdditionalLibraryDirectories="../Producer/lib;../OpenThreads/lib/win32;../OpenSceneGraph/lib"
 				GenerateDebugInformation="TRUE"/>
 			<Tool
 				Name="VCMIDLTool"/>
@@ -119,13 +121,29 @@
 				RelativePath=".\src\Main.cpp">
 			</File>
 			<Filter
+				Name="Common"
+				Filter="">
+				<File
+					RelativePath=".\src\common\Exception.cpp">
+				</File>
+				<File
+					RelativePath=".\src\common\FindNodeVisitor.cpp">
+				</File>
+			</Filter>
+			<Filter
 				Name="Core"
 				Filter="">
 				<File
-					RelativePath=".\src\core\Bezier.cpp">
+					RelativePath=".\src\core\DataInputStream.cpp">
+				</File>
+				<File
+					RelativePath=".\src\core\DataOutputStream.cpp">
 				</File>
 				<File
 					RelativePath=".\src\core\MovementPath.cpp">
+				</File>
+				<File
+					RelativePath=".\src\core\ObjectsList.cpp">
 				</File>
 				<File
 					RelativePath=".\src\core\PathFollower.cpp">
@@ -133,84 +151,98 @@
 				<File
 					RelativePath=".\src\core\Scenery.cpp">
 				</File>
-				<File
-					RelativePath=".\src\core\Skydome.cpp">
-				</File>
 			</Filter>
 			<Filter
-				Name="FileIO"
+				Name="Events"
 				Filter="">
 				<File
-					RelativePath=".\src\fileio\DataInputStream.cpp">
+					RelativePath=".\src\events\Event.cpp">
 				</File>
 				<File
-					RelativePath=".\src\fileio\DataOutputStream.cpp">
+					RelativePath=".\src\events\EventIds.cpp">
 				</File>
 				<File
-					RelativePath=".\src\fileio\Exception.cpp">
+					RelativePath=".\src\events\EventMgr.cpp">
 				</File>
-			</Filter>
-			<Filter
-				Name="Mover"
-				Filter="">
+				<File
+					RelativePath=".\src\events\EventQueue.cpp">
+				</File>
+				<File
+					RelativePath=".\src\events\EventReceiver.cpp">
+				</File>
 			</Filter>
 		</Filter>
 		<Filter
 			Name="Header Files"
 			Filter="h;hpp;hxx;hm;inl;inc;xsd"
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}">
-			<File
-				RelativePath=".\TestPrepareFile.h">
-			</File>
 			<Filter
 				Name="Core"
 				Filter="">
 				<File
-					RelativePath=".\src\core\Bezier.h">
+					RelativePath=".\include\core\DataInputStream.h">
 				</File>
 				<File
-					RelativePath=".\src\core\MovementPath.h">
+					RelativePath=".\include\core\DataOutputStream.h">
 				</File>
 				<File
-					RelativePath=".\src\core\PathFollower.h">
+					RelativePath=".\include\core\DataTypeSize.h">
 				</File>
 				<File
-					RelativePath=".\src\core\Scenery.h">
+					RelativePath=".\include\core\MovementPath.h">
 				</File>
 				<File
-					RelativePath=".\src\core\SkyDome.h">
-				</File>
-			</Filter>
-			<Filter
-				Name="FileIO"
-				Filter="">
-				<File
-					RelativePath=".\src\fileio\DataInputStream.h">
+					RelativePath=".\include\core\ObjectsList.h">
 				</File>
 				<File
-					RelativePath=".\src\fileio\DataOutputStream.h">
+					RelativePath=".\include\core\PathFollower.h">
 				</File>
 				<File
-					RelativePath=".\src\fileio\DataTypes.h">
+					RelativePath=".\include\core\ReadWrite.h">
 				</File>
 				<File
-					RelativePath=".\src\fileio\DataTypeSize.h">
+					RelativePath=".\include\core\Scenery.h">
 				</File>
 				<File
-					RelativePath=".\src\fileio\Exception.h">
+					RelativePath=".\include\core\SkyDome.h">
 				</File>
 				<File
-					RelativePath=".\src\fileio\ReadWrite.h">
-				</File>
-				<File
-					RelativePath=".\src\fileio\SptVersion.h">
+					RelativePath=".\include\core\SptVersion.h">
 				</File>
 			</Filter>
 			<Filter
-				Name="Mover"
+				Name="common"
 				Filter="">
 				<File
-					RelativePath=".\src\mover\Mover.h">
+					RelativePath=".\include\common\Exception.h">
+				</File>
+				<File
+					RelativePath=".\include\common\FindNodeVisitor.h">
+				</File>
+				<File
+					RelativePath=".\include\common\OutputNodeVisitor.h">
+				</File>
+				<File
+					RelativePath=".\include\common\StringSwitchState.h">
+				</File>
+			</Filter>
+			<Filter
+				Name="Events"
+				Filter="">
+				<File
+					RelativePath=".\include\events\Event.h">
+				</File>
+				<File
+					RelativePath=".\include\events\EventIds.h">
+				</File>
+				<File
+					RelativePath=".\include\events\EventMgr.h">
+				</File>
+				<File
+					RelativePath=".\include\events\EventQueue.h">
+				</File>
+				<File
+					RelativePath=".\include\events\EventReceiver.h">
 				</File>
 			</Filter>
 		</Filter>

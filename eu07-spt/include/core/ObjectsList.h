@@ -59,14 +59,14 @@ public:
 }; // class BaseObjectsList
 
 template <class Ty>
-inline Ty* get(const unsigned int& id) {
+inline Ty* BaseObjectsList<Ty>::get(const unsigned int& id) {
 
 	return static_cast<Ty*>(ObjectsList::get(id));
 
 }
 
 template <class Ty>
-inline Ty* getOrCreate(const unsigned int& id) {
+inline Ty* BaseObjectsList<Ty>::getOrCreate(const unsigned int& id) {
 
 	return static_cast<Ty*>(ObjectsList::get(id));
 

@@ -20,6 +20,8 @@
 
 namespace spt {
 
+class Scenery;
+
 class DataOutputStream
 {
 
@@ -75,7 +77,7 @@ public:
     void writeMatrixf(const osg::Matrixf& mat);
     void writeMatrixd(const osg::Matrixd& mat);
 
-	Scenery* getScenery() { return m_scenery; };
+	Scenery* getScenery();
 
     bool _verboseOutput;
 

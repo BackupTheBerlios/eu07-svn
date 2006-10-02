@@ -12,9 +12,9 @@ EventReceiver::EventHandlerArr EventReceiver::m_localEventHandlers;
 void EventReceiver::handle(Event* event) {
 
 	const EventHandlerArr& eventHandlers = getEventHandlers();
-	EventHandlerArr::const_iterator iter = eventHandlers.find(event->getId());
+	EventHandlerArr::const_iterator iter = eventHandlers.find(event->getHash());
 
-	std::cout << this->className() << ": Event " << event->className() << "(" << event->getId() << ")";
+	std::cout << this->className() << ": Event " << event->getHash();
 
 	if(iter != eventHandlers.end()) {
 

@@ -5,7 +5,7 @@
 #---------------------------------------------------------------------------
 PROJECT_NAME           = "MaSzyna SPT - Path Follower"
 PROJECT_NUMBER         = 0.1
-OUTPUT_DIRECTORY       = D:/Projects/NebulaMoje/eu07-spt/doc
+OUTPUT_DIRECTORY       = doc
 CREATE_SUBDIRS         = NO
 OUTPUT_LANGUAGE        = English
 USE_WINDOWS_ENCODING   = YES
@@ -24,8 +24,8 @@ ABBREVIATE_BRIEF       = "The $name class" \
                          the
 ALWAYS_DETAILED_SEC    = NO
 INLINE_INHERITED_MEMB  = NO
-FULL_PATH_NAMES        = YES
-STRIP_FROM_PATH        = "C:/Documents and Settings/ShaXbee/"
+FULL_PATH_NAMES        = NO
+STRIP_FROM_PATH        = 
 STRIP_FROM_INC_PATH    = 
 SHORT_NAMES            = NO
 JAVADOC_AUTOBRIEF      = NO
@@ -82,10 +82,8 @@ WARN_LOGFILE           =
 #---------------------------------------------------------------------------
 # configuration options related to the input files
 #---------------------------------------------------------------------------
-INPUT                  = D:/Projects/NebulaMoje/eu07-spt/src \
-                         D:/Projects/NebulaMoje/eu07-spt/src/core \
-                         D:/Projects/NebulaMoje/eu07-spt/src/fileio \
-                         D:/Projects/NebulaMoje/eu07-spt/src/mover
+INPUT                  = src/core \
+                         src/common
 FILE_PATTERNS          = *.c \
                          *.cc \
                          *.cxx \

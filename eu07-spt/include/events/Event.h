@@ -3,39 +3,33 @@
 
 #include <osg/Object>
 
-#include "EventReceiver.h"
-
 namespace spt
 {
 
+class EventReceiver;
 class EventIds;
+class EventQueue;
 
 class Event: public osg::Object
 {
 
-friend class EventIds;
+friend class EventQueue;
 
 public:
 	Event();
 	Event(const Event& event, const osg::CopyOp& copyop=osg::CopyOp::SHALLOW_COPY);
 
-	virtual const char* libraryName() const { return "spt"; }
-	virtual const char* className() const { return "Event"; }
-	virtual const unsigned int getId() const { return m_id; }
+	virtual ~Event();
 
-	osg::ref_ptr<EventReceiver> getSender() { return m_sender; }
-	void setSender(osg::ref_ptr<EventReceiver>& sender) { m_sender = sender; }
+	META_Object(spt, Event);
 
-	osg::ref_ptr<EventReceiver> getReceiver() { return m_receiver; }
-	void setReceiver(osg::ref_ptr<EventReceiver>& receiver) { m_receiver = receiver; }
+	virtual unsigned int getHash();
 
-	const double getSent() const { return m_sent; }
-	void setSent(double sent) { m_sent = sent; }
+	EventReceiver* getSender();
+	EventReceiver* getReceiver();
 
-	const double getDelivery() const { return m_delivery; }
-	void setDelivery(double delivery) { m_delivery = delivery; }
-
-	bool operator<(const Event& event) { return m_delivery > event.m_delivery; }
+	double getSent();
+	double getDelivery();
 
 protected:
 	osg::ref_ptr<EventReceiver> m_sender;
@@ -44,8 +38,55 @@ protected:
 	double m_sent;
 	double m_delivery;
 
-private:
-	static unsigned int m_id;
+};
+
+template <typename ValueTy>
+class BaseEvent : public Event {
+
+public:
+	BaseEvent() { }
+	BaseEvent(ValueTy& value) : m_value(value) { }
+
+	virtual ~BaseEvent();
+
+	ValueTy getValue() { return m_value; }
+	void setValue(ValueTy& value) { m_value = value; }
+
+protected:
+	ValueTy m_value;
+
+};
+
+template <typename ValueTy>
+class DynamicEvent : public BaseEvent<ValueTy> {
+
+public:
+	DynamicEvent() : m_hash(0) { }
+	DynamicEvent(unsigned int hash) : m_hash(hash) { }
+	DynamicEvent(unsigned int hash, ValueTy& value) : DynamicEvent(hash), m_value(value) { }
+
+	virtual ~DynamicEvent() { }
+
+	virtual unsigned int getHash() { return m_hash; }
+
+protected:
+	unsigned int m_hash;
+
+};
+
+template<class BaseClass, typename ValueTy>
+class StaticEvent : public BaseEvent<ValueTy> {
+
+public:
+	StaticEvent() { }
+	StaticEvent(ValueTy& value) : m_value(value) { }
+
+	virtual ~StaticEvent() { }
+
+	virtual unsigned int getHash() { return m_hash; }
+
+protected:
+	static unsigned int m_hash;
 
 };
 

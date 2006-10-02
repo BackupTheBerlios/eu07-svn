@@ -30,6 +30,8 @@ void DataOutputStream::setOptions(const osgDB::ReaderWriter::Options* options)
 
 }
 
+Scenery* DataOutputStream::getScenery() { return m_scenery; }
+
 DataOutputStream::DataOutputStream(std::ostream * ostream)
 {
 
@@ -44,8 +46,6 @@ DataOutputStream::DataOutputStream(std::ostream * ostream)
 }
 
 DataOutputStream::~DataOutputStream(){}
-
-spt::Scenery* DataOutputStream::getScenery() { return m_scenery; }
 
 void DataOutputStream::writeBool(bool b)
 {
