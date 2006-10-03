@@ -1,9 +1,9 @@
 #ifndef TRACK_H
 #define TRACK_H 1
 
-#include "Event.h"
-#include "EventQueue.h"
-#include "MovementPath.h"
+#include "events/Event.h"
+#include "events/EventQueue.h"
+#include "core/MovementPath.h"
 
 namespace spt {
 

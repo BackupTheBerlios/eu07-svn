@@ -59,14 +59,14 @@ public:
 }; // class BaseObjectsList
 
 template <class Ty>
-inline Ty* BaseObjectsList<Ty>::get(const unsigned int& id) {
+Ty* BaseObjectsList<Ty>::get(const unsigned int& id) {
 
 	return static_cast<Ty*>(ObjectsList::get(id));
 
 }
 
 template <class Ty>
-inline Ty* BaseObjectsList<Ty>::getOrCreate(const unsigned int& id) {
+Ty* BaseObjectsList<Ty>::getOrCreate(const unsigned int& id) {
 
 	return static_cast<Ty*>(ObjectsList::get(id));
 
@@ -118,14 +118,14 @@ template <class Ty>
 void BaseObjectsList<Ty>::write(DataOutputStream* output) {
 
 	output->writeUInt(m_idPtrMap.size());
-		
+
 	for(IdPtrMap::iterator iter = m_idPtrMap.begin(); iter != m_idPtrMap.end(); iter++) {
 
 		output->writeUInt(iter->first);
 		static_cast<Ty*>(iter->second)->write(output);
 
 	};
-		
+
 }
 
 } // namespace spt

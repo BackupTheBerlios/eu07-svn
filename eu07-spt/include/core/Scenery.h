@@ -6,10 +6,10 @@
 
 #include <osg/Group>
 
-#include "MovementPath.h"
-#include "PathFollower.h"
+#include "core/MovementPath.h"
+#include "core/PathFollower.h"
 
-#include "ObjectsList.h"
+#include "core/ObjectsList.h"
 
 namespace spt
 {
@@ -41,7 +41,7 @@ public:
 	void read(DataInputStream* input);
 	void write(DataOutputStream* output);
 
-//	ObjectsList* PathFollowerList; 
+//	ObjectsList* PathFollowerList;
 
 protected:
 
