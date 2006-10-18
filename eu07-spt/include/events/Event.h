@@ -10,23 +10,26 @@ class EventReceiver;
 class EventIds;
 class EventQueue;
 
-class Event: public osg::Referenced
+class Event: public osg::Object
 {
 
 friend class EventQueue;
 
 public:
 	Event();
+	Event(const Event& event, const osg::CopyOp& copyop=osg::CopyOp::SHALLOW_COPY);
 
 	virtual ~Event();
 
-	virtual unsigned int getHash();
+	META_Object(spt, Event);
 
-	double getSent();
-	double getDelivery();
+	virtual unsigned int getHash();
 
 	EventReceiver* getSender();
 	EventReceiver* getReceiver();
+
+	double getSent();
+	double getDelivery();
 
 protected:
 	osg::ref_ptr<EventReceiver> m_sender;
@@ -59,17 +62,19 @@ class DynamicEvent : public BaseEvent<ValueTy> {
 
 public:
 	DynamicEvent() : m_hash(0) { }
+
 	DynamicEvent(unsigned int hash) : m_hash(hash) { }
-	DynamicEvent(unsigned int hash, ValueTy& value) : m_hash(hash), m_value(value) { }
+	DynamicEvent(unsigned int hash, ValueTy& value) : DynamicEvent(hash), m_value(value) { }
+
+	DynamicEvent(std::string name) { m_hash = sptCommon::DJBHash(name); }
+	DynamicEvent(std::string name, ValueTy& value) : m_value(value) { m_hash = sptCommon::DJBHash(name); }
 
 	virtual ~DynamicEvent() { }
-
 	virtual unsigned int getHash() { return m_hash; }
 
 protected:
-    ValueTy m_value;
 	unsigned int m_hash;
-
+	
 };
 
 template<class BaseClass, typename ValueTy>
@@ -80,15 +85,13 @@ public:
 	StaticEvent(ValueTy& value) : m_value(value) { }
 
 	virtual ~StaticEvent() { }
-
 	virtual unsigned int getHash() { return m_hash; }
 
 protected:
-    ValueTy m_value;
 	static unsigned int m_hash;
 
 };
 
-} // namespace spt
+}
 
 #endif

@@ -19,7 +19,7 @@ public:
 protected:
 	void add(Event* event);
 
-	typedef std::deque< Event* > EventDeque;
+	typedef std::deque<Event*> EventDeque;
 
 	EventDeque m_events;
 	double m_last;

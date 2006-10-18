@@ -124,6 +124,9 @@
 				Name="Common"
 				Filter="">
 				<File
+					RelativePath=".\src\common\DJBHash.cpp">
+				</File>
+				<File
 					RelativePath=".\src\common\Exception.cpp">
 				</File>
 				<File
@@ -211,8 +214,11 @@
 				</File>
 			</Filter>
 			<Filter
-				Name="common"
+				Name="Common"
 				Filter="">
+				<File
+					RelativePath=".\include\common\DJBHash.h">
+				</File>
 				<File
 					RelativePath=".\include\common\Exception.h">
 				</File>

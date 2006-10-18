@@ -2,12 +2,12 @@
 
 #include <iostream>
 
-#include "events/Event.h"
-#include "events/EventMgr.h"
-
 namespace spt {
 
+<<<<<<< .mine
+=======
 EventReceiver::EventReceiver(): m_queue(NULL) { }
 EventReceiver::EventReceiver(EventQueue* queue): m_queue(queue) { }
 
+>>>>>>> .r414
 } // namespace spt
