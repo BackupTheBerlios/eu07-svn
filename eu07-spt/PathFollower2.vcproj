@@ -162,9 +162,6 @@
 					RelativePath=".\src\events\Event.cpp">
 				</File>
 				<File
-					RelativePath=".\src\events\EventIds.cpp">
-				</File>
-				<File
 					RelativePath=".\src\events\EventMgr.cpp">
 				</File>
 				<File

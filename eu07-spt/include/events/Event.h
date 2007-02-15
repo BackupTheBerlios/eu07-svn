@@ -10,7 +10,7 @@ class EventReceiver;
 class EventIds;
 class EventQueue;
 
-class Event: public osg::Object
+class Event: public osg::Referenced
 {
 
 friend class EventQueue;
@@ -21,7 +21,7 @@ public:
 
 	virtual ~Event();
 
-	META_Object(spt, Event);
+	//META_Object(spt, Event);
 
 	virtual unsigned int getHash();
 
