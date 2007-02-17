@@ -44,7 +44,6 @@ void Scenery::write(DataOutputStream* output) {
 
 }
 
-/*
 void Scenery::addNode(osg::Node* node) {
 
 	m_root->addChild(node);
@@ -53,16 +52,15 @@ void Scenery::addNode(osg::Node* node) {
 
 void Scenery::addMovementPath(MovementPath* path) {
 
-	m_movementPathList.insert(path);
+	MovementPathList->insert(path);
 
 };
 
-void Scenery::addPathFollower(PathFollower* follower)
+/* void Scenery::addPathFollower(PathFollower* follower)
 {
 
-	m_pathFollowerList.insert(follower);
+	PathFollowerList->insert(follower);
 
-};
-*/
+}; */
 
 } // namespace spt

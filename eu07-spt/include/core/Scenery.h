@@ -37,10 +37,14 @@ public:
 
 	BaseObjectsList<MovementPath::Tip>* TipList;
 	BaseObjectsList<MovementPath>* MovementPathList;
+//	BaseObjectsList<PathFollower>* PathFollowerList;
 
 	void read(DataInputStream* input);
 	void write(DataOutputStream* output);
 
+	void addNode(osg::Node* node);
+	void addMovementPath(MovementPath* path);
+//	void addPathFollower(PathFollower* follower);
 //	ObjectsList* PathFollowerList;
 
 protected:

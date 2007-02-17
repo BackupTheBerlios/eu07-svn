@@ -15,6 +15,7 @@
  **********************************************************************/
 
 #include "core/DataOutputStream.h"
+#include "core/Scenery.h"
 
 #include <osg/Notify>
 #include <osg/io_utils>
@@ -42,6 +43,8 @@ DataOutputStream::DataOutputStream(std::ostream * ostream)
         throw Exception("DataOutputStream::DataOutputStream(): null pointer exception in argument.");
     writeUInt(ENDIAN_TYPE) ;
     writeUInt(getVersion());
+
+	m_scenery = Scenery::getInstance();
 
 }
 

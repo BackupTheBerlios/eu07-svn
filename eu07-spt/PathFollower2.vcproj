@@ -137,6 +137,9 @@
 				Name="Core"
 				Filter="">
 				<File
+					RelativePath=".\src\core\Bezier.cpp">
+				</File>
+				<File
 					RelativePath=".\src\core\DataInputStream.cpp">
 				</File>
 				<File
@@ -153,6 +156,9 @@
 				</File>
 				<File
 					RelativePath=".\src\core\Scenery.cpp">
+				</File>
+				<File
+					RelativePath=".\src\core\SkyDome.cpp">
 				</File>
 			</Filter>
 			<Filter

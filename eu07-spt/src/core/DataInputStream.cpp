@@ -16,6 +16,7 @@
  **********************************************************************/
 
 #include "core/DataInputStream.h"
+#include "core/Scenery.h"
 
 #include <osg/Endian>
 #include <osg/Notify>
@@ -34,6 +35,8 @@ void DataInputStream::setOptions(const osgDB::ReaderWriter::Options* options)
 
 DataInputStream::DataInputStream(std::istream* istream)
 {
+
+	std::cout << (int) istream << std::endl;
     unsigned int endianType ;
 
     _verboseOutput = false;
@@ -64,6 +67,8 @@ DataInputStream::DataInputStream(std::istream* istream)
     if(_version>VERSION){
         throw Exception("DataInputStream::DataInputStream(): The version found in the file is newer than this library can handle.");
     }
+
+	m_scenery = Scenery::getInstance();
 
 }
 
@@ -174,6 +179,7 @@ int DataInputStream::peekInt(){
 
 float DataInputStream::readFloat(){
     float f;
+
     _istream->read((char*)&f, FLOATSIZE);
     if (_istream->rdstate() & _istream->failbit)
         throw Exception("DataInputStream::readFloat(): Failed to read float value.");

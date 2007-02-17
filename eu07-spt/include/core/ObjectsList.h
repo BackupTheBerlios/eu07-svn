@@ -91,6 +91,8 @@ void BaseObjectsList<Ty>::read(DataInputStream* input) {
 
         while(--count) {
 
+			std::cout << count << std::endl;
+
         	Ty* obj;
                 unsigned int id = input->readUInt();
 

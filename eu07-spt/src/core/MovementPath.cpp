@@ -444,6 +444,7 @@ void MovementPath::read(DataInputStream* in)
         {
 
                 float distance = in->readFloat(); // read distance
+				std::cout << "pointCount: " << pointCount << " distance: " << distance << std::endl;
                 ControlPoint cp; cp.read(in); // read control point
 
                 m_lastCPIter = m_controlPointMap.insert(ControlPointPair(distance, cp)).first; // insert to control points map
@@ -461,6 +462,8 @@ void MovementPath::write(DataOutputStream* out)
 {
 
         out->writeUInt(m_controlPointMap.size()); // write control points count
+
+		std::cout << "pointCount: " << m_controlPointMap.size() << std::endl;
 
         ControlPointMap::iterator iter = m_controlPointMap.begin();
         while(iter != m_controlPointMap.end())
@@ -490,6 +493,7 @@ void MovementPath::ControlPoint::read(DataInputStream* in)
         m_position = in->readVec3();
         m_rotation = in->readQuat();
         m_length = in->readFloat();
+		std::cout << "length: " << m_length << std::endl;
 
 } // MovementPath::ControlPoint::read
 
