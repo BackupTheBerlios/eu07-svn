@@ -3,8 +3,8 @@
 
 #include <osg/Node>
 
-#include "../core/MovementPath.h"
-#include "../core/PathFollower.h"
+#include "core/MovementPath.h"
+#include "core/PathFollower.h"
 
 #include "Axle.h"
 

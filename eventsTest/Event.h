@@ -17,7 +17,10 @@ friend class EventIds;
 
 public:
 	Event();
+	Event(std::string id);
 	Event(const Event& event, const osg::CopyOp& copyop=osg::CopyOp::SHALLOW_COPY);
+
+	virtual ~Event();
 
 	virtual const char* libraryName() const { return "spt"; }
 	virtual const char* className() const { return "Event"; }
@@ -50,5 +53,14 @@ private:
 };
 
 }
+
+template <typename T>
+class EventBase {
+
+public:
+	EventBase()
+
+	virtual ~EventBase();
+
 
 #endif

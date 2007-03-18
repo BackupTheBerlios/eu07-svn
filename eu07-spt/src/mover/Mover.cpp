@@ -3,7 +3,7 @@
 #include <osg/Notify>
 #include <osgDB/ReadFile>
 
-#include "../common/FindNodeVisitor.h"
+#include "common/FindNodeVisitor.h"
 
 namespace spt
 {

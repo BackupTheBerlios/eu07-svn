@@ -8,8 +8,8 @@
 #include <osg/MatrixTransform>
 
 #include "../tinyxml/tinyxml.h"
-#include "../core/MovementPath.h"
-#include "../core/EventReceiver.h"
+#include "core/MovementPath.h"
+#include "events/EventReceiver.h"
 
 #include "Boogey.h"
 

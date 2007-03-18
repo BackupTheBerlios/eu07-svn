@@ -1,5 +1,7 @@
 #include <osg/Vec3>
 #include <osg/Array>
+#include <osg/Node>
+#include <osgDB/ReadFile>
 
 #include "core/Bezier.h"
 #include "core/MovementPath.h"
@@ -66,7 +68,10 @@ void TestPrepareFile()
 
 	tip = new MovementPath::Tip(lastMp, MovementPath::Tip::FRONT, firstMp, MovementPath::Tip::BACK);
 
-	Scenery::getInstance()->write(new DataOutputStream(new std::ofstream("test.scn")));
+	PathFollower* follower = new PathFollower(lastMp, 0.0);
+	osg::Node* node = osgDB::readNodeFile("dynamic/pkp/sm42/sm42.IVE");
+
+//	Scenery::getInstance()->write(new DataOutputStream(new std::ofstream("test.scn")));
 
 };
 
@@ -75,6 +80,6 @@ void TestLoadFile()
 
 	if(!Scenery::getInstance()) new Scenery();
 
-	Scenery::getInstance()->read(new DataInputStream(new std::ifstream("scenery/shxtest1/shxtest1.scn")));
+//	Scenery::getInstance()->read(new DataInputStream(new std::ifstream("scenery/shxtest1/shxtest1.scn")));
 
 };

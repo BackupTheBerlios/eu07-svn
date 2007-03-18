@@ -1,8 +1,8 @@
 COMPILER=g++
-CCFLAGS=-g -pedantic -Wall -iquote../../include
+CCFLAGS=-g -Wall -iquote../../include
 
 LIBS=
-OBJS=MovementPath.o PathFollower.o SkyDome.o ObjectsList.o Scenery.o 
+OBJS=Bezier.o DataInputStream.o DataOutputStream.o MovementPath.o PathFollower.o SkyDome.o ObjectsList.o Scenery.o
 
 core: ${OBJS}
 	ar cr ../core.a ${OBJS}

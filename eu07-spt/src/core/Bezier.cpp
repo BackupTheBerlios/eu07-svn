@@ -39,7 +39,7 @@ osg::Vec3Array* Bezier::getPoints()
 
 	return m_points;
 
-};
+}
 
 osg::Group* Bezier::getNode()
 {
@@ -183,4 +183,4 @@ osg::Group* Bezier::getNode()
 
 	return m_node;
 
-};
+}

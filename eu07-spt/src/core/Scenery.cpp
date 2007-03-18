@@ -48,13 +48,13 @@ void Scenery::addNode(osg::Node* node) {
 
 	m_root->addChild(node);
 
-};
+}
 
 void Scenery::addMovementPath(MovementPath* path) {
 
 	MovementPathList->insert(path);
 
-};
+}
 
 /* void Scenery::addPathFollower(PathFollower* follower)
 {

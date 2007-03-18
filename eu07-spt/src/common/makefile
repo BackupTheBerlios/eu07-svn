@@ -2,7 +2,7 @@ COMPILER=g++
 CCFLAGS=-g -Wall -iquote../../include
 
 LIBS=
-OBJS=Exception.o FindNodeVisitor.o 
+OBJS=Exception.o FindNodeVisitor.o DJBHash.o 
 
 core: ${OBJS}
 	ar cr ../common.a ${OBJS}

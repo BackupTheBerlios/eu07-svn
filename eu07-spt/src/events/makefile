@@ -2,7 +2,7 @@ COMPILER=g++
 CCFLAGS=-g -Wall -iquote../../include
 
 LIBS=
-OBJS=Event.o EventReceiver.o EventQueue.o EventIds.o EventMgr.o 
+OBJS=Event.o EventMgr.o EventIds.o EventQueue.o EventReceiver.o
 
 core: ${OBJS}
 	ar cr ../events.a ${OBJS}

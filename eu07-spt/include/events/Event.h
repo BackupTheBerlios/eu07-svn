@@ -53,7 +53,7 @@ public:
 	void setValue(ValueTy& value) { m_value = value; }
 
 protected:
-	ValueTy m_value;
+	typename ValueTy m_value;
 
 };
 

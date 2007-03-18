@@ -11,7 +11,7 @@
 #include "core/MovementPath.h"
 #include "core/PathFollower.h"
 
-#include "core/Skydome.h"
+#include "core/SkyDome.h"
 
 using namespace spt;
 

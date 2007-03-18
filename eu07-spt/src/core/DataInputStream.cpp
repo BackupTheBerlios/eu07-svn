@@ -658,6 +658,6 @@ osg::Matrixd DataInputStream::readMatrixd()
 
 
     return mat;
-};
+}
 
 } // namespace sptFileIO
