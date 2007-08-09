@@ -87,14 +87,14 @@ osg::Referenced* BaseObjectsList<Ty>::create(DataInputStream* input) {
 template <class Ty>
 void BaseObjectsList<Ty>::read(DataInputStream* input) {
 
+	std::cout << "readObjectsList " << input->_istream->tellg() << std::endl;
 	unsigned int count = input->readUInt();
 
         while(--count) {
 
-			std::cout << count << std::endl;
-
         	Ty* obj;
-                unsigned int id = input->readUInt();
+            unsigned int id = input->readUInt();
+			std::cout << "readObject #" << id << " " << input->_istream->tellg() << std::endl;
 
                 IdPtrMap::iterator iter = m_idPtrMap.find(id);
 
@@ -119,11 +119,13 @@ void BaseObjectsList<Ty>::read(DataInputStream* input) {
 template <class Ty>
 void BaseObjectsList<Ty>::write(DataOutputStream* output) {
 
+	std::cout << "writeObjectsList " << output->_ostream->tellp() << std::endl;
 	output->writeUInt(m_idPtrMap.size());
 
 	for(IdPtrMap::iterator iter = m_idPtrMap.begin(); iter != m_idPtrMap.end(); iter++) {
 
 		output->writeUInt(iter->first);
+		std::cout << "writeObject #" << iter->first << " " << output->_ostream->tellp() << std::endl;
 		static_cast<Ty*>(iter->second)->write(output);
 
 	};

@@ -1,59 +1,30 @@
 #include <iostream>
 
-#include <osg/Node>
-#include <osg/Vec3>
-#include <osg/Fog>
-
+#include <osg/Group>
 #include <osgProducer/Viewer>
-#include <osgDB/ReadFile>
 
-#include "core/Bezier.h"
-#include "core/MovementPath.h"
-#include "core/PathFollower.h"
+#include "events/Manager.h"
+#include "events/LocalManager.h"
 
-#include "core/SkyDome.h"
+//using namespace spt;
+using namespace sptEvents;
 
-using namespace spt;
+int main() {
 
-#include "../TestPrepareFile.h"
+	Manager::init(new LocalManager());
 
-int main()
-{
+    osg::Group* rootNode = new osg::Group();
 
-		TestPrepareFile();
-        TestLoadFile();
+    osgProducer::Viewer viewer;
+    viewer.setUpViewer(osgProducer::Viewer::STANDARD_SETTINGS);
 
-        osg::Group* rootNode = new osg::Group();
-        osg::Group* sceneNode = Scenery::getInstance()->getNode();
+    osg::Matrixd matrix;
+    viewer.setView(matrix);
 
-        SkyDome* skydome = new SkyDome(rootNode);
-
-        if(sceneNode) rootNode->addChild(sceneNode);
-
-        osg::Fog* fog = new osg::Fog();
-
-        //atmo: 300 1600 0.6 0.7 0.8
-	fog->setMode(osg::Fog::EXP2);
-        fog->setColor(osg::Vec4(0.6, 0.7, 0.8, 0.2));
-        fog->setStart(300);
-        fog->setEnd(1600);
-        fog->setDensity(0.1);
-
-//	sceneNode->getOrCreateStateSet()->setAttributeAndModes(fog); // do zdebugowania - mg3a sie dziwnie zachowuje
-//	makeTrack(sceneNode, points);
-
-        osgProducer::Viewer viewer;
-        viewer.setUpViewer(osgProducer::Viewer::STANDARD_SETTINGS);
-
-//	viewer.getCamera(0)->getOrCreateStateSet()->setAttributeAndModes(fog);
-
-        osg::Matrixd matrix;
-        viewer.setView(matrix);
-
-        // set scene data to rootNode
+    // set scene data to rootNode
 	viewer.setSceneData(rootNode);
 
-        // create the windows and run threads
+    // create the windows and run threads
 	viewer.realize();
 
     while( !viewer.done() )

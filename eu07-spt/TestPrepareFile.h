@@ -55,7 +55,7 @@ void TestPrepareFile()
 		mp = new MovementPath(bezier->getPoints());
 
 		if(lastMp)
-			tip = new MovementPath::Tip(lastMp, MovementPath::Tip::FRONT, mp, MovementPath::Tip::BACK);
+			tip =new MovementPath::Tip(lastMp, MovementPath::Tip::FRONT, mp, MovementPath::Tip::BACK);
 		else
 			firstMp = mp;
 
@@ -68,7 +68,7 @@ void TestPrepareFile()
 
 	tip = new MovementPath::Tip(lastMp, MovementPath::Tip::FRONT, firstMp, MovementPath::Tip::BACK);
 
-	PathFollower* follower = new PathFollower(lastMp, 0.0);
+	PathFollower* follower = new PathFollower(firstMp, 0.0);
 	osg::Node* node = osgDB::readNodeFile("dynamic/pkp/sm42/sm42.IVE");
 
 //	Scenery::getInstance()->write(new DataOutputStream(new std::ofstream("test.scn")));
@@ -80,6 +80,6 @@ void TestLoadFile()
 
 	if(!Scenery::getInstance()) new Scenery();
 
-//	Scenery::getInstance()->read(new DataInputStream(new std::ifstream("scenery/shxtest1/shxtest1.scn")));
+	Scenery::getInstance()->read(new DataInputStream(new std::ifstream("test.scn")));
 
 };

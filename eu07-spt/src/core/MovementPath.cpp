@@ -463,15 +463,13 @@ void MovementPath::write(DataOutputStream* out)
 
         out->writeUInt(m_controlPointMap.size()); // write control points count
 
-		std::cout << "pointCount: " << m_controlPointMap.size() << std::endl;
-
         ControlPointMap::iterator iter = m_controlPointMap.begin();
         while(iter != m_controlPointMap.end())
         {
 
-                out->writeFloat(iter->first);
-                iter->second.write(out); // write control point
-                iter++;
+			out->writeFloat(iter->first);
+            iter->second.write(out); // write control point
+            iter++;
 
         };
 
@@ -491,9 +489,11 @@ void MovementPath::ControlPoint::read(DataInputStream* in)
 {
 
         m_position = in->readVec3();
+
+//		std::cout << "position: " << m_position.x() << " " << m_position.y() << " " << m_position.z() << std::endl;
         m_rotation = in->readQuat();
         m_length = in->readFloat();
-		std::cout << "length: " << m_length << std::endl;
+//		std::cout << "length: " << m_length << std::endl;
 
 } // MovementPath::ControlPoint::read
 

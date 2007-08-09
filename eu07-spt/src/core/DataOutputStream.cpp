@@ -139,6 +139,9 @@ void DataOutputStream::writeVec2(const osg::Vec2& v){
 }
 
 void DataOutputStream::writeVec3(const osg::Vec3& v){
+
+//	std::cout << "write " << _ostream->tellp() << std::endl;
+
     writeFloat(v.x());
     writeFloat(v.y());
     writeFloat(v.z());

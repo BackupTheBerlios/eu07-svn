@@ -36,7 +36,6 @@ void DataInputStream::setOptions(const osgDB::ReaderWriter::Options* options)
 DataInputStream::DataInputStream(std::istream* istream)
 {
 
-	std::cout << (int) istream << std::endl;
     unsigned int endianType ;
 
     _verboseOutput = false;
@@ -258,6 +257,8 @@ osg::Vec2 DataInputStream::readVec2()
 }
 
 osg::Vec3 DataInputStream::readVec3(){
+
+//	std::cout << "offset " << _istream->tellg() << std::endl;
     osg::Vec3 v;
     v.x()=readFloat();
     v.y()=readFloat();

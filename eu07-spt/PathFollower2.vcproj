@@ -72,7 +72,7 @@
 			ManagedExtensions="TRUE">
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="../Producer/include;../OpenThreads/include;../OpenSceneGraph/include"
+				AdditionalIncludeDirectories="include;../Producer/include;../OpenThreads/include;../OpenSceneGraph/include"
 				PreprocessorDefinitions="WIN32;NDEBUG"
 				MinimalRebuild="FALSE"
 				RuntimeLibrary="2"
@@ -120,6 +120,9 @@
 			<File
 				RelativePath=".\src\Main.cpp">
 			</File>
+			<File
+				RelativePath=".\src\common\Subject.cpp\Subject.cpp">
+			</File>
 			<Filter
 				Name="Common"
 				Filter="">
@@ -131,6 +134,9 @@
 				</File>
 				<File
 					RelativePath=".\src\common\FindNodeVisitor.cpp">
+				</File>
+				<File
+					RelativePath=".\include\common\Functors.h">
 				</File>
 			</Filter>
 			<Filter
@@ -165,16 +171,25 @@
 				Name="Events"
 				Filter="">
 				<File
+					RelativePath=".\src\events\Context.cpp">
+				</File>
+				<File
 					RelativePath=".\src\events\Event.cpp">
 				</File>
 				<File
-					RelativePath=".\src\events\EventMgr.cpp">
+					RelativePath=".\src\events\LocalContext.cpp">
 				</File>
 				<File
-					RelativePath=".\src\events\EventQueue.cpp">
+					RelativePath=".\src\events\LocalManager.cpp">
 				</File>
 				<File
-					RelativePath=".\src\events\EventReceiver.cpp">
+					RelativePath=".\src\events\Manager.cpp">
+				</File>
+				<File
+					RelativePath=".\src\events\Queue.cpp">
+				</File>
+				<File
+					RelativePath=".\src\events\Receiver.cpp">
 				</File>
 			</Filter>
 		</Filter>
@@ -229,29 +244,47 @@
 					RelativePath=".\include\common\FindNodeVisitor.h">
 				</File>
 				<File
+					RelativePath=".\include\common\Observer.h">
+				</File>
+				<File
 					RelativePath=".\include\common\OutputNodeVisitor.h">
 				</File>
 				<File
 					RelativePath=".\include\common\StringSwitchState.h">
+				</File>
+				<File
+					RelativePath=".\include\common\Subject.h">
 				</File>
 			</Filter>
 			<Filter
 				Name="Events"
 				Filter="">
 				<File
+					RelativePath=".\include\events\ClientManager.h">
+				</File>
+				<File
+					RelativePath=".\include\events\Context.h">
+				</File>
+				<File
 					RelativePath=".\include\events\Event.h">
 				</File>
 				<File
-					RelativePath=".\include\events\EventIds.h">
+					RelativePath=".\include\events\LocalContext.h">
 				</File>
 				<File
-					RelativePath=".\include\events\EventMgr.h">
+					RelativePath=".\include\events\LocalManager.h">
 				</File>
 				<File
-					RelativePath=".\include\events\EventQueue.h">
+					RelativePath=".\include\events\Manager.h">
 				</File>
 				<File
-					RelativePath=".\include\events\EventReceiver.h">
+					RelativePath=".\include\events\Queue.h">
+				</File>
+				<File
+					RelativePath=".\include\events\Receiver.h">
+				</File>
+				<File
+					RelativePath=".\include\events\ServerManager.h">
 				</File>
 			</Filter>
 		</Filter>

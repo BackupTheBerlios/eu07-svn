@@ -80,12 +80,12 @@ public:
 	Scenery* getScenery();
 
     bool _verboseOutput;
+    std::ostream* _ostream;
 
 protected:
 
 	Scenery* m_scenery;
 
-    std::ostream* _ostream;
     osg::ref_ptr<const osgDB::ReaderWriter::Options> _options;
 
 }; // spt::DataOutputStream

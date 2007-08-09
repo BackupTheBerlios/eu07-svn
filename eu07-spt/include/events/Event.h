@@ -1,22 +1,37 @@
-#ifndef EVENT_H
-#define EVENT_H 1
+#ifndef SPTEVENTS_EVENT_H
+#define SPTEVENTS_EVENT_H 1
 
 #include <osg/Object>
 
-namespace spt
-{
+namespace sptEvents {
 
-class EventReceiver;
-class EventIds;
-class EventQueue;
+class Receiver;
+//class EventIds;
+class Queue;
 
-class Event: public osg::Referenced
-{
+class Event: public osg::Referenced {
 
-friend class EventQueue;
+friend class Queue;
 
 public:
+
+	class Address {
+
+	public:
+		Address(unsigned int client, unsigned int context, unsigned int receiver);
+
+		unsigned int getClient();
+		unsigned int getContext();
+		unsigned int getReceiver();
+
+	protected:
+		unsigned int _context;
+		unsigned int _receiver;
+
+	}
+
 	Event();
+	Event(const Address& sender, const Address& receiver);
 	Event(const Event& event, const osg::CopyOp& copyop=osg::CopyOp::SHALLOW_COPY);
 
 	virtual ~Event();
@@ -25,23 +40,25 @@ public:
 
 	virtual unsigned int getHash();
 
-	EventReceiver* getSender();
-	EventReceiver* getReceiver();
+	const Address& getSender();
+	const Address& getReceiver();
 
 	double getSent();
 	double getDelivery();
 
-protected:
-	osg::ref_ptr<EventReceiver> m_sender;
-	osg::ref_ptr<EventReceiver> m_receiver;
+	bool operator<(const Event& event);
 
-	double m_sent;
-	double m_delivery;
+protected:
+	Address _sender;
+	Address _receiver;
+
+	double _sent;
+	double _delivery;
 
 };
 
 template <typename ValueTy>
-class BaseEvent : public Event {
+class BaseEvent: public Event {
 
 public:
 	BaseEvent() { }
@@ -55,10 +72,10 @@ public:
 protected:
 	typename ValueTy m_value;
 
-};
+}; // template class BaseEvent
 
 template <typename ValueTy>
-class DynamicEvent : public BaseEvent<ValueTy> {
+class DynamicEvent: public BaseEvent<ValueTy> {
 
 public:
 	DynamicEvent() : m_hash(0) { }
@@ -75,10 +92,10 @@ public:
 protected:
 	unsigned int m_hash;
 	
-};
+}; // template class DynamicEvent
 
 template<class BaseClass, typename ValueTy>
-class StaticEvent : public BaseEvent<ValueTy> {
+class StaticEvent: public BaseEvent<ValueTy> {
 
 public:
 	StaticEvent() { }
@@ -90,8 +107,8 @@ public:
 protected:
 	static unsigned int m_hash;
 
-};
+}; // template class StaticEvent
 
-}
+}; // namespace sptEvents
 
 #endif
