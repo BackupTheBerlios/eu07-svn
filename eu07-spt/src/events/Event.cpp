@@ -4,7 +4,7 @@
 namespace sptEvents {
 
 Event::Event(): _sent(0.0f), _delivery(0.0f) { }
-Event::Event(unsigned int sender, unsigned int receiver): _sent(0.0f), _delivery(0.0f), _sender(sender), _receiver(receiver) { }
+Event::Event(const Address& sender, const Address& receiver): _sent(0.0f), _delivery(0.0f), _sender(sender), _receiver(receiver) { }
 
 Event::~Event() { }
 
@@ -15,21 +15,23 @@ Event::Address::Address() {
 
 }
 
-Event::Address::Address(int client, int context, int receiver) {
+Event::Address::Address(unsigned int client, unsigned int context, unsigned int receiver) {
 
-	_context = (client << 24) | (context & 00FFFFFFh);
+	_context = (client << 24) | (context & 0x0FFFFFF);
 	_receiver = receiver;
 
 }
 
-unsigned int Event::Address::getClient() { return (_context & FF000000) >> 24; }
-unsigned int Event::Address::getContext() { return (_context & 00FFFFFF); }
-unsigned int Event::Address::getReceiver() { return _receiver; }
+unsigned int const Event::Address::getClientId() { return (_context & 0xFF000000) >> 24; }
+unsigned int const Event::Address::getContextId() { return (_context & 0x00FFFFFF); }
+unsigned int const Event::Address::getReceiverId() { return _receiver; }
+
+bool const Event::Address::isValid() { return _context && _receiver; }
 
 unsigned int Event::getHash() { return 0; }
 
-unsigned int Event::getSender() { return _sender; }
-unsigned int Event::getReceiver() { return _receiver; }
+const Event::Address& Event::getSender() { return _sender; }
+const Event::Address& Event::getReceiver() { return _receiver; }
 
 double Event::getSent() { return _sent; }
 double Event::getDelivery() { return _delivery; }

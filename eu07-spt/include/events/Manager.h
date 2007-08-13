@@ -4,33 +4,31 @@
 #include <string>
 #include <map>
 
+#include "events/Event.h"
+
 namespace sptEvents {
 
 class Context;
-class Event;
 class Receiver;
-class Queue;
 
 class Manager {
 
 protected:
-	static Manager* m_instance;
+	static Manager* _instance;
 	Manager() { }
 
-	Queue* _queue;
+	Context* _root;
 
-	void setReceiver(Receiver* receiver, unsigned int id);
+	inline void setReceiver(Receiver* receiver, unsigned int id);
+	static void setInstance(Manager* manager);
 
 public:
-	typedef enum { LOCAL, CLIENT, SERVER } Mode;
-	typedef std::map<std::string, std::string> Settings;
-
-	static Manager* getInstance() { return m_instance;	}
-	static void init(Manager* manager);
+	static Manager* getInstance();
 
 	virtual void add(Receiver* receiver) = 0;
-	virtual Receiver* getReceiver(Event* event) = 0;
-	virtual Receiver* getSender(Event* event) = 0;
+	virtual const Event::Address& translate(std::string address) = 0;
+
+	virtual void send(Event* event) = 0;
 
 }; // class ReceiversManager
 

@@ -15,7 +15,7 @@ void LocalManager::add(Receiver* receiver) {
 Receiver* LocalManager::getReceiver(Event* event) {
 
 	Receiver* result = NULL;
-	Receivers::iterator iter = _receivers.find(event->getReceiver());
+	Receivers::iterator iter = _receivers.find(event->getReceiver()->getReceiverId());
 	
 	if(iter != _receivers.end())
 		result = iter->second;

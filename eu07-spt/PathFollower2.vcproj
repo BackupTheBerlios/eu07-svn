@@ -120,9 +120,6 @@
 			<File
 				RelativePath=".\src\Main.cpp">
 			</File>
-			<File
-				RelativePath=".\src\common\Subject.cpp\Subject.cpp">
-			</File>
 			<Filter
 				Name="Common"
 				Filter="">
@@ -136,7 +133,7 @@
 					RelativePath=".\src\common\FindNodeVisitor.cpp">
 				</File>
 				<File
-					RelativePath=".\include\common\Functors.h">
+					RelativePath=".\src\common\Subject.cpp\Subject.cpp">
 				</File>
 			</Filter>
 			<Filter
@@ -175,9 +172,6 @@
 				</File>
 				<File
 					RelativePath=".\src\events\Event.cpp">
-				</File>
-				<File
-					RelativePath=".\src\events\LocalContext.cpp">
 				</File>
 				<File
 					RelativePath=".\src\events\LocalManager.cpp">
@@ -244,6 +238,9 @@
 					RelativePath=".\include\common\FindNodeVisitor.h">
 				</File>
 				<File
+					RelativePath=".\include\common\Functors.h">
+				</File>
+				<File
 					RelativePath=".\include\common\Observer.h">
 				</File>
 				<File
@@ -269,12 +266,6 @@
 					RelativePath=".\include\events\Event.h">
 				</File>
 				<File
-					RelativePath=".\include\events\LocalContext.h">
-				</File>
-				<File
-					RelativePath=".\include\events\LocalManager.h">
-				</File>
-				<File
 					RelativePath=".\include\events\Manager.h">
 				</File>
 				<File
@@ -282,9 +273,6 @@
 				</File>
 				<File
 					RelativePath=".\include\events\Receiver.h">
-				</File>
-				<File
-					RelativePath=".\include\events\ServerManager.h">
 				</File>
 			</Filter>
 		</Filter>

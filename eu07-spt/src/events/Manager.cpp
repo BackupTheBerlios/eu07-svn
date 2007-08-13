@@ -1,17 +1,20 @@
 #include "events/Manager.h"
 
-#include "events/LocalManager.h"
-#include "events/ClientManager.h"
-#include "events/ServerManager.h"
 #include "events/Receiver.h"
 
 namespace sptEvents {
 
-void Manager::init(Manager* manager) {
+void Manager::setInstance(Manager* manager) {
 
-	m_instance = manager;
+	_instance = manager;
 
 } // Manager::init
+
+Manager* Manager::getInstance() { 
+	
+	return Manager::_instance; 
+
+}
 
 void Manager::setReceiver(Receiver* receiver, unsigned int id) {
 
@@ -20,6 +23,6 @@ void Manager::setReceiver(Receiver* receiver, unsigned int id) {
 
 } // Manager::setReceiver
 
-Manager* Manager::m_instance = NULL;
+Manager* Manager::_instance = NULL;
 
 } // namespace sptEvents

@@ -24,7 +24,7 @@ void Queue::update(double time) {
 
 		while( event && _events.size() && (event->getDelivery() <= _time) ) {
 
-			_manager->getReceiver(event)->handle(event);
+			_manager->send(event);
 			_events.pop_back();
 			event = _events.back();
 

@@ -2,14 +2,14 @@
 #define EVENTRECEIVER_H 1
 
 #include <map>
-#include <osg/Object>
+#include <osg/Node>
+#include <osg/NodeVisitor>
 
 #include "events/Event.h"
 #include "common/Subject.h"
 
 namespace sptEvents {
 
-class Event;
 class Manager;
 
 class Receiver: public osg::Node, public spt::Subject {
@@ -25,21 +25,21 @@ protected:
 
 	}; // class Receiver::Handler
 
-	typedef std::map< unsigned int, Handler > Handlers;
-	typedef std::pair< unsigned int, Handler > HandlerPair;
+	typedef std::map< Event::Id, Handler > Handlers;
+	typedef std::pair< Event::Id, Handler > HandlerPair;
 
 	friend class Manager;
 
 public:
 
-	Receiver(): _registered(false), _id(0) { }
-	Receiver(const Receiver& receiver, const osg::CopyOp& copyop=osg::CopyOp::SHALLOW_COPY) { }
+	Receiver();
+	Receiver(const Receiver& receiver, const osg::CopyOp& copyop=osg::CopyOp::SHALLOW_COPY);
 
 	META_Node(sptEvents, Receiver);
 
-	virtual void handle(Event* event) { };
-	bool isRegistered() { return _registered; }
-	unsigned int getId() { return _id; }
+	virtual void handle(Event* event);
+	bool isRegistered();
+	unsigned int getId();
 
 };
 

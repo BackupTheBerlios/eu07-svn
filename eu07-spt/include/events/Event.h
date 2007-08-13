@@ -6,7 +6,6 @@
 namespace sptEvents {
 
 class Receiver;
-//class EventIds;
 class Queue;
 
 class Event: public osg::Referenced {
@@ -18,17 +17,22 @@ public:
 	class Address {
 
 	public:
+		Address();
 		Address(unsigned int client, unsigned int context, unsigned int receiver);
 
-		unsigned int getClient();
-		unsigned int getContext();
-		unsigned int getReceiver();
+		unsigned int const getClientId();
+		unsigned int const getContextId();
+		unsigned int const getReceiverId();
+
+		bool const isValid();
 
 	protected:
 		unsigned int _context;
 		unsigned int _receiver;
 
-	}
+	};
+
+	typedef unsigned int Id;
 
 	Event();
 	Event(const Address& sender, const Address& receiver);
@@ -38,7 +42,7 @@ public:
 
 	//META_Object(spt, Event);
 
-	virtual unsigned int getHash();
+	virtual Id getHash();
 
 	const Address& getSender();
 	const Address& getReceiver();
@@ -87,10 +91,10 @@ public:
 	DynamicEvent(std::string name, ValueTy& value) : m_value(value) { m_hash = sptCommon::DJBHash(name); }
 
 	virtual ~DynamicEvent() { }
-	virtual unsigned int getHash() { return m_hash; }
+	virtual Id getHash() { return m_hash; }
 
 protected:
-	unsigned int m_hash;
+	Id m_hash;
 	
 }; // template class DynamicEvent
 
@@ -102,10 +106,10 @@ public:
 	StaticEvent(ValueTy& value) : m_value(value) { }
 
 	virtual ~StaticEvent() { }
-	virtual unsigned int getHash() { return m_hash; }
+	virtual Id getHash() { return m_hash; }
 
 protected:
-	static unsigned int m_hash;
+	static Id m_hash;
 
 }; // template class StaticEvent
 
