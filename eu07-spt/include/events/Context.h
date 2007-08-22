@@ -3,21 +3,24 @@
 
 #include "events/Receiver.h"
 
-
 #include <vector>
-#include <osg/Group>
 
 namespace sptEvents {
 
 class Event;
 
-class Context: public osg::Group, public Receiver {
+class Context: public Receiver {
 
 public:
-	virtual bool addChild(osg::Node* child) = 0;
-	virtual bool insertChild(unsigned int index, osg::Node* child) = 0;
-	virtual void traverse(osg::NodeVisitor& nv) = 0;
-	void notify();
+	Context();
+	Context(const Context& receiver, const osg::CopyOp& copyop=osg::CopyOp::SHALLOW_COPY);
+
+	META_Node(sptEvents, Context);
+
+	virtual bool addChild(osg::Node* child);
+	virtual bool insertChild(unsigned int index, osg::Node* child);
+//	virtual void traverse(osg::NodeVisitor& nv);
+//	void notify();
 
 }; // class Context
 

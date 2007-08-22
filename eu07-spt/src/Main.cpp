@@ -11,7 +11,7 @@ using namespace sptEvents;
 
 int main() {
 
-	new LocalManager();
+	new LocalManager(new sptEvents::Context());
 
     osg::Group* rootNode = new osg::Group();
 

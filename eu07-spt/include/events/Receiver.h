@@ -4,6 +4,7 @@
 #include <map>
 #include <osg/Node>
 #include <osg/NodeVisitor>
+#include <osg/Group>
 
 #include "events/Event.h"
 #include "common/Subject.h"
@@ -12,11 +13,11 @@ namespace sptEvents {
 
 class Manager;
 
-class Receiver: public osg::Node, public spt::Subject {
+class Receiver: public osg::Group, public spt::Subject {
 
 protected:
 	bool _registered;
-	Event::Address& _address;
+	Event::Address _address;
 
 	class Handler {
 
@@ -39,7 +40,7 @@ public:
 
 	virtual void handle(Event* event);
 	bool isRegistered();
-	Event::Address& getAddress();
+	const Event::Address& getAddress();
 
 };
 

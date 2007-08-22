@@ -2,6 +2,7 @@
 
 #include "events/Event.h"
 #include "events/Receiver.h"
+#include "events/Context.h"
 
 #include "common/FindDomainNodeVisitor.h"
 
@@ -63,10 +64,10 @@ void LocalManager::send(Event* event) {
 const Event::Address& LocalManager::translate(std::string path) {
 
 	spt::FindDomainNodeVisitor visitor(path);
-	visitor.apply(_root);
-	Receiver* node = dynamic_cast<Receiver*> visitor.getResult();
+	_root->accept(visitor);
+	Receiver* node = dynamic_cast<Receiver*>(visitor.getNode());
 
-	if(node != null)
+	if(node != NULL)
 		return node->getAddress();
 
 }
