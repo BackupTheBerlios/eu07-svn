@@ -7,24 +7,26 @@
 
 namespace sptEvents {
 
-class LocalManager: public Manager {
+	class LocalManager: public Manager {
 
-protected:
-	typedef std::map<unsigned int, Receiver*> Receivers;
-	typedef std::pair<unsigned int, Receiver*> ReceiversItem;
+	protected:
+		typedef std::map<unsigned int, Receiver*> Receivers;
+		typedef std::pair<unsigned int, Receiver*> ReceiversItem;
 
-	Receivers _receivers;
-	unsigned int _maxId;
+		Receivers _receivers;
+		unsigned int _maxId;
 
-public:
-	LocalManager() : _maxId(1) { }
+		virtual Receiver* getReceiver(Event* event);
+		virtual Receiver* getSender(Event* event);
 
-	virtual void add(Receiver* receiver);
+	public:
+		LocalManager() : _maxId(1) { }
 
-	virtual Receiver* getReceiver(Event* event);
-	virtual Receiver* getSender(Event* event);
+		virtual void add(Receiver* receiver);
+		virtual const Event::Address& translate(std::string address);
+		virtual void send(Event* event);
 
-}; // class LocalReceiversManager
+	}; // class LocalReceiversManager
 
 }; // namespace sptEvents
 

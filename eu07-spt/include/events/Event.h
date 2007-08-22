@@ -20,11 +20,11 @@ public:
 		Address();
 		Address(unsigned int client, unsigned int context, unsigned int receiver);
 
-		unsigned int const getClientId();
-		unsigned int const getContextId();
-		unsigned int const getReceiverId();
+		unsigned int getClientId() const; 
+		unsigned int getContextId() const;
+		unsigned int getReceiverId() const;
 
-		bool const isValid();
+		bool isValid() const;
 
 	protected:
 		unsigned int _context;

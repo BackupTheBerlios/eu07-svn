@@ -9,18 +9,18 @@ namespace spt {
 class FindNodeVisitor : public osg::NodeVisitor { 
 public: 
    FindNodeVisitor(); 
-   FindNodeVisitor(const std::string &searchName) ;
+   FindNodeVisitor(const std::string &name);
 
-   virtual void apply(osg::Node &searchNode);
+   virtual void apply(osg::Node &node);
 
-   void setNameToFind(const std::string &searchName);
-   typedef std::vector<osg::Node*> nodeListType; 
+   void setName(const std::string &name);
+   typedef std::vector<osg::Node*> Nodes; 
 
-   nodeListType& getNodeList() { return foundNodeList; }
+   Nodes& getNodes() { return _nodes; }
 
 private: 
-   std::string searchForName; 
-   nodeListType foundNodeList; 
+   std::string _name;
+   Nodes _nodes;
 
 }; // class FindNodeVisitor
 

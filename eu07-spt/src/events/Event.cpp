@@ -22,11 +22,11 @@ Event::Address::Address(unsigned int client, unsigned int context, unsigned int 
 
 }
 
-unsigned int const Event::Address::getClientId() { return (_context & 0xFF000000) >> 24; }
-unsigned int const Event::Address::getContextId() { return (_context & 0x00FFFFFF); }
-unsigned int const Event::Address::getReceiverId() { return _receiver; }
+unsigned int Event::Address::getClientId() const { return (_context & 0xFF000000) >> 24; }
+unsigned int Event::Address::getContextId() const { return (_context & 0x00FFFFFF); }
+unsigned int Event::Address::getReceiverId() const { return _receiver; }
 
-bool const Event::Address::isValid() { return _context && _receiver; }
+bool Event::Address::isValid() const { return _context && _receiver; }
 
 unsigned int Event::getHash() { return 0; }
 

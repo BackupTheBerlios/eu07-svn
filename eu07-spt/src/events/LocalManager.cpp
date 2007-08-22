@@ -15,7 +15,7 @@ void LocalManager::add(Receiver* receiver) {
 Receiver* LocalManager::getReceiver(Event* event) {
 
 	Receiver* result = NULL;
-	Receivers::iterator iter = _receivers.find(event->getReceiver()->getReceiverId());
+	Receivers::iterator iter = _receivers.find(event->getReceiver().getReceiverId());
 	
 	if(iter != _receivers.end())
 		result = iter->second;
@@ -27,7 +27,7 @@ Receiver* LocalManager::getReceiver(Event* event) {
 Receiver* LocalManager::getSender(Event* event) {
 
 	Receiver* result = NULL;
-	Receivers::iterator iter = _receivers.find(event->getSender());
+	Receivers::iterator iter = _receivers.find(event->getSender().getReceiverId());
 	
 	if(iter != _receivers.end())
 		result = iter->second;
@@ -35,5 +35,18 @@ Receiver* LocalManager::getSender(Event* event) {
 	return result;
 
 } // getSender
+
+void LocalManager::send(Event* event) {
+
+	Receivers::iterator iter = _receivers.find(event->getSender().getReceiverId());
+	
+	if(iter != _receivers.end()) {
+
+		Receiver* receiver = iter->second;
+		receiver->handle(event);
+
+	}
+
+}
 
 } // namespace sptEvents
