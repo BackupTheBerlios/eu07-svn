@@ -16,13 +16,6 @@ Manager* Manager::getInstance() {
 
 }
 
-void Manager::setReceiver(Receiver* receiver, unsigned int id) {
-
-	receiver->_id = id;
-	receiver->_registered = true;
-
-} // Manager::setReceiver
-
 Manager* Manager::_instance = NULL;
 
 } // namespace sptEvents

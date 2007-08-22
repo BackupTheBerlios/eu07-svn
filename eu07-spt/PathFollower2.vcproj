@@ -130,6 +130,9 @@
 					RelativePath=".\src\common\Exception.cpp">
 				</File>
 				<File
+					RelativePath=".\src\common\FindDomainNodeVisitor.cpp">
+				</File>
+				<File
 					RelativePath=".\src\common\FindNodeVisitor.cpp">
 				</File>
 				<File
@@ -235,6 +238,9 @@
 					RelativePath=".\include\common\Exception.h">
 				</File>
 				<File
+					RelativePath=".\include\common\FindDomainNodeVisitor.h">
+				</File>
+				<File
 					RelativePath=".\include\common\FindNodeVisitor.h">
 				</File>
 				<File
@@ -264,6 +270,9 @@
 				</File>
 				<File
 					RelativePath=".\include\events\Event.h">
+				</File>
+				<File
+					RelativePath=".\include\events\LocalManager.h">
 				</File>
 				<File
 					RelativePath=".\include\events\Manager.h">

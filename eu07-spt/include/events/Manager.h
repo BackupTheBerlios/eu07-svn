@@ -19,7 +19,7 @@ protected:
 
 	Context* _root;
 
-	inline void setReceiver(Receiver* receiver, unsigned int id);
+	void setReceiver(Receiver* receiver, unsigned int id);
 	static void setInstance(Manager* manager);
 
 public:

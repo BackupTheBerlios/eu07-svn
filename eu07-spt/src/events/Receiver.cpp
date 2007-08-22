@@ -4,7 +4,7 @@
 
 namespace sptEvents {
 
-Receiver::Receiver() : _registered(false), _id(0) { }
+Receiver::Receiver() : _registered(false), _address() { }
 Receiver::Receiver(const Receiver& receiver, const osg::CopyOp& copyop) { }
 
 void Receiver::handle(Event* event) { }

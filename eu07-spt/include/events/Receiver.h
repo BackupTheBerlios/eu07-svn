@@ -16,7 +16,7 @@ class Receiver: public osg::Node, public spt::Subject {
 
 protected:
 	bool _registered;
-	unsigned int _id;
+	Event::Address& _address;
 
 	class Handler {
 
@@ -39,7 +39,7 @@ public:
 
 	virtual void handle(Event* event);
 	bool isRegistered();
-	unsigned int getId();
+	Event::Address& getAddress();
 
 };
 

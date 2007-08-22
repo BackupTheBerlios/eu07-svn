@@ -6,15 +6,17 @@
 namespace spt {
 
 class FindDomainNodeVisitor : public FindNodeVisitor { 
-public: 
-	FindDomainNodeVisitor(); 
-	FindDomainNodeVisitor(const std::string& name, const bool& strict);
-
-	virtual void apply(osg::Node &node);
 
 private: 
-	bool _strict;
-	std::string getActiveName();
+	std::string _name;
+	osg::Node* _node;
+
+public: 
+	FindDomainNodeVisitor(); 
+	FindDomainNodeVisitor(const std::string& name);
+
+	virtual void apply(osg::Node &node);
+	osg::Node* getNode();
 
 }; // class FindDomainNodeVisitor
 

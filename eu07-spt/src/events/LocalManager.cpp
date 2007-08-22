@@ -1,8 +1,19 @@
 #include "events/LocalManager.h"
 
 #include "events/Event.h"
+#include "events/Receiver.h"
+
+#include "common/FindDomainNodeVisitor.h"
 
 namespace sptEvents {
+
+void Manager::setReceiver(Receiver* receiver, unsigned int id) {
+
+	receiver->_address = Event::Address(0, id);
+	receiver->_registered = true;
+
+} // Manager::setReceiver
+
 
 void LocalManager::add(Receiver* receiver) {
 
@@ -46,6 +57,17 @@ void LocalManager::send(Event* event) {
 		receiver->handle(event);
 
 	}
+
+}
+
+const Event::Address& LocalManager::translate(std::string path) {
+
+	spt::FindDomainNodeVisitor visitor(path);
+	visitor.apply(_root);
+	Receiver* node = dynamic_cast<Receiver*> visitor.getResult();
+
+	if(node != null)
+		return node->getAddress();
 
 }
 

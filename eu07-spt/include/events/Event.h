@@ -14,21 +14,28 @@ friend class Queue;
 
 public:
 
+	class Compare {
+
+	public:
+		int operator()(const Event*& left, const Event*& right) {
+			return (left->_delivery) > (right->_delivery);
+		}
+
+	};
+
 	class Address {
 
 	public:
 		Address();
-		Address(unsigned int client, unsigned int context, unsigned int receiver);
+		Address(unsigned int client, unsigned int receiver);
 
 		unsigned int getClientId() const; 
-		unsigned int getContextId() const;
 		unsigned int getReceiverId() const;
 
 		bool isValid() const;
 
 	protected:
-		unsigned int _context;
-		unsigned int _receiver;
+		unsigned int _address;
 
 	};
 

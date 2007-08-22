@@ -10,23 +10,20 @@ Event::~Event() { }
 
 Event::Address::Address() {
 
-	_context = 0;
-	_receiver = 0;
+_address = 0;
 
 }
 
-Event::Address::Address(unsigned int client, unsigned int context, unsigned int receiver) {
+Event::Address::Address(unsigned int client, unsigned int receiver) {
 
-	_context = (client << 24) | (context & 0x0FFFFFF);
-	_receiver = receiver;
+	_address = (client << 24) | (receiver & 0x00FFFFFF);
 
 }
 
-unsigned int Event::Address::getClientId() const { return (_context & 0xFF000000) >> 24; }
-unsigned int Event::Address::getContextId() const { return (_context & 0x00FFFFFF); }
-unsigned int Event::Address::getReceiverId() const { return _receiver; }
+unsigned int Event::Address::getClientId() const { return (_address & 0xFF000000) >> 24; }
+unsigned int Event::Address::getReceiverId() const { return _address & 0x00FFFFFF; }
 
-bool Event::Address::isValid() const { return _context && _receiver; }
+bool Event::Address::isValid() const { return (_address != 0); }
 
 unsigned int Event::getHash() { return 0; }
 
