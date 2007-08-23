@@ -3,6 +3,7 @@
 #include <osg/Group>
 #include <osgProducer/Viewer>
 
+#include "events/Receiver.h"
 #include "events/Manager.h"
 #include "events/LocalManager.h"
 
@@ -11,7 +12,7 @@ using namespace sptEvents;
 
 int main() {
 
-	new LocalManager(new sptEvents::Context());
+	new LocalManager(new Receiver());
 
     osg::Group* rootNode = new osg::Group();
 

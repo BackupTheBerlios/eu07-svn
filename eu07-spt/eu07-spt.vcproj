@@ -130,6 +130,9 @@
 					RelativePath=".\src\common\Exception.cpp">
 				</File>
 				<File
+					RelativePath=".\src\common\FindDomainNodeVisitor.cpp">
+				</File>
+				<File
 					RelativePath=".\src\common\FindNodeVisitor.cpp">
 				</File>
 				<File
@@ -167,9 +170,6 @@
 			<Filter
 				Name="Events"
 				Filter="">
-				<File
-					RelativePath=".\src\events\Context.cpp">
-				</File>
 				<File
 					RelativePath=".\src\events\Event.cpp">
 				</File>
@@ -260,10 +260,10 @@
 					RelativePath=".\include\events\ClientManager.h">
 				</File>
 				<File
-					RelativePath=".\include\events\Context.h">
+					RelativePath=".\include\events\Event.h">
 				</File>
 				<File
-					RelativePath=".\include\events\Event.h">
+					RelativePath=".\include\events\LocalManager.h">
 				</File>
 				<File
 					RelativePath=".\include\events\Manager.h">

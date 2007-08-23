@@ -2,6 +2,8 @@
 
 namespace sptEvents {
 
+	Context::Context() {
+
 bool Context::addChild(osg::Node* child) {
 
 	return false;

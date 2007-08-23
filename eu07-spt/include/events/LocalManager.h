@@ -10,7 +10,7 @@ namespace sptEvents {
 
 	/**
 	 * @class LocalManager
-	 * Events manager used in single-client mode 
+	 * Events manager for local machine mode 
 	 *
 	 * @author Zbyszek "ShaXbee" Mandziejewicz
 	 * @date 23-08-2007
@@ -32,14 +32,11 @@ namespace sptEvents {
 		//! Events queue
 		EventQueue _queue;
 
-		//! Root events context
-		Context* _root;
-
 		virtual Receiver* getReceiver(Event* event);
 		virtual Receiver* getSender(Event* event);
 
 	public:
-		LocalManager(Context* root) : _maxId(1), _root(root) { }
+		LocalManager(Receiver* root);
 
 		//! Register new receiver and assign unique id
 		virtual void add(Receiver* receiver);
@@ -47,6 +44,8 @@ namespace sptEvents {
 		virtual const Event::Address& translate(std::string path);
 		//! Send event
 		virtual void send(Event* event);
+
+		virtual void update(double time);
 
 	}; // class LocalReceiversManager
 

@@ -8,68 +8,76 @@
 
 namespace sptEvents {
 
-void Manager::setReceiver(Receiver* receiver, unsigned int id) {
+	LocalManager::LocalManager(Receiver* root): Manager(0, root), _maxId(0) { }
 
-	receiver->_address = Event::Address(0, id);
-	receiver->_registered = true;
+	void LocalManager::add(Receiver* receiver) {
 
-} // Manager::setReceiver
+		_receivers.insert(ReceiversItem(_maxId, receiver));
+		setReceiver(receiver, _maxId);
+		_maxId++;
 
+	} // LocalManager::add
 
-void LocalManager::add(Receiver* receiver) {
+	Receiver* LocalManager::getReceiver(Event* event) {
 
-	_receivers.insert(ReceiversItem(_maxId, receiver));
-	setReceiver(receiver, _maxId);
-	_maxId++;
+		Receiver* result = NULL;
+		Receivers::iterator iter = _receivers.find(event->getReceiver().getReceiverId());
 
-} // add
+		if(iter != _receivers.end())
+			result = iter->second;
 
-Receiver* LocalManager::getReceiver(Event* event) {
+		return result;
 
-	Receiver* result = NULL;
-	Receivers::iterator iter = _receivers.find(event->getReceiver().getReceiverId());
-	
-	if(iter != _receivers.end())
-		result = iter->second;
+	} // getReceiver
 
-	return result;
+	Receiver* LocalManager::getSender(Event* event) {
 
-} // getReceiver
+		Receiver* result = NULL;
+		Receivers::iterator iter = _receivers.find(event->getSender().getReceiverId());
 
-Receiver* LocalManager::getSender(Event* event) {
+		if(iter != _receivers.end())
+			result = iter->second;
 
-	Receiver* result = NULL;
-	Receivers::iterator iter = _receivers.find(event->getSender().getReceiverId());
-	
-	if(iter != _receivers.end())
-		result = iter->second;
+		return result;
 
-	return result;
+	} // getSender
 
-} // getSender
+	void LocalManager::send(Event* event) {
 
-void LocalManager::send(Event* event) {
-
-	Receivers::iterator iter = _receivers.find(event->getSender().getReceiverId());
-	
-	if(iter != _receivers.end()) {
-
-		Receiver* receiver = iter->second;
-		receiver->handle(event);
+		_queue.push(event);
 
 	}
 
-}
+	const Event::Address& LocalManager::translate(std::string path) {
 
-const Event::Address& LocalManager::translate(std::string path) {
+		spt::FindDomainNodeVisitor visitor(path);
+		_root->accept(visitor);
+		Receiver* node = dynamic_cast<Receiver*>(visitor.getNode());
 
-	spt::FindDomainNodeVisitor visitor(path);
-	_root->accept(visitor);
-	Receiver* node = dynamic_cast<Receiver*>(visitor.getNode());
+		if(node != NULL)
+			return node->getAddress();
 
-	if(node != NULL)
-		return node->getAddress();
+	}
 
-}
+	void LocalManager::update(double time) {
+
+		Event* event;
+
+		while(!_queue.empty() && ((event = _queue.top()) != NULL) && (event->getDelivery() < time)) {
+
+			Receivers::iterator iter = _receivers.find(event->getSender().getReceiverId());
+
+			if(iter != _receivers.end()) {
+
+				Receiver* receiver = iter->second;
+				iter->second->handle(event);
+
+			}
+
+			_queue.pop();
+
+		}
+
+	} // LocalManager::update
 
 } // namespace sptEvents

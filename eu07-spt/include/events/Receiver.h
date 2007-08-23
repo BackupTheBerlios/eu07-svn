@@ -11,100 +11,101 @@
 
 namespace sptEvents {
 
-class Manager;
+	class Receiver: public osg::Group, public spt::Subject {
 
-class Receiver: public osg::Group, public spt::Subject {
+	protected:
+		bool _registered;
+		Event::Address _address;
 
-protected:
-	bool _registered;
-	Event::Address _address;
+		class Handler {
 
-	class Handler {
+		public:
+			virtual void handle(Receiver* receiver, Event* event) = 0;
+
+		}; // class Receiver::Handler
+
+		typedef std::map< Event::Id, Handler > Handlers;
+		typedef std::pair< Event::Id, Handler > HandlerPair;
+
+		friend class Manager;
 
 	public:
-		virtual void handle(Receiver* receiver, Event* event) = 0;
 
-	}; // class Receiver::Handler
+		Receiver();
+		Receiver(const Receiver& receiver, const osg::CopyOp& copyop=osg::CopyOp::SHALLOW_COPY);
 
-	typedef std::map< Event::Id, Handler > Handlers;
-	typedef std::pair< Event::Id, Handler > HandlerPair;
+		META_Node(sptEvents, Receiver);
 
-	friend class Manager;
+		virtual void handle(Event* event);
+		bool isRegistered();
+		const Event::Address& getAddress();
 
-public:
+		virtual bool addChild(osg::Node* child);
+		virtual bool insertChild(unsigned int index, osg::Node* child);
 
-	Receiver();
-	Receiver(const Receiver& receiver, const osg::CopyOp& copyop=osg::CopyOp::SHALLOW_COPY);
+	};
 
-	META_Node(sptEvents, Receiver);
+	template <class Cl>
+	class BaseReceiver: public Receiver {
 
-	virtual void handle(Event* event);
-	bool isRegistered();
-	const Event::Address& getAddress();
+	public:
+		virtual void handle(Event* event) {
 
-};
+			if(iter = m_handlers.find(event->getHash()) && iter != m_handlers.end())
+				iter->handle(this, event);
 
-template <class Cl>
-class BaseReceiver: public Receiver {
+		}
 
-public:
-	virtual void handle(Event* event) {
+	private:
+		static Handlers m_handlers;
 
-		if(iter = m_handlers.find(event->getHash()) && iter != m_handlers.end())
-			iter->handle(this, event);
+		void addHandler(const std::string& name, Handler* handler) {
 
-	}
+			m_handlers.insert(HandlerPair(DJBHash(name), handler));
 
-private:
-	static Handlers m_handlers;
+		}
 
-	void addHandler(const std::string& name, Handler* handler) {
+	};
 
-		m_handlers.insert(HandlerPair(DJBHash(name), handler));
+	template <typename Cl, typename Ty>
+	class BaseHandler: public Receiver::Handler {
 
-	}
+	private:
+		typedef BaseEvent <typename Ty> EventCl;
+		typedef void (Cl::*MethodPtr)(EventCl*);
 
-};
+		MethodPtr _method;
 
-template <typename Cl, typename Ty>
-class BaseHandler: public Receiver::Handler {
+	public:
+		BaseHandler(MethodPtr method) : m_method(method) { }
 
-private:
-	typedef BaseEvent <typename Ty> EventCl;
-	typedef void (Cl::*MethodPtr)(EventCl*);
+		virtual void handle(Receiver* receiver, Event* event) {
 
-	MethodPtr _method;
-	
-public:
-	BaseHandler(MethodPtr method) : m_method(method) { }
+			(*receiver.*_method)(static_cast<EventCl*>(event));
 
-	virtual void handle(Receiver* receiver, Event* event) {
+		}
 
-		(*receiver.*_method)(static_cast<EventCl*>(event));
+	};
 
-	}
+	template<class Cl, typename Ty>
+	class BaseValueHandler: public Receiver::Handler {
 
-};
+	private:
+		typedef void (Cl::*MethodPtr)(Ty);
+		typedef BaseEvent<Ty> EventCl;
 
-template<class Cl, typename Ty>
-class BaseValueHandler: public Receiver::Handler {
+		MethodPtr _method;
 
-private:
-	typedef void (Cl::*MethodPtr)(Ty);
-	typedef BaseEvent<Ty> EventCl;
+	public:
+		BaseValueHandler(MethodPtr method) : _method(method) { }
 
-	MethodPtr _method;
+		virtual void handle(Receiver* receiver, Event* event) {
 
-public:
-	BaseValueHandler(MethodPtr method) : _method(method) { }
+			(*receiver.*_method)(static_cast<EventCl*>(event)->getValue());
 
-	virtual void handle(Receiver* receiver, Event* event) {
+		}
 
-		(*receiver.*_method)(static_cast<EventCl*>(event)->getValue());
-
-	}
-
-};
+	};
 
 } // namespace sptEvents
 

@@ -4,18 +4,28 @@
 
 namespace sptEvents {
 
-void Manager::setInstance(Manager* manager) {
+	Manager::Manager(): _client(0), _root(NULL) { }
+	Manager::Manager(unsigned int client, Receiver* root): _client(client), _root(root) { }
 
-	_instance = manager;
+	void Manager::setReceiver(Receiver* receiver, unsigned int id) {
 
-} // Manager::init
+		receiver->_address = Event::Address(_client, id);
+		receiver->_registered = true;
 
-Manager* Manager::getInstance() { 
-	
-	return Manager::_instance; 
+	} // Manager::setReceiver
 
-}
+	void Manager::setInstance(Manager* manager) {
 
-Manager* Manager::_instance = NULL;
+		_instance = manager;
+
+	} // Manager::init
+
+	Manager* Manager::getInstance() { 
+
+		return Manager::_instance; 
+
+	}
+
+	Manager* Manager::_instance = NULL;
 
 } // namespace sptEvents

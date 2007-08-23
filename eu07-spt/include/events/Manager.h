@@ -8,29 +8,31 @@
 
 namespace sptEvents {
 
-class Context;
-class Receiver;
+	class Receiver;
 
-class Manager {
+	class Manager {
 
-protected:
-	static Manager* _instance;
-	Manager() { }
+	protected:
+		static Manager* _instance;
+		Manager();
+		Manager(unsigned int client, Receiver* root);
 
-	Context* _root;
+		unsigned int _client;
+		Receiver* _root;
 
-	void setReceiver(Receiver* receiver, unsigned int id);
-	static void setInstance(Manager* manager);
+		void setReceiver(Receiver* receiver, unsigned int id);
+		static void setInstance(Manager* manager);
 
-public:
-	static Manager* getInstance();
+	public:
+		static Manager* getInstance();
 
-	virtual void add(Receiver* receiver) = 0;
-	virtual const Event::Address& translate(std::string address) = 0;
+		virtual void add(Receiver* receiver) = 0;
+		virtual const Event::Address& translate(std::string address) = 0;
 
-	virtual void send(Event* event) = 0;
+		virtual void send(Event* event) = 0;
+		virtual void update(double time) = 0;
 
-}; // class ReceiversManager
+	}; // class Manager
 
 }; // namespace sptEvents
 
