@@ -1,5 +1,5 @@
 Microsoft Visual Studio Solution File, Format Version 8.00
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "eu07-spt", "PathFollower2.vcproj", "{1CA1A5FD-87A6-437B-B0C5-F5F25D697C3C}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "eu07-spt", "eu07-spt.vcproj", "{1CA1A5FD-87A6-437B-B0C5-F5F25D697C3C}"
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
@@ -10,6 +10,7 @@ Global
 	EndGlobalSection
 	GlobalSection(ProjectConfiguration) = postSolution
 		{1CA1A5FD-87A6-437B-B0C5-F5F25D697C3C}.Debug.ActiveCfg = Debug|Win32
+		{1CA1A5FD-87A6-437B-B0C5-F5F25D697C3C}.Debug.Build.0 = Debug|Win32
 		{1CA1A5FD-87A6-437B-B0C5-F5F25D697C3C}.Release.ActiveCfg = Release|Win32
 		{1CA1A5FD-87A6-437B-B0C5-F5F25D697C3C}.Release.Build.0 = Release|Win32
 	EndGlobalSection
