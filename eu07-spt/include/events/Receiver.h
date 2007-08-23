@@ -22,7 +22,7 @@ namespace sptEvents {
 		class Handler {
 
 		public:
-			virtual void handle(Receiver* receiver, Event* event) = 0;
+			virtual void handle(Receiver* receiver, Event* event);
 
 		}; // class Receiver::Handler
 

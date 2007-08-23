@@ -51,6 +51,8 @@ namespace sptEvents {
 
 	}
 
+	void Receiver::Handler::handle(Receiver* receiver, Event* event) { }
+
 	Receiver::ObserversVisitor::ObserversVisitor(spt::Observer* observer, const Operation& operation): osg::NodeVisitor(TRAVERSE_ALL_CHILDREN), _observer(observer), _operation(operation) { }
 
 	void Receiver::ObserversVisitor::apply(osg::Node& node) {
