@@ -103,8 +103,8 @@ namespace sptEvents {
 	class BaseHandler: public Receiver::Handler {
 
 	private:
-		typedef BaseEvent <typename Ty> EventCl;
-		typedef void (Cl::*MethodPtr)(EventCl*);
+		typedef typename BaseEvent <Ty> EventCl;
+		typedef typename void (Cl::*MethodPtr)(EventCl*);
 
 		MethodPtr _method;
 
@@ -123,8 +123,8 @@ namespace sptEvents {
 	class BaseValueHandler: public Receiver::Handler {
 
 	private:
-		typedef void (Cl::*MethodPtr)(Ty);
-		typedef BaseEvent<Ty> EventCl;
+		typedef typename void (Cl::*MethodPtr)(Ty);
+		typedef typename BaseEvent<Ty> EventCl;
 
 		MethodPtr _method;
 

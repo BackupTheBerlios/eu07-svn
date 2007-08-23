@@ -7,7 +7,7 @@
 #include "events/Manager.h"
 #include "events/LocalManager.h"
 
-#include "debug/DumpReceiversVisitor.h"
+//#include "debug/DumpReceiversVisitor.h"
 
 //using namespace spt;
 using namespace sptEvents;
@@ -21,8 +21,8 @@ int main() {
 	manager->getRoot()->addChild(new Receiver("receiver2"));
 	manager->getRoot()->addChild(new Receiver("receiver3"));
 
-	sptDebug::DumpReceiversVisitor visitor;
-	manager->getRoot()->accept(visitor);
+//	sptDebug::DumpReceiversVisitor visitor;
+//	manager->getRoot()->accept(visitor);
 	Event::Address address = manager->translate("root.receiver2");
 
 	std::cout << address.getReceiverId() << std::endl;
