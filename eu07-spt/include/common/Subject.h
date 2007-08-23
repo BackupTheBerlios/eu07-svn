@@ -16,8 +16,8 @@ protected:
 public:
 	Subject();
 
-    void attach(Observer* observer);
-    void detach(Observer* observer);
+    virtual void attach(Observer* observer);
+    virtual void detach(Observer* observer);
     void notify();
 
 }; // class Subject

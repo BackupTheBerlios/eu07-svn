@@ -3,20 +3,28 @@
 
 #include "common/FindNodeVisitor.h"
 
+#include <string>
+#include <vector>
+
 namespace spt {
 
-class FindDomainNodeVisitor : public FindNodeVisitor { 
+class FindDomainNodeVisitor: public FindNodeVisitor { 
 
 private: 
-	std::string _name;
+	typedef std::vector<std::string> NodePath;
+
+	NodePath _path;
+	NodePath::iterator _iter;
 	osg::Node* _node;
 
 public: 
 	FindDomainNodeVisitor(); 
 	FindDomainNodeVisitor(const std::string& name);
 
+	void setName(const std::string& name);
+
 	virtual void apply(osg::Node &node);
-	osg::Node* getNode();
+	virtual void traverse(osg::Node& node);
 
 }; // class FindDomainNodeVisitor
 

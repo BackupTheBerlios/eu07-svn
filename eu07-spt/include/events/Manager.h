@@ -17,6 +17,7 @@ namespace sptEvents {
 		Manager();
 		Manager(unsigned int client, Receiver* root);
 
+		double _time;
 		unsigned int _client;
 		Receiver* _root;
 
@@ -25,6 +26,9 @@ namespace sptEvents {
 
 	public:
 		static Manager* getInstance();
+
+		Receiver* getRoot();
+		const double& getTime();
 
 		virtual void add(Receiver* receiver) = 0;
 		virtual const Event::Address& translate(std::string address) = 0;

@@ -136,7 +136,7 @@
 					RelativePath=".\src\common\FindNodeVisitor.cpp">
 				</File>
 				<File
-					RelativePath=".\src\common\Subject.cpp\Subject.cpp">
+					RelativePath=".\src\common\Subject.cpp">
 				</File>
 			</Filter>
 			<Filter
@@ -180,10 +180,14 @@
 					RelativePath=".\src\events\Manager.cpp">
 				</File>
 				<File
-					RelativePath=".\src\events\Queue.cpp">
-				</File>
-				<File
 					RelativePath=".\src\events\Receiver.cpp">
+				</File>
+			</Filter>
+			<Filter
+				Name="Debug"
+				Filter="">
+				<File
+					RelativePath=".\src\debug\DumpReceiversVisitor.cpp">
 				</File>
 			</Filter>
 		</Filter>
@@ -235,6 +239,9 @@
 					RelativePath=".\include\common\Exception.h">
 				</File>
 				<File
+					RelativePath=".\include\common\FindDomainNodeVisitor.h">
+				</File>
+				<File
 					RelativePath=".\include\common\FindNodeVisitor.h">
 				</File>
 				<File
@@ -269,10 +276,14 @@
 					RelativePath=".\include\events\Manager.h">
 				</File>
 				<File
-					RelativePath=".\include\events\Queue.h">
-				</File>
-				<File
 					RelativePath=".\include\events\Receiver.h">
+				</File>
+			</Filter>
+			<Filter
+				Name="Debug"
+				Filter="">
+				<File
+					RelativePath=".\include\debug\DumpReceiversVisitor.h">
 				</File>
 			</Filter>
 		</Filter>

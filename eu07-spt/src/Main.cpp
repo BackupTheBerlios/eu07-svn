@@ -7,12 +7,25 @@
 #include "events/Manager.h"
 #include "events/LocalManager.h"
 
+#include "debug/DumpReceiversVisitor.h"
+
 //using namespace spt;
 using namespace sptEvents;
 
 int main() {
 
-	new LocalManager(new Receiver());
+	new LocalManager(new Receiver("root"));
+
+	Manager* manager = Manager::getInstance();
+	manager->getRoot()->addChild(new Receiver("receiver1"));
+	manager->getRoot()->addChild(new Receiver("receiver2"));
+	manager->getRoot()->addChild(new Receiver("receiver3"));
+
+	sptDebug::DumpReceiversVisitor visitor;
+	manager->getRoot()->accept(visitor);
+	Event::Address address = manager->translate("root.receiver2");
+
+	std::cout << address.getReceiverId() << std::endl;
 
     osg::Group* rootNode = new osg::Group();
 
@@ -39,6 +52,8 @@ int main() {
          
         // fire off the cull and draw traversals of the scene.
         viewer.frame();
+
+		Manager::getInstance()->update(0.0f);
         
     }
     

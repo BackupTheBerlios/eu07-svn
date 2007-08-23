@@ -7,6 +7,7 @@
 #include <osg/Group>
 
 #include "events/Event.h"
+#include "common/Observer.h"
 #include "common/Subject.h"
 
 namespace sptEvents {
@@ -25,6 +26,20 @@ namespace sptEvents {
 
 		}; // class Receiver::Handler
 
+		class ObserversVisitor: public osg::NodeVisitor {
+
+		public:
+			typedef enum { ATTACH, DETACH } Operation;
+			
+			ObserversVisitor(spt::Observer* observer, const Operation& operation);
+			virtual void apply(osg::Node& node);
+
+		protected:
+			spt::Observer* _observer;
+			Operation _operation;
+
+		}; // class ObserversVisitor
+
 		typedef std::map< Event::Id, Handler > Handlers;
 		typedef std::pair< Event::Id, Handler > HandlerPair;
 
@@ -33,14 +48,25 @@ namespace sptEvents {
 	public:
 
 		Receiver();
+		Receiver(std::string name);
 		Receiver(const Receiver& receiver, const osg::CopyOp& copyop=osg::CopyOp::SHALLOW_COPY);
 
 		META_Node(sptEvents, Receiver);
 
+		//! Handle event
 		virtual void handle(Event* event);
+		//! Send event
+		virtual void send(Event* event);
+
+		//! Check if receiver has unique address
 		bool isRegistered();
+		//! Return receiver address
 		const Event::Address& getAddress();
+		//! Return last handled event
 		Event* getLastEvent();
+
+		virtual void attach(spt::Observer* observer);
+		virtual void detach(spt::Observer* observer);
 
 		virtual bool addChild(osg::Node* child);
 		virtual bool insertChild(unsigned int index, osg::Node* child);

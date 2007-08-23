@@ -7,6 +7,9 @@ namespace sptEvents {
 	Manager::Manager(): _client(0), _root(NULL) { }
 	Manager::Manager(unsigned int client, Receiver* root): _client(client), _root(root) { }
 
+	Receiver* Manager::getRoot() { return _root; }
+	const double& Manager::getTime() { return _time; }
+
 	void Manager::setReceiver(Receiver* receiver, unsigned int id) {
 
 		receiver->_address = Event::Address(_client, id);

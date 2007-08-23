@@ -6,7 +6,7 @@
 
 namespace spt {
 
-class FindNodeVisitor : public osg::NodeVisitor { 
+class FindNodeVisitor: public osg::NodeVisitor { 
 public: 
    FindNodeVisitor(); 
    FindNodeVisitor(const std::string &name);
@@ -18,7 +18,7 @@ public:
 
    Nodes& getNodes() { return _nodes; }
 
-private: 
+protected: 
    std::string _name;
    Nodes _nodes;
 

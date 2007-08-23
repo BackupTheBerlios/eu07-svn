@@ -1,10 +1,16 @@
 #include "events/Event.h"
+#include "events/Manager.h"
 #include "events/Receiver.h"
 
 namespace sptEvents {
 
 Event::Event(): _sent(0.0f), _delivery(0.0f) { }
-Event::Event(const Address& sender, const Address& receiver): _sent(0.0f), _delivery(0.0f), _sender(sender), _receiver(receiver) { }
+Event::Event(const Address& sender, const Address& receiver, double delay): _sender(sender), _receiver(receiver) { 
+
+	_sent = Manager::getInstance()->getTime();
+	_delivery = _sent + delay;
+
+}
 
 Event::~Event() { }
 

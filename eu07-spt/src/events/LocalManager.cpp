@@ -8,13 +8,17 @@
 
 namespace sptEvents {
 
-	LocalManager::LocalManager(Receiver* root): Manager(0, root), _maxId(0) { }
+	LocalManager::LocalManager(Receiver* root): Manager(0, root), _maxId(0) { 
+		
+		setInstance(this); 
+		add(root); 
+	
+	}
 
 	void LocalManager::add(Receiver* receiver) {
 
-		_receivers.insert(ReceiversItem(_maxId, receiver));
+		_receivers.insert(ReceiversItem(++_maxId, receiver));
 		setReceiver(receiver, _maxId);
-		_maxId++;
 
 	} // LocalManager::add
 
@@ -52,7 +56,7 @@ namespace sptEvents {
 
 		spt::FindDomainNodeVisitor visitor(path);
 		_root->accept(visitor);
-		Receiver* node = dynamic_cast<Receiver*>(visitor.getNode());
+		Receiver* node = dynamic_cast<Receiver*>(visitor.getNodes().front());
 
 		if(node != NULL)
 			return node->getAddress();
@@ -61,9 +65,10 @@ namespace sptEvents {
 
 	void LocalManager::update(double time) {
 
+		_time = time;
 		Event* event;
 
-		while(!_queue.empty() && ((event = _queue.top()) != NULL) && (event->getDelivery() < time)) {
+		while(!_queue.empty() && ((event = _queue.top()) != NULL) && (event->getDelivery() < _time)) {
 
 			Receivers::iterator iter = _receivers.find(event->getSender().getReceiverId());
 

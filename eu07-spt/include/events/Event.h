@@ -1,6 +1,7 @@
 #ifndef SPTEVENTS_EVENT_H
 #define SPTEVENTS_EVENT_H 1
 
+#include <string>
 #include <osg/Object>
 
 namespace sptEvents {
@@ -9,8 +10,6 @@ class Receiver;
 class Queue;
 
 class Event: public osg::Referenced {
-
-friend class Queue;
 
 public:
 
@@ -42,7 +41,7 @@ public:
 	typedef unsigned int Id;
 
 	Event();
-	Event(const Address& sender, const Address& receiver);
+	Event(const Address& sender, const Address& receiver, double delay = 0.0f);
 	Event(const Event& event, const osg::CopyOp& copyop=osg::CopyOp::SHALLOW_COPY);
 
 	virtual ~Event();
@@ -119,6 +118,8 @@ protected:
 	static Id m_hash;
 
 }; // template class StaticEvent
+
+typedef DynamicEvent<std::string> StringEvent;
 
 }; // namespace sptEvents
 
