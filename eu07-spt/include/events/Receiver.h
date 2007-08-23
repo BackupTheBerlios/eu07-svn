@@ -104,7 +104,7 @@ namespace sptEvents {
 
 	private:
 		typedef typename BaseEvent <Ty> EventCl;
-		typedef typename void (Cl::*MethodPtr)(EventCl*);
+		typedef void typename (Cl::*MethodPtr)(EventCl*);
 
 		MethodPtr _method;
 
