@@ -16,6 +16,7 @@ namespace sptEvents {
 	protected:
 		bool _registered;
 		Event::Address _address;
+		osg::ref_ptr<Event> _lastEvent;
 
 		class Handler {
 
@@ -39,6 +40,7 @@ namespace sptEvents {
 		virtual void handle(Event* event);
 		bool isRegistered();
 		const Event::Address& getAddress();
+		Event* getLastEvent();
 
 		virtual bool addChild(osg::Node* child);
 		virtual bool insertChild(unsigned int index, osg::Node* child);
@@ -51,8 +53,12 @@ namespace sptEvents {
 	public:
 		virtual void handle(Event* event) {
 
+			_lastEvent = event;
+
 			if(iter = m_handlers.find(event->getHash()) && iter != m_handlers.end())
 				iter->handle(this, event);
+
+			notify();
 
 		}
 

@@ -15,4 +15,4 @@ osg::Node* FindDomainNodeVisitor::getNode() {
 
 } // FindDomainNodeVisitor::getNode
 
-}
+} // namespace spt

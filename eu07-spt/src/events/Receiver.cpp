@@ -4,33 +4,34 @@
 
 namespace sptEvents {
 
-Receiver::Receiver() : _registered(false), _address() { }
-Receiver::Receiver(const Receiver& receiver, const osg::CopyOp& copyop) { }
+	Receiver::Receiver() : _registered(false), _address() { }
+	Receiver::Receiver(const Receiver& receiver, const osg::CopyOp& copyop) { }
 
-void Receiver::handle(Event* event) { }
-bool Receiver::isRegistered() { return _registered; }
-const Event::Address& Receiver::getAddress() { return _address; }
+	void Receiver::handle(Event* event) { }
+	bool Receiver::isRegistered() { return _registered; }
+	const Event::Address& Receiver::getAddress() { return _address; }
+	Event* Receiver::getLastEvent() { return _lastEvent.get(); }
 
-bool Receiver::addChild(osg::Node* child) {
+	bool Receiver::addChild(osg::Node* child) {
 
-	Receiver* receiver = dynamic_cast<Receiver*>(child);
+		Receiver* receiver = dynamic_cast<Receiver*>(child);
 
-	if(receiver != NULL && !receiver->isRegistered())
-		Manager::getInstance()->add(receiver);
+		if(receiver != NULL && !receiver->isRegistered())
+			Manager::getInstance()->add(receiver);
 
-	return osg::Group::addChild(child);
+		return osg::Group::addChild(child);
 
-}
+	}
 
-bool Receiver::insertChild(unsigned int index, osg::Node* child) {
+	bool Receiver::insertChild(unsigned int index, osg::Node* child) {
 
-	Receiver* receiver = dynamic_cast<Receiver*>(child);
+		Receiver* receiver = dynamic_cast<Receiver*>(child);
 
-	if(receiver != NULL && !receiver->isRegistered())
-		Manager::getInstance()->add(receiver);
+		if(receiver != NULL && !receiver->isRegistered())
+			Manager::getInstance()->add(receiver);
 
-	return osg::Group::insertChild(index, child);
+		return osg::Group::insertChild(index, child);
 
-}
+	}
 
 } // namespace spt
