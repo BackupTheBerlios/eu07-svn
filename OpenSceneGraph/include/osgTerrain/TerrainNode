@@ -1,0 +1,94 @@
+/* -*-c++-*- OpenSceneGraph - Copyright (C) 1998-2006 Robert Osfield 
+ *
+ * This library is open source and may be redistributed and/or modified under  
+ * the terms of the OpenSceneGraph Public License (OSGPL) version 0.0 or 
+ * (at your option) any later version.  The full license is in LICENSE file
+ * included with this distribution, and on the openscenegraph.org website.
+ * 
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the 
+ * OpenSceneGraph Public License for more details.
+*/
+
+#ifndef OSGTERRAIN_TERRAINNODE
+#define OSGTERRAIN_TERRAINNODE 1
+
+#include <osg/Group>
+#include <osg/CoordinateSystemNode>
+#include <osg/TransferFunction>
+
+#include <osgTerrain/TerrainTechnique>
+#include <osgTerrain/Layer>
+#include <osgTerrain/Locator>
+
+namespace osgTerrain {
+
+/** Terrain provides a framework for loosly coupling height field data with height rendering algorithms.
+  * This allows TerrainTechnique's to be pluged in at runtime.*/
+class OSGTERRAIN_EXPORT TerrainNode : public osg::Group
+{
+    public:
+
+        TerrainNode();
+        
+        /** Copy constructor using CopyOp to manage deep vs shallow copy.*/
+        TerrainNode(const TerrainNode&,const osg::CopyOp& copyop=osg::CopyOp::SHALLOW_COPY);
+
+        META_Node(osgTerrain, TerrainNode);
+
+        virtual void traverse(osg::NodeVisitor& nv);
+
+
+        /** Set the TerrainTechnique*/
+        void setTerrainTechnique(osgTerrain::TerrainTechnique* TerrainTechnique);
+
+        /** Get the TerrainTechnique*/
+        TerrainTechnique* getTerrainTechnique() { return _terrainTechnique.get(); }
+        
+        /** Get the const TerrainTechnique*/
+        const TerrainTechnique* getTerrainTechnique() const { return _terrainTechnique.get(); }
+
+
+        /** Set the coordinate frame locator of the terrain node.
+          * The locator takes non-dimensional s,t coordinates into the X,Y,Z world coords and back.*/
+        void setLocator(Locator* locator) { _locator = locator; }
+
+        /** Get the coordinate frame locator of the terrain node.*/
+        Locator* getLocator() { return _locator.get(); }
+
+        /** Get the coordinate frame locator of the terrain node.*/
+        const Locator* getLocator() const { return _locator.get(); }
+
+
+        void setElevationLayer(Layer* layer);
+        Layer* getElevationLayer() { return _elevationLayer.get(); }
+        const Layer* getElevationLayer() const { return _elevationLayer.get(); }
+        
+        void setColorLayer(osgTerrain::Layer* layer);
+        Layer* getColorLayer() { return _colorLayer.get(); }
+        const Layer* getColorLayer() const { return _colorLayer.get(); }
+        
+        void setColorTransferFunction(osg::TransferFunction* tf);
+        osg::TransferFunction* getColorTransferFunction() { return _colorTransferFunction.get(); }
+        const osg::TransferFunction* getColorTransferFunction() const { return _colorTransferFunction.get(); }
+
+        /** Compute the bounding volume of the terrain by computing the union of the bounding volumes of all layers.*/
+        virtual osg::BoundingSphere computeBound() const;
+
+    protected:
+
+        virtual ~TerrainNode();
+
+        osg::ref_ptr<TerrainTechnique>      _terrainTechnique;
+        osg::ref_ptr<Locator>               _locator;
+        
+        osg::ref_ptr<Layer>                 _elevationLayer;
+
+        osg::ref_ptr<Layer>                 _colorLayer;
+        osg::ref_ptr<osg::TransferFunction> _colorTransferFunction;
+};
+
+}
+
+#endif
