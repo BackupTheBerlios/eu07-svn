@@ -1,5 +1,6 @@
 #include "events/Manager.h"
 
+#include <iostream>
 #include "events/Receiver.h"
 
 namespace sptEvents {
@@ -7,7 +8,7 @@ namespace sptEvents {
 	Manager::Manager(): _client(0), _root(NULL) { }
 	Manager::Manager(unsigned int client, Receiver* root): _client(client), _root(root) { }
 
-	Receiver* Manager::getRoot() { return _root; }
+	Receiver* Manager::getRoot() { return _root.get(); }
 	const double& Manager::getTime() { return _time; }
 
 	void Manager::setReceiver(Receiver* receiver, unsigned int id) {
@@ -26,6 +27,18 @@ namespace sptEvents {
 	Manager* Manager::getInstance() { 
 
 		return Manager::_instance; 
+
+	}
+
+	Manager::Update::Update(Manager* manager) : _manager(manager) { };
+
+	void Manager::Update::operator()(osg::Node* node, osg::NodeVisitor* nv) {
+
+		double time = nv->getFrameStamp()->getReferenceTime();
+
+		std::cout << time << std::endl;
+
+		_manager->update(time);
 
 	}
 

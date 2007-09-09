@@ -18,19 +18,21 @@ namespace sptEvents {
 	class LocalManager: public Manager {
 
 	protected:
-		//! Receiver id -> pointer mapping
 		typedef std::map<unsigned int, Receiver*> Receivers;
 		typedef std::pair<unsigned int, Receiver*> ReceiversItem;
 
-		//! Events queue sorted by delivery time
 		typedef std::priority_queue<Event*, std::vector<Event*>, Event::Compare> EventQueue;
+
+//		typedef std::stack<Event::Id> IdStack;
 
 		//! Receivers id -> pointer map
 		Receivers _receivers;
 		//! Last assigned receiver id
 		unsigned int _maxId;
-		//! Events queue
+		//! Events queue sorted by delivery time
 		EventQueue _queue;
+		//! Stack of free receivers id
+//		IdStack _idStack;
 
 		virtual Receiver* getReceiver(Event* event);
 		virtual Receiver* getSender(Event* event);
@@ -40,6 +42,7 @@ namespace sptEvents {
 
 		//! Register new receiver and assign unique id
 		virtual void add(Receiver* receiver);
+		virtual void remove(Receiver* receiver);
 		//! Translate receiver path to Event::Address structure
 		virtual const Event::Address& translate(std::string path);
 		//! Send event

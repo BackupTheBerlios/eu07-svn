@@ -8,6 +8,13 @@ namespace sptEvents {
 	Receiver::Receiver(std::string name): _registered(false), _address() { setName(name); }
 	Receiver::Receiver(const Receiver& receiver, const osg::CopyOp& copyop) { }
 
+	Receiver::~Receiver() { 
+		
+		if(_registered)
+			Manager::getInstance()->remove(this);
+
+	}
+
 	void Receiver::handle(Event* event) { }
 	void Receiver::send(Event* event) { Manager::getInstance()->send(event); }
 

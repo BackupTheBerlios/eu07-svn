@@ -11,16 +11,43 @@ namespace sptEvents {
 	LocalManager::LocalManager(Receiver* root): Manager(0, root), _maxId(0) { 
 		
 		setInstance(this); 
-		add(root); 
+		add(root);
+		root->setUpdateCallback(new Manager::Update(this));
 	
 	}
 
 	void LocalManager::add(Receiver* receiver) {
 
-		_receivers.insert(ReceiversItem(++_maxId, receiver));
-		setReceiver(receiver, _maxId);
+		Event::Id id;
+		
+		// if there are free id's
+/*		if(_idStack.size()) {
+
+			id = _idStack.top(); // use first free id
+			_idStack.pop(); // and pop it
+
+		// else use next id
+		} else {*/
+
+			id = ++_maxId;
+
+//		}
+
+		_receivers.insert(ReceiversItem(id, receiver));
+		setReceiver(receiver, id);
 
 	} // LocalManager::add
+
+	void LocalManager::remove(Receiver* receiver) {
+
+		Event::Id id = receiver->getAddress().getReceiverId();
+
+		// remove receiver from id map
+		_receivers.erase(id);
+		// add receiver id to free receivers pool
+//		_idStack.push(id);
+
+	}
 
 	Receiver* LocalManager::getReceiver(Event* event) {
 
@@ -54,12 +81,12 @@ namespace sptEvents {
 
 	const Event::Address& LocalManager::translate(std::string path) {
 
+
 		spt::FindDomainNodeVisitor visitor(path);
 		_root->accept(visitor);
 		Receiver* node = dynamic_cast<Receiver*>(visitor.getNodes().front());
 
-		if(node != NULL)
-			return node->getAddress();
+		return (node != NULL) ? node->getAddress() : *(new Event::Address());
 
 	}
 

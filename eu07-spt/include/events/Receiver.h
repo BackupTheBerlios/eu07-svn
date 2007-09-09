@@ -19,13 +19,6 @@ namespace sptEvents {
 		Event::Address _address;
 		osg::ref_ptr<Event> _lastEvent;
 
-		class Handler {
-
-		public:
-			virtual void handle(Receiver* receiver, Event* event);
-
-		}; // class Receiver::Handler
-
 		class ObserversVisitor: public osg::NodeVisitor {
 
 		public:
@@ -38,14 +31,23 @@ namespace sptEvents {
 			spt::Observer* _observer;
 			Operation _operation;
 
-		}; // class ObserversVisitor
-
-		typedef std::map< Event::Id, Handler > Handlers;
-		typedef std::pair< Event::Id, Handler > HandlerPair;
+		}; // class Receiver::ObserversVisitor
 
 		friend class Manager;
 
+		virtual ~Receiver();
+
 	public:
+
+		class Handler {
+
+		public:
+			virtual void handle(Receiver* receiver, Event* event);
+
+		}; // class Receiver::Handler
+
+		typedef std::map< Event::Id, Handler > Handlers;
+		typedef std::pair< Event::Id, Handler > HandlerPair;
 
 		Receiver();
 		Receiver(std::string name);
@@ -103,8 +105,8 @@ namespace sptEvents {
 	class BaseHandler: public Receiver::Handler {
 
 	private:
-		typedef typename BaseEvent <Ty> EventCl;
-		typedef void typename (Cl::*MethodPtr)(EventCl*);
+		typedef BaseEvent <Ty> EventCl;
+		typedef void (Cl::*MethodPtr)(EventCl*);
 
 		MethodPtr _method;
 
@@ -123,8 +125,8 @@ namespace sptEvents {
 	class BaseValueHandler: public Receiver::Handler {
 
 	private:
-		typedef typename void (Cl::*MethodPtr)(Ty);
-		typedef typename BaseEvent<Ty> EventCl;
+		typedef void (Cl::*MethodPtr)(Ty);
+		typedef BaseEvent<Ty> EventCl;
 
 		MethodPtr _method;
 

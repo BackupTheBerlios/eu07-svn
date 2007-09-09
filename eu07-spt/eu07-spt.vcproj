@@ -17,13 +17,13 @@
 			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="1"
 			CharacterSet="2"
-			ManagedExtensions="TRUE">
+			ManagedExtensions="FALSE">
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\Producer\include;..\OpenThreads\include;..\OpenSceneGraph\include;include"
+				AdditionalIncludeDirectories="..\OpenThreads\include;..\OpenSceneGraph\include;include"
 				PreprocessorDefinitions="WIN32;_DEBUG"
-				MinimalRebuild="FALSE"
+				MinimalRebuild="TRUE"
 				BasicRuntimeChecks="0"
 				RuntimeLibrary="2"
 				RuntimeTypeInfo="TRUE"
@@ -35,10 +35,10 @@
 			<Tool
 				Name="VCLinkerTool"
 				IgnoreImportLibrary="TRUE"
-				AdditionalDependencies="osgd.lib osgDBd.lib osgParticled.lib osgProducerd.lib osgUtild.lib Producerd.lib"
+				AdditionalDependencies="osgd.lib osgDBd.lib osgParticled.lib osgUtild.lib osgViewerd.lib"
 				OutputFile="$(OutDir)\$(ProjectName).exe"
 				LinkIncremental="2"
-				AdditionalLibraryDirectories="..\Producer\lib;..\OpenThreads\lib\win32;..\OpenSceneGraph\lib"
+				AdditionalLibraryDirectories="..\OpenThreads\lib\win32;..\OpenSceneGraph\lib"
 				IgnoreDefaultLibraryNames="MSVCRTD.lib"
 				GenerateDebugInformation="TRUE"
 				AssemblyDebug="1"/>
@@ -158,6 +158,9 @@
 					RelativePath=".\src\core\ObjectsList.cpp">
 				</File>
 				<File
+					RelativePath=".\src\core\Path.cpp">
+				</File>
+				<File
 					RelativePath=".\src\core\PathFollower.cpp">
 				</File>
 				<File
@@ -186,9 +189,6 @@
 			<Filter
 				Name="Debug"
 				Filter="">
-				<File
-					RelativePath=".\src\debug\DumpReceiversVisitor.cpp">
-				</File>
 			</Filter>
 		</Filter>
 		<Filter
@@ -212,6 +212,9 @@
 				</File>
 				<File
 					RelativePath=".\include\core\ObjectsList.h">
+				</File>
+				<File
+					RelativePath=".\include\core\Path.h">
 				</File>
 				<File
 					RelativePath=".\include\core\PathFollower.h">
@@ -282,9 +285,6 @@
 			<Filter
 				Name="Debug"
 				Filter="">
-				<File
-					RelativePath=".\include\debug\DumpReceiversVisitor.h">
-				</File>
 			</Filter>
 		</Filter>
 		<Filter

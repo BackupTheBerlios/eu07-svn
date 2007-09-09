@@ -4,6 +4,9 @@
 #include <string>
 #include <map>
 
+#include <osg/NodeVisitor>
+#include <osg/NodeCallback>
+
 #include "events/Event.h"
 
 namespace sptEvents {
@@ -19,10 +22,22 @@ namespace sptEvents {
 
 		double _time;
 		unsigned int _client;
-		Receiver* _root;
+		osg::ref_ptr<Receiver> _root;
 
 		void setReceiver(Receiver* receiver, unsigned int id);
 		static void setInstance(Manager* manager);
+
+		class Update: public osg::NodeCallback {
+
+		protected:
+			Manager* _manager;
+
+		public:
+
+			Update(Manager* manager);
+			virtual void operator()(osg::Node* node, osg::NodeVisitor* nv);
+
+		};
 
 	public:
 		static Manager* getInstance();
@@ -31,6 +46,7 @@ namespace sptEvents {
 		const double& getTime();
 
 		virtual void add(Receiver* receiver) = 0;
+		virtual void remove(Receiver* receiver) = 0;
 		virtual const Event::Address& translate(std::string address) = 0;
 
 		virtual void send(Event* event) = 0;
