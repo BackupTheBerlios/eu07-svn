@@ -1,6 +1,9 @@
 #include <iostream>
 
 #include <osg/Group>
+#include <osg/Geometry>
+#include <osg/LineWidth>
+
 #include <osgViewer/Viewer>
 
 #include "events/Receiver.h"

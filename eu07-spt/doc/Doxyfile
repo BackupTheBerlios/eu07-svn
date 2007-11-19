@@ -84,7 +84,8 @@ WARN_LOGFILE           =
 #---------------------------------------------------------------------------
 INPUT                  = include/common \
                          include/core \
-                         include/events
+                         include/events \
+                         include/tracks
 FILE_PATTERNS          = *.c \
                          *.cc \
                          *.cxx \

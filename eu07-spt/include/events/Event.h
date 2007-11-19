@@ -39,9 +39,10 @@ public:
 	};
 
 	typedef unsigned int Id;
+	typedef double Time;
 
 	Event();
-	Event(const Address& sender, const Address& receiver, double delay = 0.0f);
+	Event(const Address& sender, const Address& receiver, Time delay = 0.0f);
 	Event(const Event& event, const osg::CopyOp& copyop=osg::CopyOp::SHALLOW_COPY);
 
 	virtual ~Event();
@@ -53,8 +54,8 @@ public:
 	const Address& getSender();
 	const Address& getReceiver();
 
-	double getSent();
-	double getDelivery();
+	Time getSent();
+	Time getDelivery();
 
 	bool operator<(const Event& event);
 
@@ -62,8 +63,8 @@ protected:
 	Address _sender;
 	Address _receiver;
 
-	double _sent;
-	double _delivery;
+	Time _sent;
+	Time _delivery;
 
 };
 
@@ -90,8 +91,8 @@ class DynamicEvent: public BaseEvent<ValueTy> {
 public:
 	DynamicEvent() : m_hash(0) { }
 
-	DynamicEvent(unsigned int hash) : m_hash(hash) { }
-	DynamicEvent(unsigned int hash, ValueTy& value) : DynamicEvent(hash), m_value(value) { }
+	DynamicEvent(Id hash) : m_hash(hash) { }
+	DynamicEvent(Id hash, ValueTy& value) : DynamicEvent(hash), m_value(value) { }
 
 	DynamicEvent(std::string name) { m_hash = sptCommon::DJBHash(name); }
 	DynamicEvent(std::string name, ValueTy& value) : m_value(value) { m_hash = sptCommon::DJBHash(name); }

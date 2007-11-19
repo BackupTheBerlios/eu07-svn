@@ -190,6 +190,10 @@
 				Name="Debug"
 				Filter="">
 			</Filter>
+			<Filter
+				Name="Tracks"
+				Filter="">
+			</Filter>
 		</Filter>
 		<Filter
 			Name="Header Files"
@@ -224,6 +228,9 @@
 				</File>
 				<File
 					RelativePath=".\include\core\Scenery.h">
+				</File>
+				<File
+					RelativePath=".\include\core\Segments.h">
 				</File>
 				<File
 					RelativePath=".\include\core\SkyDome.h">
@@ -285,6 +292,22 @@
 			<Filter
 				Name="Debug"
 				Filter="">
+			</Filter>
+			<Filter
+				Name="Tracks"
+				Filter="">
+				<File
+					RelativePath=".\include\tracks\BezierFragment.h">
+				</File>
+				<File
+					RelativePath=".\include\tracks\Fragment.h">
+				</File>
+				<File
+					RelativePath=".\include\tracks\LineFragment.h">
+				</File>
+				<File
+					RelativePath=".\include\tracks\Segment.h">
+				</File>
 			</Filter>
 		</Filter>
 		<Filter

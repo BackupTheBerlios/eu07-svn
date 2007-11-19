@@ -39,6 +39,22 @@ namespace sptEvents {
 
 		};
 
+/*		class Cache {
+
+		protected:
+			typedef std::pair<Event::Time, Event::Id> Entry;
+			typedef std::set<Entry> History;
+			typedef std::stack<Event::Id> Pool;
+
+			bool operator==(const Entry& left, const Entry& right);
+
+		public:
+			unsigned int avail();
+			bool isValid(const Event& event);
+			void batchRegister(std::vector<Receiver*> receivers);
+			
+		}; */
+
 	public:
 		static Manager* getInstance();
 
