@@ -13,10 +13,8 @@ namespace sptTracks {
 	public:
 		Fragment(osg::Vec3f start, osg::Vec3f end);
 
-		virtual osg::Vec3f getPosition(double offset);
-		virtual osg::Matrixf getMatrix(double offset);
-		virtual osg::Vec3f getPosition(Follower* follower, osg::Vec3f reference, double distance);
-		virtual osg::Matrixf getMatrix(Follower* follower, osg::Vec3f reference, double distance);
+		virtual void getForward(Segments::iterator& iter);
+		virtual void getBackward(Segments::iterator& iter);
 
 	}
 

@@ -4,10 +4,9 @@
 #include <osg/Vec3f>
 #include <osg/Matrixf>
 
-namespace sptTracks {
+#include "tracks/Segment.h"
 
-	// Forward declaration
-	class Follower;
+namespace sptTracks {
 
 	class Fragment {
 
@@ -23,10 +22,8 @@ namespace sptTracks {
 		osg::Vec3f getEnd();
 		float getLength();
 
-		virtual osg::Vec3f getPosition(double offset) = 0;
-		virtual osg::Matrixf getMatrix(double offset) = 0;
-		virtual osg::Vec3f getPosition(Follower* follower, osg::Vec3f reference, double distance) = 0;
-		virtual osg::Matrixf getMatrix(Follower* follower, osg::Vec3f reference, double distance) = 0;
+		virtual void getForward(Segments::iterator& iter) = 0;
+		virtual void getBackward(Segments::iterator& iter) = 0;
 
 	}
 

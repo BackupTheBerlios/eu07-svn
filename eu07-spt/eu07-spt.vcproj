@@ -158,9 +158,6 @@
 					RelativePath=".\src\core\ObjectsList.cpp">
 				</File>
 				<File
-					RelativePath=".\src\core\Path.cpp">
-				</File>
-				<File
 					RelativePath=".\src\core\PathFollower.cpp">
 				</File>
 				<File
@@ -193,6 +190,9 @@
 			<Filter
 				Name="Tracks"
 				Filter="">
+				<File
+					RelativePath=".\src\tracks\Segment.cpp">
+				</File>
 			</Filter>
 		</Filter>
 		<Filter
@@ -216,9 +216,6 @@
 				</File>
 				<File
 					RelativePath=".\include\core\ObjectsList.h">
-				</File>
-				<File
-					RelativePath=".\include\core\Path.h">
 				</File>
 				<File
 					RelativePath=".\include\core\PathFollower.h">
@@ -307,6 +304,9 @@
 				</File>
 				<File
 					RelativePath=".\include\tracks\Segment.h">
+				</File>
+				<File
+					RelativePath=".\includes\tracks\Track.h">
 				</File>
 			</Filter>
 		</Filter>
