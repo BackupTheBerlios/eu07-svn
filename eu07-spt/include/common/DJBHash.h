@@ -3,6 +3,10 @@
 
 #include <string>
 
-unsigned int DJBHash(std::string str);
+namespace spt {
+
+	unsigned int DJBHash(std::string str);
+
+} // namespace spt
 
 #endif

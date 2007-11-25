@@ -1,5 +1,7 @@
 #include "common/DJBHash.h"
 
+namespace spt {
+
 unsigned int DJBHash(std::string str)
 {
 
@@ -15,4 +17,6 @@ unsigned int DJBHash(std::string str)
    return (hash & 0x7FFFFFFF);
 
 
-};
+}; // DJBHash
+
+} // namespace spt

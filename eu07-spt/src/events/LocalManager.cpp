@@ -1,5 +1,7 @@
 #include "events/LocalManager.h"
 
+#include <iostream>
+
 #include "events/Event.h"
 #include "events/Receiver.h"
 #include "events/Context.h"
@@ -73,18 +75,22 @@ namespace sptEvents {
 
 	} // getSender
 
-	void LocalManager::send(Event* event) {
+	void LocalManager::send(Event* event, double delay) {
 
+		setEventDelay(event, delay);
 		_queue.push(event);
 
 	}
 
 	const Event::Address& LocalManager::translate(std::string path) {
 
+		Receiver* node = NULL;
 
 		spt::FindDomainNodeVisitor visitor(path);
 		_root->accept(visitor);
-		Receiver* node = dynamic_cast<Receiver*>(visitor.getNodes().front());
+
+		if(visitor.getNodes().size())
+			node = dynamic_cast<Receiver*>(visitor.getNodes().front());
 
 		return (node != NULL) ? node->getAddress() : *(new Event::Address());
 
@@ -95,7 +101,7 @@ namespace sptEvents {
 		_time = time;
 		Event* event;
 
-		while(!_queue.empty() && ((event = _queue.top()) != NULL) && (event->getDelivery() < _time)) {
+		while(!_queue.empty() && ((event = _queue.top()) != NULL) && (event->getDelivery() <= _time)) {
 
 			Receivers::iterator iter = _receivers.find(event->getSender().getReceiverId());
 

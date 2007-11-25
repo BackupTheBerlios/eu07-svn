@@ -15,8 +15,20 @@ namespace sptEvents {
 
 	}
 
-	void Receiver::handle(Event* event) { }
-	void Receiver::send(Event* event) { Manager::getInstance()->send(event); }
+	void Receiver::handle(Event* event) { 
+	
+		_lastEvent = event;
+		notify(); 
+	
+	}
+
+	void Receiver::send(Event* event, const Event::Address& receiver, double delay) { 
+		
+		event->_sender = _address;
+		event->_receiver = receiver;
+		Manager::getInstance()->send(event, delay);
+	
+	}
 
 	bool Receiver::isRegistered() { return _registered; }
 	const Event::Address& Receiver::getAddress() { return _address; }
@@ -24,15 +36,15 @@ namespace sptEvents {
 
 	void Receiver::attach(spt::Observer* observer) {
 
-		ObserversVisitor visitor(observer, ObserversVisitor::Operation::ATTACH);
-		accept(visitor);
+		Subject::attach(observer);
+		traverse(ObserversVisitor(observer, ObserversVisitor::Operation::ATTACH));
 
 	}
 
 	void Receiver::detach(spt::Observer* observer) {
 
-		ObserversVisitor visitor(observer, ObserversVisitor::Operation::DETACH);
-		accept(visitor);
+		Subject::detach(observer);
+		traverse(ObserversVisitor(observer, ObserversVisitor::Operation::DETACH));
 
 	}
 

@@ -58,7 +58,7 @@ namespace sptEvents {
 		//! Handle event
 		virtual void handle(Event* event);
 		//! Send event
-		virtual void send(Event* event);
+		virtual void send(Event* event, const Event::Address& receiver, double delay = 0.0f);
 
 		//! Check if receiver has unique address
 		bool isRegistered();

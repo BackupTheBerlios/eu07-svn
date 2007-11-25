@@ -45,4 +45,17 @@ bool Event::operator<(const Event& event) {
 
 } // Event::operator<
 
+void Event::output(std::ostream& stream) {
+
+	stream << "hash: " << getHash() << ", delivery: " << getDelivery();
+
+}
+
+std::ostream& operator<<(std::ostream& stream, Event& event) {
+
+	event.output(stream);
+	return stream;
+
+} // operator<<
+
 }

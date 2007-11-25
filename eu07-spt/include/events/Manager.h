@@ -27,6 +27,8 @@ namespace sptEvents {
 		void setReceiver(Receiver* receiver, unsigned int id);
 		static void setInstance(Manager* manager);
 
+		void setEventDelay(Event* event, double delay);
+
 		class Update: public osg::NodeCallback {
 
 		protected:
@@ -65,7 +67,7 @@ namespace sptEvents {
 		virtual void remove(Receiver* receiver) = 0;
 		virtual const Event::Address& translate(std::string address) = 0;
 
-		virtual void send(Event* event) = 0;
+		virtual void send(Event* event, double delay = 0.0f) = 0;
 		virtual void update(double time) = 0;
 
 	}; // class Manager

@@ -46,7 +46,7 @@ namespace sptEvents {
 		//! Translate receiver path to Event::Address structure
 		virtual const Event::Address& translate(std::string path);
 		//! Send event
-		virtual void send(Event* event);
+		virtual void send(Event* event, double delay = 0.0f);
 
 		virtual void update(double time);
 

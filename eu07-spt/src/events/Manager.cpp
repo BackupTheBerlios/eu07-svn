@@ -5,8 +5,8 @@
 
 namespace sptEvents {
 
-	Manager::Manager(): _client(0), _root(NULL) { }
-	Manager::Manager(unsigned int client, Receiver* root): _client(client), _root(root) { }
+	Manager::Manager(): _client(0), _root(NULL), _time(0.0f) { }
+	Manager::Manager(unsigned int client, Receiver* root): _client(client), _root(root), _time(0.0f) { }
 
 	Receiver* Manager::getRoot() { return _root.get(); }
 	const double& Manager::getTime() { return _time; }
@@ -30,14 +30,19 @@ namespace sptEvents {
 
 	}
 
+	void Manager::setEventDelay(Event* event, double delay) {
+
+		event->_delivery = _time + delay;
+
+	}
+
 	Manager::Update::Update(Manager* manager) : _manager(manager) { };
 
 	void Manager::Update::operator()(osg::Node* node, osg::NodeVisitor* nv) {
 
 		double time = nv->getFrameStamp()->getReferenceTime();
 
-		std::cout << time << std::endl;
-
+//		std::cout << time << std::endl;
 		_manager->update(time);
 
 	}
