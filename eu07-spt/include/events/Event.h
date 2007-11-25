@@ -4,6 +4,8 @@
 #include <string>
 #include <osg/Object>
 
+#include "common/DJBHash.h"
+
 namespace sptEvents {
 
 class Receiver;
@@ -47,8 +49,6 @@ public:
 
 	virtual ~Event();
 
-	//META_Object(spt, Event);
-
 	virtual Id getHash();
 
 	const Address& getSender();
@@ -59,6 +59,10 @@ public:
 
 	bool operator<(const Event& event);
 
+	friend class Receiver;
+	friend class Manager;
+	friend std::ostream& operator<<(std::ostream& stream, Event& event);
+
 protected:
 	Address _sender;
 	Address _receiver;
@@ -66,22 +70,33 @@ protected:
 	Time _sent;
 	Time _delivery;
 
+	virtual void output(std::ostream& stream);
+
 };
+
+std::ostream& operator<<(std::ostream& stream, Event& event);
 
 template <typename ValueTy>
 class BaseEvent: public Event {
 
 public:
 	BaseEvent() { }
-	BaseEvent(ValueTy& value) : m_value(value) { }
+	BaseEvent(ValueTy& value) : _value(value) { }
 
-	virtual ~BaseEvent();
+	virtual ~BaseEvent() { };
 
-	ValueTy getValue() { return m_value; }
-	void setValue(ValueTy& value) { m_value = value; }
+	ValueTy getValue() { return _value; }
+	void setValue(ValueTy& value) { _value = value; }
 
 protected:
-	typename ValueTy m_value;
+	ValueTy _value;
+
+	virtual void output(std::ostream& stream) {
+
+		Event::output(stream);
+		stream << ", value: '" << getValue() << "'";
+
+	}
 
 }; // template class BaseEvent
 
@@ -89,19 +104,19 @@ template <typename ValueTy>
 class DynamicEvent: public BaseEvent<ValueTy> {
 
 public:
-	DynamicEvent() : m_hash(0) { }
+	DynamicEvent() : _hash(0) { }
 
 	DynamicEvent(Id hash) : m_hash(hash) { }
-	DynamicEvent(Id hash, ValueTy& value) : DynamicEvent(hash), m_value(value) { }
+	DynamicEvent(Id hash, ValueTy& value) : BaseEvent(hash), m_value(value) { }
 
-	DynamicEvent(std::string name) { m_hash = sptCommon::DJBHash(name); }
-	DynamicEvent(std::string name, ValueTy& value) : m_value(value) { m_hash = sptCommon::DJBHash(name); }
+	DynamicEvent(std::string name) { _hash = spt::DJBHash(name); }
+	DynamicEvent(std::string name, ValueTy& value) : BaseEvent<ValueTy>(value) { _hash = spt::DJBHash(name); }
 
 	virtual ~DynamicEvent() { }
-	virtual Id getHash() { return m_hash; }
+	virtual Id getHash() { return _hash; }
 
 protected:
-	Id m_hash;
+	Id _hash;
 	
 }; // template class DynamicEvent
 
@@ -113,14 +128,16 @@ public:
 	StaticEvent(ValueTy& value) : m_value(value) { }
 
 	virtual ~StaticEvent() { }
-	virtual Id getHash() { return m_hash; }
+	virtual Id getHash() { return _hash; }
 
 protected:
-	static Id m_hash;
+	static Id _hash;
 
 }; // template class StaticEvent
 
-typedef DynamicEvent<std::string> StringEvent;
+typedef BaseEvent<std::string> StringEvent;
+typedef BaseEvent<int> IntEvent;
+typedef BaseEvent<double> DoubleEvent;
 
 }; // namespace sptEvents
 
