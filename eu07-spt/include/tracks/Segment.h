@@ -17,6 +17,7 @@ namespace sptTracks {
 	public:
 		Segment(const osg::Vec3f& point, const osg::Vec3f& next);
 		Segment(const Segment& source, const osg::Vec3f& offset);
+		Segment(const osg::Vec3f& position, const osg::Vec3f& delta, const float& length2);
 
 		const osg::Vec3f& getPosition();
 		const osg::Vec3f& getDelta();
@@ -26,6 +27,24 @@ namespace sptTracks {
 		osg::Matrixf getMatrix(double offset);
 		osg::Vec3f getPosition(osg::Vec3f reference, double distance);
 		osg::Matrixf getMatrix(osg::Vec3f reference, double distance);
+
+		class Translate {
+
+		private:
+			osg::Vec3f _translation;
+
+		public:
+			Translate(const osg::Vec3f& translation);
+			Segment& operator()(const Segment& segment);
+
+		};
+
+		class Invert {
+
+		public:
+			Segment& operator()(const Segment& segment);
+
+		};
 
 	};
 

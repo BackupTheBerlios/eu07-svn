@@ -191,6 +191,9 @@
 				Name="Tracks"
 				Filter="">
 				<File
+					RelativePath=".\src\tracks\Caterpillar.cpp">
+				</File>
+				<File
 					RelativePath=".\src\tracks\Segment.cpp">
 				</File>
 			</Filter>
@@ -297,6 +300,12 @@
 					RelativePath=".\include\tracks\BezierFragment.h">
 				</File>
 				<File
+					RelativePath=".\include\tracks\Caterpillar.h">
+				</File>
+				<File
+					RelativePath=".\include\tracks\Follower.h">
+				</File>
+				<File
 					RelativePath=".\include\tracks\Fragment.h">
 				</File>
 				<File
@@ -306,7 +315,7 @@
 					RelativePath=".\include\tracks\Segment.h">
 				</File>
 				<File
-					RelativePath=".\includes\tracks\Track.h">
+					RelativePath=".\includes\Track.h">
 				</File>
 			</Filter>
 		</Filter>

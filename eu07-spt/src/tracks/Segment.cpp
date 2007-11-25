@@ -38,9 +38,16 @@ namespace sptTracks {
 
 	osg::Vec3f Segment::getPosition(double offset) {
 
+		return _position + _delta * (offset / sqrt(_length2));
+
 	}
 
 	osg::Matrixf Segment::getMatrix(double offset) {
+
+		osg::Matrixf result;
+		result.makeRotate(osg::Vec3f(0.0, -1.0, 0.0), _delta);
+
+		return result;
 
 	}
 
@@ -85,8 +92,26 @@ namespace sptTracks {
 
 		osg::Matrixf result;
 
-		result.translate(getPosition(reference, distance));
 		result.makeRotate(osg::Vec3f(0.0, -1.0, 0.0), _delta);
+		result.translate(getPosition(reference, distance));
+
+		return result;
+
+	}
+
+	Segment::Translate::Translate(const osg::Vec3f& translation) : _translation(translation) {
+
+	}
+
+	Segment Segment::Translate::operator()(const Segment& segment) {
+
+		return Segment(*this, translation));
+
+	}
+
+	Segment Segment::Invert::operator()(const Segment& segment) {
+
+		return Segment(_position + _delta, - _delta, _length2);
 
 	}
 
